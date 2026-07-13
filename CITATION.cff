@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this software or its source data, please cite the archived release."
-title: "Recovery supervision with calibrated fallback for multi-sensor fusion under available-but-corrupted channels"
+title: "Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption"
 type: software
 authors:
   - family-names: "Luo"
     given-names: "Riyang"
     affiliation: "School of Mechanical and Power Engineering, Nanjing Tech University"
     email: "lry@njtech.edu.cn"
-version: 2.0.0
+version: 3.0.0
 date-released: 2026-07-14
 license: MIT
 keywords:
@@ -16,5 +16,5 @@ keywords:
   - paired degradation
   - recovery supervision
   - selective recovery
-  - calibrated fallback
+  - cross-fitting
   - condition monitoring

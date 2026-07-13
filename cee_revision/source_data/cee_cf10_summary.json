@@ -1,0 +1,110 @@
+{
+  "design": {
+    "run_id": "CEE-CF10-R1",
+    "mode": "formal frozen rerun",
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110
+    ],
+    "epochs": 60,
+    "test_realization": 70001,
+    "training_rerun_id": "major.fit-v2026-07-14-clean-teacher",
+    "temperature_protocol": "first chronological half of Batch 7 calibration partition",
+    "selector_protocol": "second chronological half of Batch 7; 5-fold stratified group cross-fitting by original sample; OOF probabilities tune thresholds; coefficients refit on all informative calibration rows",
+    "calibration_faults": [
+      "gaussian",
+      "offset",
+      "drift",
+      "stuck_at"
+    ],
+    "unseen_faults": [
+      "gain_loss",
+      "clipping",
+      "correlated_dual"
+    ],
+    "prevalences": [
+      0.1,
+      0.4,
+      0.7
+    ],
+    "primary_estimand": "fault actually applied while the target group remains available",
+    "deployment_streams": [
+      "clean/no imposed fault",
+      "full mixed stream",
+      "strict fault-applied-and-available",
+      "assigned-but-masked",
+      "unaffected"
+    ],
+    "bootstrap": "1000 hierarchical replicates: fault type -> optimization seed/model pair -> observation within cell",
+    "selector_uses_test_labels": false,
+    "threshold_uses_in_fold_probabilities": false,
+    "elapsed_seconds": 518.3652106999943
+  },
+  "selector_diagnostics_mean": {
+    "seed": 105.5,
+    "calibration_rows": 1860.9,
+    "correctness_disagreements": 129.8,
+    "safe_threshold": 0.8150000000000001,
+    "balanced_threshold": 0.5525,
+    "selector_auroc": 0.8723839116011559,
+    "selector_auprc": 0.8855259271175928,
+    "selector_brier": 0.13329599571760217
+  },
+  "thresholds": {
+    "safe_median": 0.85,
+    "safe_range": [
+      0.55,
+      0.9
+    ],
+    "balanced_median": 0.55,
+    "balanced_range": [
+      0.5,
+      0.675
+    ]
+  },
+  "hierarchical_intervals": [
+    {
+      "quantity": "negative_transfer_prevention",
+      "bootstrap_mean": 0.9057544891218252,
+      "ci_2.5": 0.85957372627149,
+      "ci_97.5": 0.9404319899185111,
+      "replicates": 1000
+    },
+    {
+      "quantity": "recovery_retention",
+      "bootstrap_mean": 0.1399839281312684,
+      "ci_2.5": 0.0619164737654321,
+      "ci_97.5": 0.24503339007905067,
+      "replicates": 1000
+    },
+    {
+      "quantity": "full_selection_rate",
+      "bootstrap_mean": 0.4378948119777159,
+      "ci_2.5": 0.3544942548746518,
+      "ci_97.5": 0.5183765668523677,
+      "replicates": 1000
+    },
+    {
+      "quantity": "safe_minus_pdrf_auroc",
+      "bootstrap_mean": 0.0048763760292979495,
+      "ci_2.5": 0.0028717024487812325,
+      "ci_97.5": 0.0069587239100474705,
+      "replicates": 1000
+    },
+    {
+      "quantity": "safe_minus_full_auroc",
+      "bootstrap_mean": -0.0021695781394197315,
+      "ci_2.5": -0.0067105390338544485,
+      "ci_97.5": 0.002173491515460956,
+      "replicates": 1000
+    }
+  ]
+}

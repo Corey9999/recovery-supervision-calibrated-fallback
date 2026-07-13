@@ -1,0 +1,100 @@
+{
+  "run_id": "CEE-CF10-R1",
+  "strict_n_per_fault": 1436,
+  "gaussian_full_minus_pdrf": {
+    "fault_type": "gaussian",
+    "mean_difference": 0.0143281298869082,
+    "positive_seeds": 10,
+    "n_seeds": 10,
+    "wilcoxon_p_two_sided": 0.001953125
+  },
+  "gaussian_safe_minus_pdrf": {
+    "fault_type": "gaussian",
+    "mean_difference": 0.0066328309778177,
+    "positive_seeds": 10,
+    "n_seeds": 10,
+    "wilcoxon_p_two_sided": 0.001953125
+  },
+  "four_fault_full_minus_pdrf_mean": 0.004718700352479293,
+  "four_fault_safe_minus_pdrf_mean": 0.003113582514325597,
+  "hierarchical_intervals": {
+    "negative_transfer_prevention": {
+      "bootstrap_mean": 0.9057544891218252,
+      "ci_2.5": 0.85957372627149,
+      "ci_97.5": 0.9404319899185112,
+      "replicates": 1000
+    },
+    "recovery_retention": {
+      "bootstrap_mean": 0.1399839281312684,
+      "ci_2.5": 0.0619164737654321,
+      "ci_97.5": 0.2450333900790506,
+      "replicates": 1000
+    },
+    "full_selection_rate": {
+      "bootstrap_mean": 0.4378948119777159,
+      "ci_2.5": 0.3544942548746518,
+      "ci_97.5": 0.5183765668523677,
+      "replicates": 1000
+    },
+    "safe_minus_pdrf_auroc": {
+      "bootstrap_mean": 0.0048763760292979,
+      "ci_2.5": 0.0028717024487812,
+      "ci_97.5": 0.0069587239100474,
+      "replicates": 1000
+    },
+    "safe_minus_full_auroc": {
+      "bootstrap_mean": -0.0021695781394197,
+      "ci_2.5": -0.0067105390338544,
+      "ci_97.5": 0.0021734915154609,
+      "replicates": 1000
+    }
+  },
+  "selector": {
+    "calibration_rows_mean": 1860.9,
+    "disagreement_rows_mean": 129.8,
+    "safe_threshold_median": 0.85,
+    "safe_threshold_range": [
+      0.55,
+      0.9
+    ],
+    "oof_auroc_mean": 0.8723839116011559,
+    "oof_auprc_mean": 0.8855259271175928,
+    "oof_brier_mean": 0.13329599571760217
+  },
+  "clean": {
+    "false_switch_rate_mean": 0.41423006416131986,
+    "harmful_switch_rate_mean": 0.00142071494042157
+  },
+  "lofo": {
+    "safe_minus_pdrf_mean": 0.0031785015655513837,
+    "safe_minus_full_mean": -0.0015315426086967981,
+    "prevention_mean": 0.8621121348955537,
+    "retention_mean": 0.15407430640724434
+  },
+  "unseen": {
+    "safe_minus_pdrf_mean": 0.0019478816188733853,
+    "safe_minus_full_mean": -0.00430967594027074,
+    "prevention_mean": 0.8679159403623132,
+    "retention_mean": 0.11503938684263731
+  },
+  "cost": {
+    "PDRF": {
+      "latency_ms_per_observation_median": 0.000763324931492,
+      "stored_parameters": 19740,
+      "flops_per_sample": 38528,
+      "forward_passes": 1
+    },
+    "RO-PDRF-Full": {
+      "latency_ms_per_observation_median": 0.0008045714915692001,
+      "stored_parameters": 19740,
+      "flops_per_sample": 38528,
+      "forward_passes": 1
+    },
+    "SR-PDRF-Safe-CF": {
+      "latency_ms_per_observation_median": 0.0068930568268015,
+      "stored_parameters": 39493,
+      "flops_per_sample": 231168,
+      "forward_passes": 6
+    }
+  }
+}

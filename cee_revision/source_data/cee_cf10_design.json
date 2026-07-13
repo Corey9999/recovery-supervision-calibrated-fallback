@@ -1,0 +1,49 @@
+{
+  "run_id": "CEE-CF10-R1",
+  "mode": "formal frozen rerun",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "test_realization": 70001,
+  "training_rerun_id": "major.fit-v2026-07-14-clean-teacher",
+  "temperature_protocol": "first chronological half of Batch 7 calibration partition",
+  "selector_protocol": "second chronological half of Batch 7; 5-fold stratified group cross-fitting by original sample; OOF probabilities tune thresholds; coefficients refit on all informative calibration rows",
+  "calibration_faults": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "unseen_faults": [
+    "gain_loss",
+    "clipping",
+    "correlated_dual"
+  ],
+  "prevalences": [
+    0.1,
+    0.4,
+    0.7
+  ],
+  "primary_estimand": "fault actually applied while the target group remains available",
+  "deployment_streams": [
+    "clean/no imposed fault",
+    "full mixed stream",
+    "strict fault-applied-and-available",
+    "assigned-but-masked",
+    "unaffected"
+  ],
+  "bootstrap": "1000 hierarchical replicates: fault type -> optimization seed/model pair -> observation within cell",
+  "selector_uses_test_labels": false,
+  "threshold_uses_in_fold_probabilities": false,
+  "elapsed_seconds": 518.3652106999943
+}

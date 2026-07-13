@@ -1,6 +1,28 @@
-# Recovery supervision with calibrated fallback: isolated Q1 upgrade
+# Cross-fitted selective recovery for fault-tolerant multi-sensor fusion
 
-Journal-neutral submission package for **Recovery supervision with calibrated fallback for multi-sensor fusion under available-but-corrupted channels**. Journal-specific formatting remains deferred until the target is selected. This directory is an independent upgrade: the original `paper_package` article and supplement are not modified.
+Public reproducibility package for **Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption**, prepared for submission to *Computers & Electrical Engineering*. The CEE revision is isolated under [`cee_revision/`](cee_revision/); earlier Q1-upgrade materials remain available for auditability.
+
+## CEE-CF10-R1 revision
+
+- Five-fold sample-group cross-fitting generates out-of-fold selector probabilities before threshold tuning.
+- One PDRF/RO-PDRF-Full checkpoint pair per seed is reused across all deployment, baseline and transfer audits.
+- Full streams cover no imposed fault and 10%, 40% and 70% fault prevalence with matched group-missingness masks.
+- Leave-one-fault-family-out tests and unseen gain-loss, clipping and dual-group corruptions audit selector transport.
+- Confidence, entropy, leave-one-group-out disagreement, Jensen--Shannon, random and endpoint rules provide simple fallback baselines.
+- A 1,000-replicate fault--seed--observation hierarchical bootstrap reports uncertainty.
+- Safe-CF prevents 90.6% of negative transfers (95% interval 86.0--94.0%) while retaining 14.0% of recoveries (6.2--24.5%).
+- Exact scripts, frozen-run metadata, source CSV files, manuscript facts, tables and vector figures are in `cee_revision/`.
+
+Run the formal analysis from the repository root:
+
+```bash
+python cee_revision/run_cee_selector_validation.py
+python cee_revision/analyse_cee_results.py
+python cee_revision/make_cee_validation_figure.py
+python cee_revision/make_cee_graphical_abstract.py
+```
+
+Set `CEE_FAST=1` for a one-seed smoke test. The formal 10-seed run is identified as `CEE-CF10-R1`.
 
 ## Q1 upgrade additions
 

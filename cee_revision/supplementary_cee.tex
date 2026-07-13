@@ -1,0 +1,722 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,graphicx,longtable,placeins,float,hyperref}
+\hypersetup{hidelinks}
+\graphicspath{{figures/}}
+\setlength{\emergencystretch}{2em}
+\title{Supplementary information\\Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption}
+\author{Riyang Luo}
+\date{}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\begin{document}
+\maketitle
+
+\section{Algorithm and implementation details}
+
+For every training minibatch, PDRF encodes each available sensor group, computes group logits and bounded scores, and forms normalized weights. One available group is sampled from the training prior. The group receives Gaussian degradation whose scale is determined by a uniformly sampled retention factor. The model then evaluates the degraded view and, when another group remains, the selected-group removal view. The main-text objective combines clean classification, bounded score, boundary, degraded classification, consistency, normalized-weight monotonicity and severity-linked score ranking. All random choices use explicitly recorded seeds.
+
+The RO-PDRF family uses the same architecture and data views. In the formal protocol, the detached clean-view probability vector is the teacher for degraded-view KL distillation; it therefore requires no test label or oracle view selection. RO-PDRF-Lite adds only this recovery term at weight 0.30 to the base PDRF objective and is the primary practical model and software default. RO-PDRF-Full additionally applies clean/degraded multiclass Brier terms, a log interior penalty on both response paths and a smooth one-versus-rest pairwise loss on degraded logits at weights 0.05, 0.005 and 0.10; it is the mechanistic full model. For a minibatch $\mathcal B$, both task losses use the exact class-weighted mean $\sum_{i\in\mathcal B}\omega_{y_i}[-\log p_{iy_i}]/\sum_{i\in\mathcal B}\omega_{y_i}$, evaluated on clean and degraded logits respectively. Consistency, recovery and removal-dependent directional terms are averaged only over observations with at least two available groups and are zero when that eligible subset is empty. With $\epsilon=10^{-4}$, the interior term is the sum of the clean and degraded available-group means of $-\log\{\max[\epsilon,1-(r/B)^2]\}$. The pairwise ranking term averages only over classes having at least one positive and one negative minibatch observation and is zero when no class is eligible. RO-PDRF-EMA is a calibration-oriented sensitivity based on Full. Label-assisted best-view, affected-group-removal and confidence-selected rules are separate sensitivity experiments. Development ablations used seeds 101--103; the selected combination was frozen before formal evaluation on seeds 101--110.
+
+The chemical-array group encoder is Linear(32,64), ReLU, Linear(64,32), ReLU. The hydraulic encoder is Linear(48,64), ReLU, Linear(64,32), ReLU. The AHU group encoder uses the same architecture with four inputs. The logit head is Linear(32,$C$). The score head is Linear(32,16), ReLU, Linear(16,1). The CAGF/DWR gate is Linear($32M+2M$,64), ReLU, Linear(64,$M$). Early fusion is Linear($Md+2M$,128), ReLU, Linear(128,64), ReLU, Linear(64,$C$). No batch normalization, layer normalization or dropout is used.
+
+RO-MER contains the common group classifiers, one joint expert Linear($32M+2M$,64), ReLU, Linear(64,$C$), and an independent router Linear($32M+2M$,64), ReLU, Linear(64,$M+1$). The router mixes the $M$ group experts and joint expert after unavailable group experts have been masked. It contains 35,811 parameters for four chemical groups and receives the complete recovery objective. The joint-expert router probability is distributed uniformly over available physical groups only when calculating the shared directional-weight diagnostic; the prediction uses the unmodified $M+1$ expert distribution.
+
+RO-AT-GATE uses one 32-dimensional token per group, four attention heads (head dimension 8), a 64-unit feed-forward block and dropout 0. Group-identity embeddings are initialized independently from $\mathcal N(0,0.02^2)$. Its shared gate head is Linear(34,16), ReLU, Linear(16,1); the two additional inputs are availability and optional quality. The unweighted selection cross-entropy, $10^{-4}$ improvement threshold and nine-epoch patience rule are identical to the other models.
+
+Quality-aware Multimodal Fusion (QMF) was originally reported for text--image classification and RGB--D scene recognition. QMF-PD retains the common chemical sensor-group encoder and class heads, computes the signed energy-derived quantity $\bar c_m=\operatorname{logsumexp}(\boldsymbol\mu_m)/10$, floors it to the positive confidence $c_m=\max(10^{-6},\bar c_m)$, detaches confidence in the unnormalized sum $\sum_m a_mc_m\boldsymbol\mu_m$, and assigns unit weight to the historical-loss ranking objective. The floor is required because the unshifted energy-derived quantity can be negative. The pairwise margin is formed from normalized cumulative per-sample cross-entropy histories, matching the published implementation rule. Paired degradation, optimizer, split and checkpoint selection remain common to the present experiment. This is the primary official-rule-aligned sensor-group adaptation; it is not an exact reproduction of the original data or backbones. Sensitivity variants change the confidence scale, fusion normalization, ranking weight and cumulative-history rule one at a time.
+
+All models use AdamW, learning rate $2\times10^{-3}$, weight decay $10^{-4}$, batch size 256 and gradient-norm clipping at 5. Chemical-array models train for at most 60 epochs, hydraulic models for at most 80 and AHU models for at most 12. Chemical checkpoint selection and temperature calibration use disjoint fault-free portions of batch 7 with independently generated 10\% group missingness. Checkpoint selection stops after nine epochs without an unweighted cross-entropy improvement above $10^{-4}$. Temperature scaling is fitted separately for every seed and method on all observations in its calibration subset by minimizing unweighted multiclass NLL; the same scalar is applied to clean, affected-assignment and unaffected test observations. The formal CEE deployment streams, including the no-fault stream, all use the same fixed 20\% group-missingness masks; the earlier natural-view analysis without imposed test missingness is archived separately. Training uses Gaussian paired degradation only; offset, drift and stuck-at are test-time interventions. An observation with no available group is rejected before model inference; the data generator prevents this state during evaluation.
+
+\begin{table}[ht]
+\centering
+\caption{Parameter count and measured CPU cost on the chemical-array run. Training times include early stopping and therefore vary with selected epoch. Inference excludes data loading.}
+\resizebox{0.82\textwidth}{!}{\input{tables/major_compute_table.tex}}
+\end{table}
+
+\section{Frozen CEE cross-fitted deployment analysis}
+
+The formal deployment rerun is identified as CEE-CF10-R1. It uses optimization seeds 101--110 and reuses one PDRF/RO-PDRF-Full checkpoint pair per seed across every prevalence, selector and fault audit. The strict estimand contains an observation only when the controlled intervention reaches an available affected group. For the 40\% group-1 assignment, 1,436 of 1,765 assigned observations satisfy this definition and 329 are assigned but masked. The latter cannot transmit the intervention and are reported only as a sensitivity subset.
+
+\begin{table}[ht]
+\centering
+\caption{Frozen run manifest. The test realization, temperature protocol, checkpoint pair and selector protocol are common to all CEE-CF10-R1 headline tables.}
+\resizebox{0.84\textwidth}{!}{\input{tables/cee_run_manifest.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Strict fault-applied-and-available macro-AUROC means $\pm$ standard deviations across 10 matched optimization seeds. Each mechanism contains 1,436 observations per seed.}
+\resizebox{\textwidth}{!}{\input{tables/cee_strict_primary.tex}}
+\end{table}
+
+The second chronological half of the Batch~7 calibration partition contains two method-shared realizations of Gaussian, offset, drift and stuck-at corruption. Only applied-and-available rows are retained. Selector features are base and recovery confidence, their difference, both normalized entropies and their difference, base--recovery Jensen--Shannon (JS) divergence, each endpoint's JS divergence from leave-one-group-out (LOO) recovery consensus, each endpoint's class agreement with that consensus and the legal-removal fraction. The selector contains no class label or fault-type input at inference.
+
+Five-fold stratified group cross-fitting assigns all fault realizations derived from the same original calibration observation to one fold. Within each fold, standardization and logistic coefficients are fitted only on informative rows from the other four folds, where the endpoint models differ in correctness. Pooled out-of-fold probabilities, rather than fitted probabilities, determine thresholds on the grid $0.50,0.525,\ldots,0.90$. Safe-CF first minimizes negative transfer, then maximizes selector accuracy and retained recovery. Balanced-CF first maximizes accuracy, then minimizes negative transfer. Once thresholds are selected, coefficients are refitted on all informative calibration rows; the thresholds remain frozen. Test labels are loaded only for evaluation after this process.
+
+\begin{table}[p]
+\centering
+\caption{Selector standardization and final logistic coefficients. Values are means $\pm$ standard deviations across 10 independently fitted endpoint pairs. Centers and scales are fitted within each seed; exact seed-level values are provided in the source-data archive.}
+\resizebox{0.92\textwidth}{!}{\input{tables/cee_selector_parameters.tex}}
+\end{table}
+
+\begin{table}[p]
+\centering
+\caption{Seed-level selector sample sizes, frozen thresholds and out-of-fold diagnostics. Calibration $n$ counts applied-and-available rows; disagreement $n$ counts rows informative for logistic fitting.}
+\resizebox{\textwidth}{!}{\input{tables/cee_selector_seed_diagnostics.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Out-of-fold selector reliability. Counts pool held-out-fold predictions across 10 fitted pairs; the mean probability and observed preference are weighted by bin counts. Empty seed--bin combinations contribute no pseudo-counts.}
+\resizebox{0.76\textwidth}{!}{\input{tables/cee_selector_reliability.tex}}
+\end{table}
+
+Uncertainty for the selector audit uses 1,000 hierarchical bootstrap replicates. Each replicate samples a fault mechanism with replacement, samples one fitted seed/model pair within each sampled mechanism and then samples strict observations within that cell. The resulting intervals quantify variation over the four tested mechanisms, repeated fitting and observations. They do not treat 57,440 repeated model--fault--observation predictions as independent physical events, and they do not represent a population of devices.
+
+\begin{table}[ht]
+\centering
+\caption{Complete deployment-stream macro-AUROC means $\pm$ standard deviations. The no-fault and mixed streams contain all held-out observations and use identical 20\% group-missingness masks.}
+\resizebox{0.78\textwidth}{!}{\input{tables/cee_deployment_streams.tex}}
+\end{table}
+
+The leave-one-family-out audit refits standardization, logistic coefficients and threshold using three calibration families and applies them to the fourth. The unseen audit retains the four-family selector unchanged and applies gain loss, clipping and correlated dual-group corruption, none of which appears in selector calibration. Both audits use the same endpoint checkpoints and fixed test realization as the main run.
+
+\begin{table}[ht]
+\centering
+\caption{Selector transfer to held-out and unseen mechanisms. Prevention and retention are defined relative to endpoint correctness on the strict subset.}
+\resizebox{\textwidth}{!}{\input{tables/cee_unseen_transfer.tex}}
+\end{table}
+
+Scalar confidence, entropy, LOO-disagreement and JS rules fit thresholds on out-of-fold calibration scores. Prevention-matched rules minimize absolute difference from Safe-CF calibration prevention; the random rule matches recovery-model usage. Always-base, always-recovery and a label-informed decision oracle define endpoints. Because the oracle chooses probabilities by hard-decision correctness, it defines the prevention--retention corner but is not an AUROC upper bound.
+
+\begin{table}[ht]
+\centering
+\caption{Matched simple-selector audit across four mechanisms and 10 fitted pairs. Macro-AUROC is mean $\pm$ standard deviation over 40 mechanism--seed cells.}
+\resizebox{\textwidth}{!}{\input{tables/cee_simple_baselines.tex}}
+\end{table}
+
+Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one-group-out RO-PDRF-Full pass per physical group. Its $G+2$ forward passes are included in all latency and FLOP statements. CPU measurements use three warm-up calls and seven repeated complete-batch calls, excluding data loading.
+
+\begin{table}[ht]
+\centering
+\caption{Four-group deployment cost. State assumes 32-bit parameters; times are batch-normalized CPU measurements and not single-observation real-time latency.}
+\resizebox{0.86\textwidth}{!}{\input{tables/cee_compute_cost.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Counted linear-layer FLOPs and selector forward passes as the number of groups grows.}
+\resizebox{0.62\textwidth}{!}{\input{tables/cee_group_scaling.tex}}
+\end{table}
+
+The earlier assignment-defined comparisons, teacher heuristics and alternative temperature protocols are retained in the archived sections below for auditability. They are not pooled with CEE-CF10-R1 and do not replace the strict, full-stream or transfer estimands.
+
+\section{Fault-subset, batch and class results}
+
+\begin{table}[ht]
+\centering
+\caption{Chemical-array class counts in the three held-out acquisition batches.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Batch & Class 1 & Class 2 & Class 3 & Class 4 & Class 5 & Class 6 & Total\\
+\midrule
+8 & 30 & 30 & 40 & 33 & 143 & 18 & 294\\
+9 & 61 & 55 & 100 & 75 & 78 & 101 & 470\\
+10 & 600 & 600 & 600 & 600 & 600 & 600 & 3600\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The assignment-defined mixed test set combines 40\% assigned and 60\% unassigned observations. The following archived table separates those subsets. The assignment index is generated once and shared by all methods and seeds; the main text uses the stricter fault-applied-and-available subset.
+
+\begin{table}[ht]
+\centering
+\caption{Chemical-array affected, unaffected and mixed-set performance under the fixed silent fault. Values are means across 10 seeds.}
+\resizebox{0.88\textwidth}{!}{\input{tables/major_subset_table.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Results reported separately for acquisition batches 8, 9 and 10. Values are means across 10 seeds.}
+\resizebox{0.72\textwidth}{!}{\input{tables/major_batch_table.tex}}
+\end{table}
+
+\begin{table}[p]
+\centering
+\caption{Per-class chemical-array performance under the fixed silent fault. Values are means across 10 seeds. Classes correspond to the six gases in the repository encoding.}
+\resizebox{0.76\textwidth}{!}{\input{tables/major_class_table.tex}}
+\end{table}
+
+Seed-level probabilities, predicted classes, true classes, acquisition batches and affected indicators are provided in \path{source_data/major_seed_predictions.csv}. They permit reconstruction of every confusion matrix and disagreement analysis without rounded table values.
+
+\section{Diagnostic-quality controls}
+
+No-q-update and missing-q conditions both set $q=1$. Reported metadata assign $q=0.15$ to the affected group. Shuffled metadata permute those values over observations. Misleading metadata assign low quality to unaffected groups while keeping the corrupted group at $q=1$. PDRF-NOQ does not multiply by $q$ during training or inference.
+
+\begin{table}[ht]
+\centering
+\caption{Diagnostic-quality controls under the fixed chemical-array fault.}
+\resizebox{0.66\textwidth}{!}{\input{tables/major_quality_table.tex}}
+\end{table}
+
+The no-metadata PDRF retains the full method's AUROC, whereas the quality-only rule reaches 0.810. Misleading metadata reduce ordinary PDRF to 0.773. The experiment isolates a benefit from bounded paired training that does not require explicit diagnostics, while showing that using unvalidated metadata creates an avoidable failure route.
+
+\section{Sensor grouping and unseen groups}
+
+The grouping experiment contains the original consecutive groups, interleaved groups, 10 fixed random four-by-four partitions and a 16-input condition in which every physical sensor is separate. CAGF and PDRF use exactly the same grouping, split, fixed fault and seed within each comparison. The table reports all partitions rather than selecting the best.
+
+\begin{table}[p]
+\centering
+\caption{Complete grouping distribution. PDRF wins count paired seed differences within a grouping.}
+\resizebox{0.90\textwidth}{!}{\input{tables/major_grouping_distribution_table.tex}}
+\end{table}
+
+Across the 10 random partitions, mean PDRF AUROC ranged from 0.832 to 0.860 and CAGF ranged from 0.812 to 0.847. PDRF had the higher five-seed mean for every tested grouping. The 16-independent-sensor condition reached 0.813 for PDRF and 0.781 for CAGF. Grouping changes absolute performance and the magnitude of the difference, but did not reverse the mean ordering in this analysis.
+
+The leave-one-group-out experiment assigns zero training degradation probability to each group in turn, then faults that group at test time.
+
+\begin{table}[ht]
+\centering
+\caption{Leave-one-group-out degradation training. Values are means across five seeds.}
+\resizebox{0.65\textwidth}{!}{\input{tables/major_logo_table.tex}}
+\end{table}
+
+Absolute AUROC declined for both methods. PDRF retained a higher mean than CAGF for all four held-out groups, but the result remains within one 16-sensor device and does not establish new-device generalization.
+
+\section{Fault prevalence, severity and location}
+
+PDRF and CAGF were evaluated at prevalences 0.10, 0.40 and 0.70; standardized scales 1, 3 and 5; and fault groups 1--4. Each grid point stores affected, unaffected and mixed-set macro-AUROC for 10 matched seeds in \path{source_data/major_fault_grid.csv}. The principal setting was not selected from this grid. The earlier gain, offset, linear drift, stuck-at, clipping and correlated dual-group tests remain available in the Q2 source files. Training uses one degraded group per pair, whereas the dual-group test evaluates multiple simultaneous faults.
+
+\section{Score semantics and directional audit}
+
+The raw score increased after degradation in 98.8\% of affected observed cases. The affected unnormalized weight decreased in 98.8\%, and the normalized weight decreased in 98.4\%. The slightly larger normalized violation rate reflects changes in competing groups, but the raw and unnormalized results rule out a purely denominator-driven explanation. Other sensors' normalized weights rose by 0.050 on average.
+
+The synthetic calibration audit fits an isotonic score-to-noise mapping on a separate validation split. Across 20 seeds, test noise MAE was 0.147, RMSE was 0.183 and weighted 10-bin score calibration error was 0.0078 in noise-scale units. These post-hoc values are generator-specific. Raw global Spearman correlation remained 0.403 and cross-sensor pairwise ordering accuracy 0.651. Mean between-sensor raw-score range within matched noise deciles was 0.127. The score therefore admits a useful monotonic calibration within the fixed generator but is not intrinsically aligned across sensors.
+
+\section{Hyperparameter sensitivity}
+
+The main values $B=3$, $\beta=0.25$ and ranking coefficient 0.15 were fixed before the formal rerun. The following three-seed sensitivity analysis is exploratory and is not used for post-hoc model replacement.
+
+\begin{table}[ht]
+\centering
+\caption{Bound, weighting-strength and ranking-weight sensitivity. Saturation denotes the affected fraction with $|r|\geq0.95B$.}
+\resizebox{0.70\textwidth}{!}{\input{tables/major_hyperparameter_table.tex}}
+\end{table}
+
+Larger bounds reduced relative boundary occupancy without materially changing AUROC over $B=3$--5. Larger $\beta$ increased AUROC in the three-seed grid but also increased saturation. These patterns require an independently selected tuning study before changing the prespecified method.
+
+\section{Independent hydraulic validation}
+
+The test-rig repository contains 1,449 cycles marked stable. For each component task, the same fixed proportions are used for training, checkpoint selection, calibration and testing. The class-condition values and counts are listed below.
+
+\begin{table}[ht]
+\centering
+\caption{Hydraulic cooler and valve condition values and split counts.}
+\begin{minipage}{0.47\textwidth}\centering\resizebox{\textwidth}{!}{\input{tables/hydraulic_counts_cooler.tex}}\end{minipage}\hfill
+\begin{minipage}{0.47\textwidth}\centering\resizebox{\textwidth}{!}{\input{tables/hydraulic_counts_valve.tex}}\end{minipage}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Hydraulic pump and accumulator condition values and split counts.}
+\begin{minipage}{0.47\textwidth}\centering\resizebox{\textwidth}{!}{\input{tables/hydraulic_counts_pump.tex}}\end{minipage}\hfill
+\begin{minipage}{0.47\textwidth}\centering\resizebox{\textwidth}{!}{\input{tables/hydraulic_counts_accumulator.tex}}\end{minipage}
+\end{table}
+
+The raw physical sensors are PS1--PS6 (pressure), FS1--FS2 (flow), TS1--TS4 (temperature), EPS1 (motor power) and VS1 (vibration). Three computed virtual channels are excluded. Every sensor contributes mean, standard deviation, minimum, maximum, first and third quartiles, root-mean-square value and linear slope. Physical-group summary vectors are linearly resampled to 48 inputs. This operation changes dimensional representation but introduces no new observations or labels.
+
+\begin{table}[ht]
+\centering
+\caption{Paired hydraulic PDRF-NOQ minus CAGF macro-AUROC effects. The minimum attainable non-zero two-sided exact Wilcoxon value with five same-direction pairs is 0.0625.}
+\resizebox{0.78\textwidth}{!}{\input{tables/hydraulic_effects_table.tex}}
+\end{table}
+
+Across the guarded blocked analysis, cooler performance was near ceiling, valve performance was moderate, and pump and accumulator were near chance. The task-averaged affected macro-AUROC values for RO-PDRF-Full were 0.996, 0.756, 0.528 and 0.487, respectively; the corresponding RO-CAGF values were 0.945, 0.735, 0.551 and 0.476. Six of eight task--fault means favoured RO-PDRF-Full, but architecture differences on the near-chance tasks require particular caution. These results do not convert the injected sensor corruptions into native failures; only the component-condition targets are native to the physical test rig.
+
+\section{Recovery, calibration and mechanism audits}
+
+All methods use a temperature fitted separately for each seed. RO-PDRF-Full improves affected NLL, Brier score and ECE relative to PDRF, but all three remain worse than CAGF. Equal probability averaging yields all-sample AUROC 0.8509 for RO-PDRF-Full and 0.8537 for CAGF, whereas affected-sample AUROC remains 0.0192 lower for Full. The manuscript therefore separates repeated single-model recovery from fixed-ensemble probability quality.
+
+The prediction-level files permit direct auditing of each link claimed by the training design. They include clean and fault correctness, true-class-probability change, bounded-response change, normalized-weight reduction, response saturation, class labels and seed identifiers. Downweighting succeeds on 80.2\% of affected RO-PDRF-Full observations, but 41.9\% of all affected observations fail despite that decrease. The supplied failure file lists the 40 largest such reductions so that the negative cases are inspectable rather than summarized away.
+
+\begin{table}[H]
+\centering
+\caption{Paired conditional recovery and error-transfer audit across five fitted RO-PDRF-Full models and eight method-shared fault realizations. The clean-teacher state is taken from the actual Full-model clean forward pass; the baseline state is ordinary PDRF under the matched fault. Rows are repeated predictions from one instrument and are not independent devices.}
+\label{tab:supp-teacher-conditional}
+\resizebox{0.94\textwidth}{!}{\input{tables/major5_teacher_conditional_rates.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Modern uncertainty-weighted comparator under the fixed chemical-array fault. ENT-PD uses normalized per-group predictive entropy for positive fusion weights and otherwise receives the same paired-degradation protocol. Values are means across 10 matched seeds.}
+\label{tab:supp-entropy}
+\resizebox{\textwidth}{!}{\input{tables/modern_uncertainty_baseline.tex}}
+\end{table}
+
+RO-PDRF-Full exceeded ENT-PD in affected macro-AUROC for all 10 matched seeds (mean difference 0.0497; exact two-sided Wilcoxon $P=0.0020$). ENT-PD was also lower than PDRF on the affected subset by 0.0366 across all seeds. The result indicates that predictive confidence and intervention-specific recoverability are not interchangeable.
+
+\section{Strong learned baseline and teacher/calibration remedies}
+
+RO-AT-GATE retains the four physical sensor groups and the same per-group encoders as the other late-fusion models. Each 32-dimensional group representation receives a learned identity token and passes through one four-head self-attention layer with feed-forward width 64. Unavailable groups are attention-masked. A shared head maps the contextualized group token, availability and quality to a softmax gate. The resulting model has 26,809 parameters, compared with 26,588 for CAGF, and receives the same clean/faulted views, recovery distillation, Brier term, degraded-AUC term and gate-interior regularizer as RO-CAGF. This is a controlled sensor-group attention baseline, not an exact reproduction of a task-specific image, language or autonomous-driving network.
+
+The EMA teacher follows mean-teacher weight averaging and supplies the clean-view probability target; the student alone is retained for inference. Decays 0.95, 0.99 and 0.995 are evaluated. The hard-threshold control includes only teacher predictions with maximum probability at least 0.70. For continuous weighting, $c_i=\max_c p_{ic}$ and the minibatch recovery term is $\sum_i c_iD_{\mathrm{KL}}(\mathbf p_i\|\mathbf p'_i)/(\sum_i c_i+10^{-6})$. Clean/removal agreement (CRA) averages clean and affected-group-removal probabilities and activates distillation only when their argmax classes agree. Student/EMA agreement (ECA) applies the same rule to student-clean and EMA-clean probabilities. The CE-conflict training audit activates clean-to-fault distillation during training when clean-view cross-entropy does not exceed degraded-view cross-entropy. It uses labels already present in the two task losses, but the analogous held-out status is not observable without the test label and is not proposed as a deployment selector. The calibration-aware control increases the Brier coefficient from 0.05 to 0.20 without changing any other complete-objective term. All choices were fixed before the revision runs, and every method used the same split, fault realization, minibatch construction, checkpoint rule and calibration procedure.
+
+\begin{table}[H]
+\centering
+\caption{Strong-baseline, teacher and calibration controls under the unique chemical headline fault. Values are means across 10 matched optimization seeds after per-seed temperature scaling. These seeds are repeated fits, not devices.}
+\label{tab:supp-strong-controls}
+\resizebox{\textwidth}{!}{\input{tables/major6_strong_controls.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Published/adapted baselines and teacher controls under the principal fault. The Role column distinguishes comparison baselines, the practical default, mechanistic full model, calibration sensitivity and diagnostic audits. QMF-PD is the official-rule-aligned sensor-group adaptation; CRA and ECA denote clean/removal agreement and student/EMA agreement. The CE-conflict training audit is label-assisted and training-only. Lite adds clean recovery distillation; Full additionally adds the Brier, ranking and response-interior auxiliaries. Lite, Full, EMA and all teacher controls use the same checkpoint criterion.}
+\label{tab:supp-major7-controls}
+\resizebox{\textwidth}{!}{\input{tables/major8_literature_teacher_controls.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Prediction-level teacher-safeguard audit on the five seeds shared with the original clean-teacher conditional analysis. CRA active coverage includes the valid affected-group-removal requirement. CEG is a training rule and has no label-free test-time coverage. Recovery and transfer rates are conditional paired associations, not causal effects.}
+\label{tab:supp-agreement}
+\resizebox{\textwidth}{!}{\input{tables/major8_teacher_safeguards.tex}}
+\end{table}
+
+The complete-objective EMA extension changed affected macro-AUROC from 0.8043 to 0.8059 (6/10 positive differences; $P=0.2324$), NLL from 2.650 to 2.413 (9/10 improvements; $P=0.0098$), Brier score from 0.809 to 0.792 (8/10; $P=0.0645$) and ECE from 0.342 to 0.321 (9/10; $P=0.0059$). A fourfold Brier coefficient did not improve NLL or ECE relative to Full. RO-AT-GATE improved probability quality but reached 0.784 affected AUROC. The official-rule-aligned QMF-PD reached 0.775, NLL 2.514 and ECE 0.287. CEG reached AUROC 0.806 but retained 35.7\% conditional error transfer. These results identify EMA smoothing as a probability-quality remedy while preserving the ranking/calibration and teacher-error boundaries.
+
+\begin{table}[H]
+\centering
+\caption{Original QMF implementation choices and their sensor-group adaptation. The primary adaptation aligns confidence scale, detached unnormalized fusion, cumulative history and unit ranking weight with the published implementation; task-specific backbones are not reproduced.}
+\label{tab:supp-qmf-implementation}
+\resizebox{0.98\textwidth}{!}{\input{tables/major8_qmf_implementation.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{QMF-specific fairness and hyperparameter sensitivity. Clean results use the clean view with exactly the same availability mask as the faulted view. The primary official-rule-aligned adaptation uses 10 seeds; the controlled variants use five common seeds. Lower NLL and ECE are better.}
+\label{tab:supp-qmf-sensitivity}
+\resizebox{\textwidth}{!}{\input{tables/major8_qmf_sensitivity.tex}}
+\end{table}
+
+The previous adaptation, normalized fusion and official-rule-aligned implementation all converged without exploding gradients or non-finite values (Fig.~\ref{fig:supp-qmf-training}). Across the five common seeds, changing confidence scale, normalization and ranking produced affected AUROC 0.742--0.768 and ECE 0.296--0.391 while clean AUROC remained 0.840--0.847. Completing the primary adaptation to 10 seeds gave affected AUROC $0.775\pm0.020$, NLL $2.514\pm0.459$ and ECE $0.287\pm0.046$. These results replace the weaker previous QMF point in all main comparisons.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.92\textwidth]{figureS9_qmf_training.pdf}
+\caption{\textbf{QMF sensor-group training audit.} Mean clean calibration-split cross-entropy by epoch for the previous adaptation, normalized fusion and official-rule-aligned adaptation. Ribbons are standard deviations across available repeated fits; epochs with fewer than three active fits after early stopping are omitted. The calibration split, not the held-out test set, controls checkpoint selection.}
+\label{fig:supp-qmf-training}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figureS7_strong_teacher_controls.pdf}
+\caption{\textbf{Modern fusion and teacher/calibration controls.} \textbf{a}, Affected macro-AUROC for entropy weighting, modality-dropout self-distillation, parameter-matched attention gating, unrestricted recovery gating, bounded recovery fusion and its EMA extension. \textbf{b}, Paired affected-AUROC differences for hard-threshold, continuous-confidence and EMA teachers. \textbf{c,d}, Temperature-scaled affected NLL and ECE. Open circles are individual optimization seeds; filled circles are means and whiskers are 95\% $t$ intervals across the 10 repeated fits. The intervals describe optimization variation on one fixed test fault, not device replication.}
+\label{fig:supp-strong-teacher}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[ht]
+\centering
+\caption{Original matched computational-cost audit on a 13th Gen Intel Core i5-13500H using PyTorch in CPU mode. Means and standard deviations are across three fixed seeds. Training time includes checkpoint selection; inference excludes data loading.}
+\label{tab:supp-cost}
+\resizebox{\textwidth}{!}{\input{tables/recovery_cost.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Expanded measured cost audit for the principal QMF, attention, Lite, Full, EMA and teacher-safeguard runs. Times are descriptive wall-clock measurements from the same CPU software environment; early stopping creates different epoch ranges. Inference excludes data loading.}
+\label{tab:supp-expanded-cost}
+\resizebox{\textwidth}{!}{\input{tables/major8_training_costs.tex}}
+\end{table}
+
+Lite and Full have the same 19,740 trainable parameters because their difference is objective-only. Lite required 9.2~s mean training time versus 22.7~s for Full, while one-pass inference remained below 0.002~ms per observation. QMF-PD, RO-AT-GATE and RO-PDRF-EMA required 16.0, 10.9 and 23.8~s, respectively. These measurements support Lite as the simpler practical default but are not hardware-independent complexity bounds.
+
+\section{Fault-type, realization and EMA-decay analysis}
+
+The expanded chemical audit crosses Gaussian noise, a featurewise signed offset, acquisition-ordered monotone drift and stuck-at replacement with eight fixed intervention realizations and five fitted seeds. Scale, affected prevalence and random group missingness remain 3, 0.40 and 0.20. Within a realization, affected rows and missingness masks are shared across fault types; all intervention values are fixed across methods. The bootstrap resamples fault type, realization within type and the crossed optimization-seed cluster, preserving that one fitted seed is evaluated under every controlled intervention. These factors describe one chemical instrument, not independent hardware.
+
+\begin{table}[H]
+\centering
+\caption{Affected-subset discrimination and probability quality across four controlled fault mechanisms, eight realizations and five fitted seeds. Intervals for the EMA99 AUROC contrast use 5,000 crossed-factor bootstrap replicates.}
+\label{tab:supp-fault-type-ema}
+\resizebox{\textwidth}{!}{\input{tables/major7_fault_type_ema.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Per-fault architecture effects. Intervals resample fault realization and the crossed optimization-seed cluster within each controlled mechanism. The four-type aggregate resamples only four top-level clusters and is therefore descriptive.}
+\label{tab:supp-fault-architecture}
+\resizebox{0.92\textwidth}{!}{\input{tables/major8_fault_type_architecture.tex}}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Leave-one-fault-type-out sensitivity for the RO-PDRF-Full--RO-CAGF affected-AUROC difference. Each row has only three remaining top-level fault clusters; intervals are descriptive robustness summaries, not device-generalization intervals.}
+\label{tab:supp-lofo}
+\resizebox{0.84\textwidth}{!}{\input{tables/major8_leave_one_fault_type_out.tex}}
+\end{table}
+
+Across all four mechanisms, RO-PDRF-Full exceeded RO-CAGF by a descriptive mean AUROC difference of $+0.0274$ (95\% crossed-factor interval $+0.0019$ to $+0.0512$). The per-fault effects were $+0.0112$, $+0.0299$, $+0.0351$ and $+0.0336$ for Gaussian, offset, drift and stuck-at interventions. Every leave-one-type-out mean remained positive, although the interval after omitting drift crossed zero. Only four fault mechanisms define the top level, so these results support controlled-fault breadth without estimating a population of natural failure types. Across the same design, RO-PDRF-EMA changed Full-model AUROC by $+0.0038$ ($-0.0007$ to $+0.0091$), NLL by $-0.283$ ($-0.535$ to $-0.094$) and ECE by $-0.0228$ ($-0.0396$ to $-0.0085$).
+
+\begin{table}[H]
+\centering
+\caption{EMA-decay sensitivity under the principal Gaussian realization. Values are means $\pm$ standard deviations across five fitted seeds.}
+\label{tab:supp-ema-decay}
+\resizebox{0.72\textwidth}{!}{\input{tables/major7_ema_decay.tex}}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figureS8_fault_type_ema.pdf}
+\caption{\textbf{Fault-type and EMA audit.} \textbf{a}, affected macro-AUROC by controlled mechanism. \textbf{b--d}, RO-PDRF-EMA minus RO-PDRF-Full effects for AUROC, NLL and ECE. Error bars use realization and crossed-seed resampling within each fault type. All interventions are repeated on one chemical instrument.}
+\label{fig:supp-fault-type-ema}
+\end{figure}
+\FloatBarrier
+
+\section{Score-geometry sensitivity}
+
+The following three-seed audit changes one parameter at a time around RO-PDRF-Full. It is exploratory and was not used to replace the formal setting. A larger bound lowers outer-5\% occupancy and improves affected AUROC over this grid; larger $\beta$ improves discrimination but does not monotonically reduce saturation. Ranking weight also changes saturation materially. No single hyperparameter is therefore justified by AUROC alone.
+
+\begin{table}[ht]
+\centering
+\caption{Joint score-saturation, discrimination and calibration sensitivity. Values are means across three fixed development seeds.}
+\resizebox{0.92\textwidth}{!}{\input{tables/q1_sensitivity_table.tex}}
+\end{table}
+
+\section{Hydraulic no-interpolation audit}
+
+The principal hydraulic representation linearly resamples each physical-group summary vector to length 48. The no-interpolation audit instead retains every native summary value in its original order and zero-pads only the unused tail. Both representations use identical samples, splits, faults and seeds.
+
+\begin{table}[ht]
+\centering
+\caption{Affected-subset macro-AUROC under controlled hydraulic pressure faults. Difference is RO-PDRF-NOQ minus CAGF.}
+\resizebox{0.82\textwidth}{!}{\input{tables/q1_hydraulic_extension_table.tex}}
+\end{table}
+
+\section{Real-operational AHU sensor-fault validation}
+
+The external field audit uses one year of hourly operational records from each of three buildings and only the repository's expert annotations for normal operation, return-air temperature sensor fault and supply-air temperature sensor fault. No test fault is synthesized. Table~\ref{tab:supp-ahu-splits} reports the chronological partitions after exclusion of conflicting duplicate AHU--time keys and collapse of same-label repeats. The complete test periods are retained without class subsampling.
+
+For leave-one-building-out analysis, models train on two buildings and hold out the third. Shift diagnostics include standardized mean, variance, quantile, missingness and outlier differences per feature; Kolmogorov--Smirnov and Wasserstein distances; linear and radial-basis maximum mean discrepancy; covariance discrepancy; a source-trained PCA projection; and class/subtype priors. A reversal audit reports AUROC from $1-p(\mathrm{fault})$ to distinguish absent ranking information from approximately inverted ranking. Source-only controls use source normalization and include EF-PD, RO-PDRF-Full-NOQ and GroupDRO-EF-PD with building as the source group. Target normalization recomputes location and scale from unlabeled target features, while CORAL aligns source covariance to unlabeled target covariance. These two regimes are unsupervised target adaptation, not source-only transfer.
+
+Five-member probabilities are averaged for risk--coverage analysis. Split-conformal sets use calibration nonconformity $1-p_y$ at nominal error levels 0.05, 0.10 and 0.20. Empirical coverage, mean set size, singleton rate and singleton accuracy are diagnostics only because chronological and cross-building shift violate simple exchangeability.
+
+\begin{table}[ht]
+\centering
+\caption{Chronological AHU split counts used in the field validation.}
+\label{tab:supp-ahu-splits}
+\resizebox{0.72\textwidth}{!}{\input{tables/ahu_temporal_splits.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Class and native sensor-fault-subtype distribution in each untouched chronological test period.}
+\label{tab:supp-ahu-distribution}
+\resizebox{0.72\textwidth}{!}{\input{tables/ahu_class_distribution.tex}}
+\end{table}
+
+The hospital test period is qualitatively different from the other two buildings: it contains 1,487 return-air faults but only eight supply-air faults. Metrics are therefore reported by building and subtype rather than pooled across hourly observations.
+
+\begin{table}[ht]
+\centering
+\caption{Detailed chronological AHU results. Values are means across five matched seeds. Fault precision, recall and F1 treat either native temperature-sensor-fault subtype as the positive class.}
+\label{tab:supp-ahu-detailed}
+\resizebox{\textwidth}{!}{\input{tables/ahu_temporal_detailed.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Recall for the two native expert-annotated fault subtypes. The class counts in Table~\ref{tab:supp-ahu-distribution} govern interpretation, especially for the eight hospital supply-air faults.}
+\label{tab:supp-ahu-subtypes}
+\resizebox{0.86\textwidth}{!}{\input{tables/ahu_subtype_recall.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Confusion counts for fixed five-member probability ensembles on the untouched chronological test periods. Either native sensor-fault subtype is positive.}
+\label{tab:supp-ahu-confusion}
+\resizebox{0.76\textwidth}{!}{\input{tables/ahu_ensemble_confusion.tex}}
+\end{table}
+
+Table~\ref{tab:supp-ahu-tests} treats the 15 building--seed combinations as matched repeated fits. These tests describe optimization consistency across the three building-specific tasks; they do not treat hourly records as independent retraining replicates. EF-PD and HGB-current exceed RO-PDRF-NOQ in all 15 pairs. HGB-lag does not uniformly improve HGB-current, showing that these fixed lag summaries are a task-specific baseline rather than a surrogate for every sequence architecture.
+
+\begin{table}[ht]
+\centering
+\caption{Paired AHU macro-AUROC contrasts for RO-PDRF-NOQ across five seeds and three buildings.}
+\label{tab:supp-ahu-tests}
+\resizebox{0.72\textwidth}{!}{\input{tables/ahu_temporal_tests.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Split-conformal diagnostics at nominal error level $\alpha=0.10$. Calibration uses the chronological calibration interval and evaluation uses the later test interval.}
+\label{tab:supp-ahu-conformal}
+\resizebox{\textwidth}{!}{\input{tables/ahu_conformal.tex}}
+\end{table}
+
+Empirical coverage is frequently below the nominal 0.90 target, most notably in the auditorium. This is evidence against claiming a distribution-free field guarantee: chronological changes violate the exchangeability condition needed for the elementary split-conformal construction. Confidence-based abstention can still reduce selective error, but confidence ordering and class-specific recall must be audited together.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figureS1_ahu_field_diagnostics.pdf}
+\caption{\textbf{Operational AHU diagnosis and deployment boundaries.} \textbf{a,b}, Building-specific chronological AUROC and AUPRC. \textbf{c}, Return- and supply-air fault recall, with the rare hospital supply-air subset identified. \textbf{d}, Selective error as lower-confidence predictions are rejected. \textbf{e}, Empirical split-conformal coverage and singleton rate at nominal 90\% coverage. \textbf{f}, leave-one-building-out AUROC without target-building adaptation. Error bars in \textbf{a--c} show standard deviations across five seeds.}
+\label{fig:supp-ahu}
+\end{figure}
+
+A deliberately harder leave-one-building-out audit trains on two buildings and evaluates the third without target-building adaptation. The five-seed results in Table~\ref{tab:supp-ahu-domain} show substantial domain shift, especially for the hospital. This audit is not used to select the temporal protocol or to claim device-independent transfer; it identifies a deployment boundary that requires explicit domain adaptation.
+
+\begin{table}[ht]
+\centering
+\caption{Leave-one-building-out macro-AUROC averaged across five fixed seeds.}
+\label{tab:supp-ahu-domain}
+\resizebox{0.78\textwidth}{!}{\input{tables/ahu_cross_building_exploratory.tex}}
+\end{table}
+
+The failure is concentrated rather than hidden by an overall average. RO-PDRF-NOQ retained AUROC $0.984\pm0.000$ for the held-out auditorium and $0.887\pm0.006$ for the held-out office, but fell to $0.298\pm0.005$ for the hospital. ENT-PD and PDRF-NOQ failed similarly on the hospital, whereas EF-PD retained $0.983\pm0.003$. The learned bounded-score pathway therefore did not align across the hospital domain.
+
+The expanded audit diagnoses this boundary instead of assuming that one adaptation is sufficient. Reversed hospital RO-PDRF-Full-NOQ probabilities yield AUROC $0.702\pm0.005$, revealing approximately inverted ranking. Target normalization and CORAL improve the original AUROC only to $0.356\pm0.005$ and $0.367\pm0.006$ and therefore do not repair it. GroupDRO-EF-PD remains strong at $0.982\pm0.004$ but does not improve on source-normalized EF-PD. Full feature-level shifts, PCA coordinates, prediction files and risk--coverage traces are supplied as source data.
+
+\begin{table}[ht]
+\centering
+\caption{Multivariate leave-one-building-out shift distances. Values are descriptive distances computed without target labels.}
+\resizebox{0.76\textwidth}{!}{\input{tables/major3_ahu_shift_distance.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Largest hospital feature shifts under source normalization, including location, dispersion, missingness and outlier diagnostics.}
+\resizebox{\textwidth}{!}{\input{tables/major3_hospital_feature_shift.tex}}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figureS2_ahu_shift_adaptation.pdf}
+\caption{\textbf{Full cross-building shift and adaptation audit.} Panels report source-trained PCA geometry, multivariate distances, feature-level shifts, source/target class and subtype priors, five-seed direct-diagnosis AUROC, hospital reversed-score AUROC and selective-risk behaviour. Target normalization and CORAL use unlabeled target features and are not zero-shot methods.}
+\label{fig:supp-ahu-shift}
+\end{figure}
+\FloatBarrier
+
+\section{Protocol reconciliation and recovery-objective controls}
+
+The legacy unified assignment protocol uses the clean-view teacher, fixed chemical test-fault seed 70001 and the same 10 optimization seeds for CAGF, RO-CAGF, PDRF and RO-PDRF-Full. An original recovery/calibration run used the same test fault but a label-assisted teacher for the bounded recovery model. A superseded factorial rerun used a different fixed test-fault instance (seed 85000). The latter difference changed the assigned rows and explains why nominally identical legacy source-data identifiers previously had different values. Table~\ref{tab:supp-protocol} records every relevant protocol field. The revised main paper reuses the unified fitted models but restricts evaluation to fault-applied-and-available rows.
+
+\begin{table}[ht]
+\centering
+\caption{Reconciliation of the original formal run, superseded factorial rerun and legacy unified assignment protocol. CE denotes cross-entropy.}
+\label{tab:supp-protocol}
+\resizebox{\textwidth}{!}{\input{tables/major4_protocol_reconciliation.tex}}
+\end{table}
+
+The recovery-objective-matched $2\times2$ comparison applies clean-view recovery distillation, Brier supervision and degraded-view ranking to both bounded PDRF and unrestricted CAGF. It remains architecture-specific because RO-PDRF-Full uses a response-interior penalty while RO-CAGF uses a gate KL penalty. The seed-level contrasts and CPU cost below complement the main paper. Exact tests remain descriptive, and the 17 chemical stress conditions are correlated sensitivity conditions rather than independent replications.
+
+\begin{table}[ht]
+\centering
+\caption{Recovery-objective-matched chemical and hydraulic contrasts. Positive values favour the first named method.}
+\resizebox{\textwidth}{!}{\input{tables/major3_2x2_effects.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Recovery-objective-matched parameter counts and measured CPU costs. All four methods use three forward paths during training and one during inference.}
+\resizebox{0.90\textwidth}{!}{\input{tables/major3_2x2_cost.tex}}
+\end{table}
+
+The clean-view teacher is the formal model. Label-assisted best-view, affected-group-removal and confidence-selected teachers are sensitivity variants evaluated on their own prespecified fixed fault (seed 87001), separate from the seed-70001 headline fault. Their near-identical affected-subset performance within that matched sensitivity experiment shows that its result does not depend materially on teacher selection; it is not pooled with the headline comparison. A separate leave-one-loss-out audit removes recovery distillation, Brier, interior or degraded-AUC supervision one at a time from the clean-teacher objective under the headline fault.
+
+\begin{table}[ht]
+\centering
+\caption{Recovery-teacher audit across 10 matched chemical-array seeds. Clean-only is the formal teacher; best-CE uses training labels and is retained only as sensitivity.}
+\resizebox{0.84\textwidth}{!}{\input{tables/major3_teacher_ablation.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Leave-one-loss-out affected-AUROC contrasts. Positive full-minus-ablated differences favour the complete recovery objective.}
+\resizebox{0.82\textwidth}{!}{\input{tables/major3_loss_ablation.tex}}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figureS3_recovery_objective_ablation.pdf}
+\caption{\textbf{Recovery-objective robustness.} \textbf{a}, affected macro-AUROC under four teacher rules. \textbf{b}, paired full-objective minus leave-one-loss-out effects. Error bars show standard deviations or paired 95\% bootstrap intervals as indicated.}
+\label{fig:supp-objective-ablation}
+\end{figure}
+
+The architecture-specific penalties are tested at weights 0, 0.001, 0.005 and 0.020. The complete $4\times4$ contrast matrix prevents the architecture conclusion from depending on one selected KL/interior pair.
+
+\begin{table}[ht]
+\centering
+\caption{Architecture-specific regularizer sensitivity under the unique chemical headline protocol.}
+\resizebox{0.78\textwidth}{!}{\input{tables/major4_regularizer_sensitivity.tex}}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figureS4_regularizer_sensitivity.pdf}
+\caption{\textbf{Architecture-specific regularizer sensitivity.} \textbf{a}, affected macro-AUROC across gate-KL and bounded-response-interior weights. \textbf{b}, all 16 RO-PDRF-Full minus RO-CAGF regularizer combinations. Error bars show standard deviations across 10 matched seeds.}
+\label{fig:supp-regularizer}
+\end{figure}
+\FloatBarrier
+
+\section{Consistency controls, clustered validation and teacher errors}
+
+The consistency ladder applies clean-view distillation alone to early fusion, uniform fusion, CAGF and PDRF before adding the complete recovery auxiliaries. The modality-dropout self-distillation control removes one available group per pair rather than injecting a Gaussian sensor corruption. These are principle-matched controls based on established modality-dropout and self-distillation ideas; they are not claimed as exact reproductions of a published end-to-end system. The confidence-thresholded PDRF control retains only teachers with maximum class probability at least 0.70.
+
+\begin{table}[ht]
+\centering
+\caption{Clean-distillation ladder. Differences and 95\% intervals are paired against clean distillation within architecture; exact two-sided Wilcoxon values compare matched optimization seeds.}
+\resizebox{\textwidth}{!}{\input{tables/major7_consistency_ladder_effects.tex}}
+\end{table}
+
+Eight chemical fault realizations use independently generated affected indices, missingness masks and Gaussian noise while remaining fixed across methods. Five fitted models are evaluated per realization. The hierarchical bootstrap samples fault realizations first and optimization seeds within realization second. Acquisition-batch summaries are retained separately; neither level represents independent hardware.
+
+\begin{table}[ht]
+\centering
+\caption{Chemical affected-AUROC contrasts across eight fixed fault realizations. Intervals use the fault-realization--seed hierarchy.}
+\resizebox{0.88\textwidth}{!}{\input{tables/major5_fault_realization_effects.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{RO-PDRF-Full minus RO-CAGF affected-AUROC by acquisition batch across fault realizations and seeds.}
+\resizebox{0.76\textwidth}{!}{\input{tables/major5_batch_stratified_effects.tex}}
+\end{table}
+
+The clean-teacher audit keeps each realization's availability mask identical between clean and faulted views. Correctness quadrants therefore distinguish preserved correctness, degradation-induced failure, recovery despite a wrong teacher and shared failure. A paired comparison with ordinary PDRF estimates how often a correction present in the non-distilled model is absent from RO-PDRF-Full when the latter's clean teacher is wrong. Because the two models are separately trained, this is an error-transfer association rather than a unit-level causal effect of the KL term.
+
+\begin{table}[ht]
+\centering
+\caption{Clean-teacher and faulted-prediction correctness quadrants across five models and eight realizations.}
+\resizebox{0.65\textwidth}{!}{\input{tables/major5_teacher_quadrants.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Teacher-confidence audit. $\Delta p_y$ is RO-PDRF-Full minus PDRF true-class probability on the faulted observation.}
+\resizebox{0.95\textwidth}{!}{\input{tables/major5_teacher_confidence.tex}}
+\end{table}
+\FloatBarrier
+
+\section{Guarded hydraulic split and similarity audit}
+
+Within each native component-condition class, cycles remain in acquisition order and are assigned to contiguous training, checkpoint-selection, calibration and test blocks in 60/15/10/15\% proportions. Five cycles at each boundary are discarded as guard bands. A global chronological split is not meaningful for these component tasks because the acquisition order contains state blocks: cooler training would omit the healthy state, while accumulator partitions would have non-overlapping states. The class-preserving blocked split therefore tests local sequence leakage without replacing the target with an unseen-class problem.
+
+\begin{table}[ht]
+\centering
+\caption{RO-PDRF-Full minus RO-CAGF affected-AUROC under the guarded within-condition blocked split.}
+\resizebox{0.58\textwidth}{!}{\input{tables/major5_hydraulic_blocked.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Earlier random-stratified hydraulic sensitivity analysis. These results are not the main hydraulic evidence because adjacent cycles can be allocated across splits.}
+\resizebox{0.92\textwidth}{!}{\input{tables/major3_2x2_hydraulic.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Nearest-training-cycle audit in standardized 240-dimensional hydraulic feature space.}
+\resizebox{0.78\textwidth}{!}{\input{tables/major5_hydraulic_similarity.tex}}
+\end{table}
+\FloatBarrier
+
+\section{Classwise calibration, selective prediction and computational scaling}
+
+All ensemble probabilities below are generated from models temperature-scaled on their calibration split. Probability averaging and logit averaging are evaluated separately. Classwise expected calibration error is the mean of six one-versus-rest, 10-bin errors. Selective risk retains observations in descending order of maximum predicted probability; it uses no target label to rank acceptance.
+
+\begin{table}[ht]
+\centering
+\caption{Chemical fixed-ensemble probability quality under probability and logit averaging.}
+\resizebox{0.94\textwidth}{!}{\input{tables/major5_ensemble_calibration.tex}}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figureS5_classwise_reliability.pdf}
+\caption{\textbf{Affected-row classwise calibration.} One-versus-rest predicted probability and observed class frequency for the two recovery-objective-matched ensembles. Points are shown only for non-empty bins.}
+\label{fig:supp-classwise-reliability}
+\end{figure}
+
+Linear-layer operations are counted with a one-observation forward pass. Two floating-point operations are assigned per multiply--accumulate. State memory assumes 32-bit parameters; forward activation memory sums linear-layer outputs and is a reproducible footprint measure, not a device-specific peak-resident-memory claim.
+
+\begin{table}[ht]
+\centering
+\caption{Inference complexity as the number of sensor groups increases.}
+\resizebox{0.86\textwidth}{!}{\input{tables/major5_complexity_scaling.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Training stability for clean-distillation controls. Gradient norms are measured before clipping at 5.}
+\resizebox{0.84\textwidth}{!}{\input{tables/major5_training_stability.tex}}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figureS6_deployment_and_complexity.pdf}
+\caption{\textbf{Deployment and optimization audits.} \textbf{a}, affected-row selective classification risk. \textbf{b}, counted inference FLOPs versus sensor-group count. \textbf{c}, mean pre-clipping gradient norm by epoch for the two clean-distillation controls.}
+\label{fig:supp-deployment-complexity}
+\end{figure}
+\FloatBarrier
+
+\section{Archived original-protocol analyses}
+
+The following tables and figures were generated under the original formal recovery/calibration protocol. They are retained for transparency and mechanism sensitivity, but they do not define headline method performance. Their fixed affected subset differs from the superseded seed-85000 factorial rerun; the unified headline protocol restores seed 70001 and changes the formal teacher to clean-only.
+
+\begin{table}[ht]
+\centering
+\caption{Original formal-run comparator results under the fixed chemical-array silent fault.}
+\resizebox{\textwidth}{!}{\input{tables/major_gas_results.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Original formal-run mechanism ablation.}
+\resizebox{0.78\textwidth}{!}{\input{tables/major_ablation_table.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Original formal-run recovery and calibration results. Aff. denotes the affected subset.}
+\resizebox{\textwidth}{!}{\input{tables/q1_recovery_results.tex}}
+\end{table}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figure4_mechanism_quality.pdf}
+\caption{\textbf{Original-protocol mechanism and diagnostic-quality controls.} Mechanism ablations, metadata perturbations and a quality-only comparator are retained as sensitivity evidence.}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figure3_main_results.pdf}
+\caption{\textbf{Original-protocol controlled-fault comparisons.} Chemical seed-level effects and hydraulic task results are retained for protocol transparency; the clean-teacher recovery-objective-matched figure supplies the headline comparison.}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figure5_boundaries_remedies.pdf}
+\caption{\textbf{Boundary analyses and recovery audits.} Directional violations, bounded-response saturation, fixed-ensemble bootstrap effects, affected/unaffected outcomes, bound sensitivity and ensemble diversity. This dense diagnostic figure is moved from the main paper to preserve the complete evidence without overloading the principal narrative.}
+\label{fig:supp-boundaries}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{figure6_recovery_mechanism.pdf}
+\caption{\textbf{Prediction-level recovery and deployment audits.} Matched recovery, failures despite downweighting, affected-row calibration, aggregation rules, score-bound sensitivity and hydraulic representation robustness.}
+\label{fig:supp-recovery}
+\end{figure}
+\FloatBarrier
+
+\section{External public-data feasibility audit}
+
+We searched for an external dataset that simultaneously provides (i) naturally occurring or maintenance-confirmed sensor failure, (ii) an independent downstream state to recover after suppressing the faulty sensor and (iii) multiple physical devices or sites. The NASA sensor-fault resource (\url{https://data.nasa.gov/dataset/modeling-detection-and-disambiguation-of-sensor-faults-for-aerospace-applications}) describes experimental actuator data and simulated sensor faults, but its public landing page does not provide a directly usable natural sensor-failure cohort with an independent recovery target. BASiC (\url{https://doi.org/10.5281/zenodo.8195068}) contains 70 autonomous aerial-vehicle flights, but its failures are introduced through software-in-the-loop rather than documented natural hardware sensor failures. ALFA (\url{https://theairlab.org/alfa-dataset/}) contains real flight records with engine and control-surface failures, which are actuator or system failures rather than the required sensor-failure annotation. The AHU data used here contain operational sensor-fault labels but no independent downstream recovery target; the hydraulic data contain native component targets but controlled sensor interventions and one rig. We therefore did not relabel actuator failures as sensor faults or construct a circular downstream target. The absence of a qualifying public dataset remains a limitation rather than evidence of external field recovery.
+
+\section{Reproducibility and scope}
+
+The supplied Python scripts reproduce data processing, model fitting, targeted extensions, statistical analysis, tables and figures. The upgrade-specific entry points are \path{analyse_major9_estimand.py}, \path{run_major9_safe_recovery.py}, \path{run_major9_modern_baseline.py}, \path{analyse_major9_upgrade.py} and \path{make_major9_figure.py}. The frozen design is stored in \path{source_data/major9_frozen_protocol.json}; prediction-level outputs, selector thresholds, safety accounting, model costs and bootstrap summaries are stored under \path{source_data/major9_*}. Figures use Python/matplotlib exclusively. Editable SVG/PDF figures and a 600-dpi TIFF are included in the manuscript package. Script names and execution order are listed in the package README.
+
+The chemical-array experiment uses real longitudinal measurements with controlled feature-level sensor faults. The hydraulic experiment uses native test-rig component-condition labels with controlled sensor faults. The AHU audit adds naturally observed operational records with expert-annotated sensor-fault classes from 41 installed AHUs across three buildings. Those labels were assigned from engineering rules and expert review rather than maintenance-confirmed sensor replacement records. The evidence therefore supports field-operational fault recognition but not hardware-failure prognosis or zero-shot building transfer.
+
+\end{document}
