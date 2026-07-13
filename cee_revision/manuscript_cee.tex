@@ -11,7 +11,8 @@
 
 \title{Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption}
 \author{Riyang Luo$^{1,*}$\\
-\small $^1$School of Mechanical and Power Engineering, Nanjing Tech University, Nanjing, China\\
+\small $^1$School of Mechanical and Power Engineering, Nanjing Tech University,\\
+\small 30 South Puzhu Road, Nanjing 211816, Jiangsu Province, China\\
 \small $^*$Correspondence: lry@njtech.edu.cn}
 \date{}
 
@@ -245,9 +246,9 @@ To separate recovery supervision from architecture, we also train recovery-orien
 
 Unconditional recovery can repair a wrong base prediction but can also overturn a correct one. We therefore evaluate two selective-recovery variants that choose between PDRF and RO-PDRF-Full for each observation. Batch~7 is divided chronologically into two disjoint halves. The first half fits one temperature for each model. The second half contains two calibration-only realizations of Gaussian, offset, drift and stuck-at corruption. Only rows on which the intervention reaches an available affected group enter selector development.
 
-The selector receives neither the class label nor fault type at inference. Its 12 inputs are base and recovery confidence, normalized entropy and their differences; Jensen--Shannon disagreement between the two predictions; disagreement of each prediction with the mean obtained by removing every legally removable group; class agreement with that leave-one-group-out consensus; and the fraction of legal removals. Let $\mathbf z_i$ denote the standardized feature vector. A logistic preference model estimates
+The selector receives neither the class label nor fault type at inference. Its 12 inputs are base and recovery confidence, normalized entropy and their differences; Jensen--Shannon disagreement between the two predictions; disagreement of each prediction with the mean obtained by removing every legally removable group; class agreement with that leave-one-group-out consensus; and the fraction of legal removals. Let $z_{ij}$ denote standardized selector feature $j$. A logistic preference model estimates
 \begin{equation}
-\pi_i=\sigma(\gamma_0+\boldsymbol\gamma^\mathsf{T}\mathbf z_i),
+\pi_i=\sigma\!\left(\gamma_0+\sum_{j=1}^{12}\gamma_j z_{ij}\right),
 \end{equation}
 using only calibration rows for which PDRF and RO-PDRF-Full differ in correctness. The target equals one when recovery is correct and the base model is wrong.
 
@@ -468,7 +469,7 @@ Cross-fitted selective recovery converted a useful but fallible recovery model i
 
 \section*{Data and code availability}
 
-The Gas Sensor Array Drift Dataset (DOI: \url{https://doi.org/10.24432/C5RP6W}) and Condition Monitoring of Hydraulic Systems dataset (DOI: \url{https://doi.org/10.24432/C5CW21}) are available from the UCI Machine Learning Repository under CC BY 4.0. The operational AHU data are available from Figshare under CC BY 4.0 (DOI: \url{https://doi.org/10.6084/m9.figshare.27147678.v3}). Code, fixed seeds, environment information, source data for the CEE-CF10-R1 analyses and figure/table scripts are publicly available at \url{https://github.com/Corey9999/recovery-supervision-calibrated-fallback}. A permanent software DOI has not been assigned; the repository URL and exact revision commit identify the submitted version.
+The Gas Sensor Array Drift Dataset (DOI: \url{https://doi.org/10.24432/C5RP6W}) and Condition Monitoring of Hydraulic Systems dataset (DOI: \url{https://doi.org/10.24432/C5CW21}) are available from the UCI Machine Learning Repository under CC BY 4.0. The operational AHU data are available from Figshare under CC BY 4.0 (DOI: \url{https://doi.org/10.6084/m9.figshare.27147678.v3}). Code, fixed seeds, environment information, source data for CEE-CF10-R1 and figure/table scripts are publicly available in the \texttt{cee\_revision} directory at \url{https://github.com/Corey9999/recovery-supervision-calibrated-fallback}. The submitted computational snapshot is commit \texttt{f0119bd175ed7e6c572175cb201d31c4722437a3}. A permanent software DOI has not been assigned.
 
 \section*{Ethics statement}
 
