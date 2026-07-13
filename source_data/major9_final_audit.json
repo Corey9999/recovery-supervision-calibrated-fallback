@@ -1,0 +1,25 @@
+{
+  "status": "pass",
+  "original_tex_byte_identical": "not_applicable_in_standalone_repository",
+  "strict_subset_n": 1436,
+  "optimization_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "safe_negative_transfer_prevented": 0.9003636363636364,
+  "missing_citations": [],
+  "missing_cross_references": [],
+  "placeholders": [],
+  "compiled_pdfs": [
+    "manuscript_q1_upgrade.pdf",
+    "supplementary_q1_upgrade.pdf"
+  ]
+}

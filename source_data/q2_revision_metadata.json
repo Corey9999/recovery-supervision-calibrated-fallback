@@ -1,0 +1,242 @@
+{
+  "model_selection": "first 60% of batch 7 in acquisition order",
+  "temperature_calibration": "remaining 40% of batch 7",
+  "main_methods": [
+    "UF",
+    "CAGF",
+    "DWR",
+    "BCRF"
+  ],
+  "faults": [
+    "natural",
+    "silent_gaussian",
+    "gain_loss",
+    "offset",
+    "linear_drift",
+    "stuck_at",
+    "clipping",
+    "correlated_dual"
+  ],
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "groupings": {
+    "consecutive": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6,
+        7
+      ],
+      [
+        8,
+        9,
+        10,
+        11
+      ],
+      [
+        12,
+        13,
+        14,
+        15
+      ]
+    ],
+    "interleaved": [
+      [
+        0,
+        4,
+        8,
+        12
+      ],
+      [
+        1,
+        5,
+        9,
+        13
+      ],
+      [
+        2,
+        6,
+        10,
+        14
+      ],
+      [
+        3,
+        7,
+        11,
+        15
+      ]
+    ],
+    "random_1": [
+      [
+        12,
+        8,
+        9,
+        10
+      ],
+      [
+        2,
+        4,
+        15,
+        3
+      ],
+      [
+        5,
+        6,
+        11,
+        1
+      ],
+      [
+        13,
+        0,
+        7,
+        14
+      ]
+    ],
+    "random_2": [
+      [
+        1,
+        5,
+        15,
+        10
+      ],
+      [
+        2,
+        9,
+        3,
+        8
+      ],
+      [
+        13,
+        12,
+        7,
+        4
+      ],
+      [
+        0,
+        11,
+        6,
+        14
+      ]
+    ],
+    "random_3": [
+      [
+        10,
+        5,
+        7,
+        1
+      ],
+      [
+        8,
+        9,
+        13,
+        15
+      ],
+      [
+        0,
+        6,
+        12,
+        4
+      ],
+      [
+        3,
+        2,
+        14,
+        11
+      ]
+    ],
+    "random_4": [
+      [
+        14,
+        10,
+        6,
+        2
+      ],
+      [
+        11,
+        12,
+        1,
+        0
+      ],
+      [
+        7,
+        9,
+        8,
+        15
+      ],
+      [
+        3,
+        13,
+        4,
+        5
+      ]
+    ],
+    "random_5": [
+      [
+        14,
+        11,
+        5,
+        9
+      ],
+      [
+        2,
+        6,
+        7,
+        4
+      ],
+      [
+        1,
+        13,
+        0,
+        3
+      ],
+      [
+        15,
+        12,
+        8,
+        10
+      ]
+    ]
+  },
+  "sampling_priors": {
+    "dominant_prior": [
+      0.45,
+      0.25,
+      0.18,
+      0.12
+    ],
+    "uniform": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "exclude_test_sensor": [
+      0.4,
+      0.33,
+      0.27,
+      0.0
+    ]
+  },
+  "main_method": "BCRF interpreted as bounded paired-degradation reliability fusion (PDRF)",
+  "exploratory": [
+    "grouping sensitivity",
+    "sampling sensitivity",
+    "target-margin ablation"
+  ]
+}

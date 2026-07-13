@@ -1,0 +1,14 @@
+{
+  "method": "QMF-PD-faithful",
+  "seeds": [
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "purpose": "complete 10-seed evaluation when combined with sensitivity seeds 101--105",
+  "test_used_for_selection": false,
+  "elapsed_seconds": 71.57047870001406
+}

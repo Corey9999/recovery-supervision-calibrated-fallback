@@ -1,0 +1,11 @@
+{
+  "correct_clean_teacher_rows": 40180,
+  "baseline_wrong_with_correct_ro_teacher": 10558,
+  "baseline_error_corrected_under_ro": 2293,
+  "conditional_recovery_rate": 0.2171812843341542,
+  "wrong_clean_teacher_rows": 29010,
+  "wrong_teacher_but_ro_recovers": 3203,
+  "baseline_correct_with_wrong_ro_teacher": 4001,
+  "baseline_correction_lost_under_ro": 1177,
+  "conditional_error_transfer_rate": 0.2941764558860285
+}

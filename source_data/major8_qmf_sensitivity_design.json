@@ -1,0 +1,27 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "epochs": 60,
+  "official_QMF_tasks": [
+    "text-image classification",
+    "RGB-D scene recognition"
+  ],
+  "official_confidence": "logsumexp(logits)/10",
+  "official_fusion": "unnormalized sum of detached confidence times modality logits",
+  "official_rank": "cumulative per-sample CE history, normalized pairwise margin, unit loss weight",
+  "adaptation_constants": {
+    "optimizer": "AdamW lr=0.002 weight_decay=0.0001",
+    "batch_size": 256,
+    "paired_fault_exposure": true,
+    "checkpoint": "minimum clean selection CE with patience 9",
+    "temperature": "one calibration-split temperature per fitted seed"
+  },
+  "test_used_for_selection": false,
+  "scope": "QMF-specific sensitivity within a sensor-group adaptation, not an exact reproduction",
+  "elapsed_seconds": 536.9649640999851
+}

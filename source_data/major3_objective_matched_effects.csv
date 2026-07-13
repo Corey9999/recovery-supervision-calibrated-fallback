@@ -1,0 +1,9 @@
+dataset,subset,metric,environment,contrast,n,mean_difference,ci_low,ci_high,wins,losses,wilcoxon_p
+chemical,affected,macro_auroc,type:silent_gaussian,RO-PDRF - PDRF,10,0.01356850929271578,0.011151181428347656,0.016298072993945065,10,0,0.001953125
+chemical,affected,macro_auroc,type:silent_gaussian,RO-CAGF - CAGF,10,0.005223025620545529,-0.007589094484643288,0.017234341451135327,6,4,0.375
+chemical,affected,macro_auroc,type:silent_gaussian,RO-PDRF - RO-CAGF,10,0.0073459169385454385,-0.004217564491314604,0.017777812162896173,7,3,0.322265625
+chemical,affected,macro_auroc,type:silent_gaussian,PDRF - CAGF,10,-0.0009995667336248127,-0.01364937426918007,0.010904441031594034,5,5,0.921875
+chemical,affected,macro_auroc,type:silent_gaussian,interaction: bounded recovery gain - gate recovery gain,10,0.00834548367217025,-0.0032456079759250814,0.020208185330338066,7,3,0.232421875
+hydraulic,affected,macro_auroc,all_environments,RO-PDRF - RO-CAGF,8,0.04386060867614922,0.016460532416185163,0.06820094672486082,7,1,0.0390625
+hydraulic,affected,macro_auroc,all_environments,RO-PDRF - PDRF,8,0.008330163874131583,-0.00270903966622221,0.020681142652256627,3,3,0.5625
+hydraulic,affected,macro_auroc,all_environments,RO-CAGF - CAGF,8,0.027309363597410975,0.010285257320710312,0.04725546970029001,8,0,0.0078125

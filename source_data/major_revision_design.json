@@ -1,0 +1,29 @@
+{
+  "seeds": [
+    101
+  ],
+  "methods": [
+    "EF",
+    "EF_PD",
+    "UF",
+    "UF_PD",
+    "Q_ONLY",
+    "CAGF",
+    "DWR",
+    "ENTROPY_PD",
+    "PD_ONLY",
+    "PD_MONO",
+    "PD_RANK",
+    "NO_LSCORE",
+    "LSCORE_NO_LRANK",
+    "PDRF_NOQ",
+    "PDRF"
+  ],
+  "fixed_test_fault_seed": 70001,
+  "confirmatory": {
+    "dataset": "UCI gas array batches 8-10",
+    "fault": "silent Gaussian, prevalence 0.40, scale 3",
+    "metric": "macro-AUROC",
+    "comparator": "CAGF"
+  }
+}

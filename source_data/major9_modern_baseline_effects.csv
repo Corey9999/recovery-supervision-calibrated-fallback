@@ -1,0 +1,16 @@
+scope,contrast,left,right,mean_difference,sd_difference,wins,n,wilcoxon_p,ci_low,ci_high,inference
+drift,Full - MER,RO-PDRF-Full,RO-MER,0.016541322882021158,0.015754450489973867,10,10,0.001953125,,,optimization-seed variability only
+gaussian,Full - MER,RO-PDRF-Full,RO-MER,0.011756912128193565,0.010338744034552707,9,10,0.005859375,,,optimization-seed variability only
+offset,Full - MER,RO-PDRF-Full,RO-MER,0.0151239171096483,0.0141488752677791,8,10,0.013671875,,,optimization-seed variability only
+stuck_at,Full - MER,RO-PDRF-Full,RO-MER,0.018030336702424397,0.018548961556732746,9,10,0.037109375,,,optimization-seed variability only
+four_fault_types,Full - MER,RO-PDRF-Full,RO-MER,0.015363122205571855,0.014596947752366415,4,4,,0.010647500003033675,0.020637691462369285,descriptive crossed fault-type and seed bootstrap; four top-level fault types
+drift,MER - CAGF,RO-MER,RO-CAGF,0.014333451821432553,0.022631656669384416,6,10,0.083984375,,,optimization-seed variability only
+gaussian,MER - CAGF,RO-MER,RO-CAGF,-0.00863730150251063,0.024434034017192276,3,10,0.322265625,,,optimization-seed variability only
+offset,MER - CAGF,RO-MER,RO-CAGF,0.014790111462575495,0.025349122046247875,6,10,0.10546875,,,optimization-seed variability only
+stuck_at,MER - CAGF,RO-MER,RO-CAGF,0.017354851888455237,0.03542722692871664,6,10,0.193359375,,,optimization-seed variability only
+four_fault_types,MER - CAGF,RO-MER,RO-CAGF,0.009460278417488163,0.028411779324321415,3,4,,-0.004252726619151073,0.02153542763146185,descriptive crossed fault-type and seed bootstrap; four top-level fault types
+drift,Full - CAGF,RO-PDRF-Full,RO-CAGF,0.030874774703453713,0.026248555503025944,8,10,0.009765625,,,optimization-seed variability only
+gaussian,Full - CAGF,RO-PDRF-Full,RO-CAGF,0.0031196106256829335,0.018997362174199964,4,10,0.76953125,,,optimization-seed variability only
+offset,Full - CAGF,RO-PDRF-Full,RO-CAGF,0.029914028572223795,0.029591729098634546,8,10,0.009765625,,,optimization-seed variability only
+stuck_at,Full - CAGF,RO-PDRF-Full,RO-CAGF,0.035385188590879635,0.03973555038161594,8,10,0.009765625,,,optimization-seed variability only
+four_fault_types,Full - CAGF,RO-PDRF-Full,RO-CAGF,0.02482340062306002,0.031211286724846077,4,4,,0.00898350170139284,0.039212676992275534,descriptive crossed fault-type and seed bootstrap; four top-level fault types

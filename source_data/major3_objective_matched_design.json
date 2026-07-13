@@ -1,0 +1,59 @@
+{
+  "design": "2x2 architecture x recovery objective with architecture-specific regularization",
+  "architectures": {
+    "bounded": [
+      "PDRF",
+      "RO-PDRF"
+    ],
+    "unrestricted_gate": [
+      "CAGF",
+      "RO-CAGF"
+    ]
+  },
+  "recovery_signals": [
+    "clean-view recovery distillation",
+    "clean/degraded Brier",
+    "degraded-view pairwise ranking"
+  ],
+  "architecture_specific_regularizers": {
+    "RO-PDRF": "bounded-score interior barrier, weight 0.005",
+    "RO-CAGF": "gate KL-to-available-uniform regularizer, weight 0.005"
+  },
+  "chemical_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "hydraulic_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "formal_teacher": "clean-only",
+  "principal_test_fault_seed": 70001,
+  "test_missingness": 0.2,
+  "principal_fault": {
+    "type": "silent_gaussian",
+    "group": 1,
+    "scale": 3.0,
+    "prevalence": 0.4
+  },
+  "quality_setting": {
+    "chemical": "q=1 at test",
+    "hydraulic": "q disabled"
+  },
+  "checkpoint_criterion": "unweighted natural selection cross-entropy; patience 9",
+  "training_forward_paths": 3,
+  "inference_forward_paths": 1,
+  "elapsed_seconds": 1504.1223408000078,
+  "test_data_used_for_selection": false
+}

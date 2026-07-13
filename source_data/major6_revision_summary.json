@@ -1,0 +1,8 @@
+{
+  "ro_pdrf_ema_vs_ro_pdrf": {
+    "affected_auroc_difference": 0.0015933781253689716,
+    "affected_nll_difference": -0.23685458982118268,
+    "affected_ece_difference": -0.020709173115387114
+  },
+  "interpretation": "EMA is an exploratory principal-fault remedy; cross-platform claims remain based on the prespecified non-EMA model."
+}

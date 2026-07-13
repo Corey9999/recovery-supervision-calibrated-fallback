@@ -1,0 +1,7 @@
+{
+  "mean_seed_accuracy_PDRF": 0.5499541704857929,
+  "mean_seed_accuracy_CAGF": 0.515948670944088,
+  "ensemble_accuracy_PDRF": 0.5618698441796517,
+  "ensemble_accuracy_CAGF": 0.5664527956003667,
+  "reason": "Averaging probabilities can change the winning class; mean per-model hard-decision accuracy and hard decisions from the probability ensemble are different estimands."
+}

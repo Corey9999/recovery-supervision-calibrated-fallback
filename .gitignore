@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Local third-party datasets
+external_data/*
+!external_data/README.md
+
+# Regenerable high-resolution exports
+figures/*.tif
+figures/*.tiff
+
+# Runtime and editor artifacts
+*.log
+*.err
+*.pid
+*.tmp
+.DS_Store
+Thumbs.db
+~$*
+
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc

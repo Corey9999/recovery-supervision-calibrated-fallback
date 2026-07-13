@@ -1,0 +1,56 @@
+{
+  "doi": "10.24432/C5CW21",
+  "stable_cycles_only": true,
+  "n_stable": 1449,
+  "sensor_groups": {
+    "pressure": [
+      "PS1",
+      "PS2",
+      "PS3",
+      "PS4",
+      "PS5",
+      "PS6"
+    ],
+    "flow": [
+      "FS1",
+      "FS2"
+    ],
+    "temperature": [
+      "TS1",
+      "TS2",
+      "TS3",
+      "TS4"
+    ],
+    "motor_power": [
+      "EPS1"
+    ],
+    "vibration": [
+      "VS1"
+    ]
+  },
+  "features_per_sensor": [
+    "mean",
+    "sd",
+    "min",
+    "max",
+    "q25",
+    "q75",
+    "rms",
+    "linear_slope"
+  ],
+  "split": "stratified 60% train, 15% selection, 10% calibration, 15% test",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "methods": [
+    "EF_PD",
+    "UF_PD",
+    "CAGF",
+    "DWR",
+    "PDRF_NOQ"
+  ]
+}

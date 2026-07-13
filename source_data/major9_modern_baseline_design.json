@@ -1,0 +1,27 @@
+{
+  "mode": "formal frozen rerun",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "baseline": "RO-MER: one expert per sensor group plus a joint expert and a sample-dependent router",
+  "objective": "same paired views, recovery distillation, Brier, degraded AUC, monotonicity and gate KL as RO-CAGF",
+  "test_faults": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "primary_subset": "fault actually applied while affected group is available",
+  "test_used_for_selection": false,
+  "elapsed_seconds": 438.16963739998755
+}

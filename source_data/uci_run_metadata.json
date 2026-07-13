@@ -1,0 +1,106 @@
+{
+  "dataset": "UCI Gas Sensor Array Drift Dataset",
+  "doi": "10.24432/C5RP6W",
+  "license": "CC BY 4.0",
+  "url": "https://archive.ics.uci.edu/static/public/224/gas+sensor+array+drift+dataset.zip",
+  "split": {
+    "train_batches": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "validation_batch": [
+      7
+    ],
+    "test_batches": [
+      8,
+      9,
+      10
+    ]
+  },
+  "sample_counts": {
+    "train": 5933,
+    "val": 3613,
+    "test": 4364
+  },
+  "calibration": "one scalar temperature per seed and model, fitted on validation batch 7",
+  "config": {
+    "modalities": 4,
+    "feature_dim": 32,
+    "classes": 6,
+    "batch_size": 256,
+    "epochs": 60,
+    "lr": 0.002,
+    "weight_decay": 0.0001,
+    "train_missing": 0.1,
+    "test_missing": 0.2,
+    "corruption_fraction": 0.4,
+    "corruption_scale": 3.0,
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110
+    ]
+  },
+  "methods": [
+    "EF",
+    "MD",
+    "UF",
+    "GF",
+    "RWF",
+    "CFA",
+    "CRF_NR",
+    "CRF"
+  ],
+  "strict_ablation": {
+    "CFA": "RWF plus matched counterfactual task augmentation only",
+    "CRF_NR": "CFA plus consistency and weight monotonicity, without variance ranking",
+    "CRF": "CRF_NR plus variance-ranking loss"
+  },
+  "robustness_grid": {
+    "severity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "affected_fraction": [
+      0.1,
+      0.25,
+      0.4,
+      0.6,
+      0.8
+    ],
+    "fault_modality": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "reported_quality": [
+      0.15,
+      0.4,
+      0.7,
+      1.0
+    ]
+  },
+  "rank_weight_sensitivity": [
+    0.0,
+    0.03,
+    0.07,
+    0.15,
+    0.3
+  ]
+}

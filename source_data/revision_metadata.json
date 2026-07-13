@@ -1,0 +1,66 @@
+{
+  "methods": [
+    "UF",
+    "GF",
+    "MOME_A",
+    "CFA",
+    "CRF_NR",
+    "CRF",
+    "BCRF"
+  ],
+  "faults": [
+    "silent_gaussian",
+    "bias",
+    "clipping",
+    "burst",
+    "correlated",
+    "misleading_quality",
+    "delayed_quality"
+  ],
+  "standard_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "rolling_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "origins": [
+    [
+      4,
+      5,
+      [
+        6
+      ]
+    ],
+    [
+      5,
+      6,
+      [
+        7
+      ]
+    ],
+    [
+      6,
+      7,
+      [
+        8,
+        9,
+        10
+      ]
+    ]
+  ],
+  "bounded_head": "3*tanh(raw/3), with coefficient 0.5 on mean((s/3)^4)",
+  "inference_scope": "intervals across seeds quantify optimization variability conditional on each fixed split"
+}

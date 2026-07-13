@@ -1,0 +1,29 @@
+\begin{tabular}{llcccc}
+\toprule
+Regime & Method & AUROC $\uparrow$ & NLL $\downarrow$ & ECE $\downarrow$ & AURC $\downarrow$ \\
+\midrule
+ID missingness & Early fusion & 0.785 $\pm$ 0.003 & 0.561 $\pm$ 0.003 & 0.028 $\pm$ 0.003 & 0.172 $\pm$ 0.003 \\
+ & Modality dropout & 0.786 $\pm$ 0.004 & 0.562 $\pm$ 0.004 & 0.038 $\pm$ 0.004 & 0.170 $\pm$ 0.003 \\
+ & Uniform fusion & 0.790 $\pm$ 0.004 & 0.554 $\pm$ 0.004 & 0.025 $\pm$ 0.003 & 0.166 $\pm$ 0.003 \\
+ & Gated fusion & 0.787 $\pm$ 0.003 & 0.557 $\pm$ 0.003 & 0.026 $\pm$ 0.002 & 0.168 $\pm$ 0.003 \\
+ & CRF & \textbf{0.792 $\pm$ 0.004} & \textbf{0.551 $\pm$ 0.004} & \textbf{0.025 $\pm$ 0.002} & \textbf{0.163 $\pm$ 0.003} \\
+\addlinespace
+Noise shift & Early fusion & 0.775 $\pm$ 0.004 & 0.572 $\pm$ 0.004 & 0.031 $\pm$ 0.003 & 0.181 $\pm$ 0.003 \\
+ & Modality dropout & 0.779 $\pm$ 0.004 & 0.571 $\pm$ 0.004 & 0.039 $\pm$ 0.004 & 0.177 $\pm$ 0.003 \\
+ & Uniform fusion & 0.783 $\pm$ 0.003 & 0.562 $\pm$ 0.003 & \textbf{0.028 $\pm$ 0.002} & 0.172 $\pm$ 0.003 \\
+ & Gated fusion & 0.775 $\pm$ 0.003 & 0.571 $\pm$ 0.004 & 0.032 $\pm$ 0.003 & 0.179 $\pm$ 0.003 \\
+ & CRF & \textbf{0.787 $\pm$ 0.003} & \textbf{0.557 $\pm$ 0.004} & 0.029 $\pm$ 0.002 & \textbf{0.168 $\pm$ 0.003} \\
+\addlinespace
+Outlier shift & Early fusion & 0.766 $\pm$ 0.003 & 0.585 $\pm$ 0.003 & 0.036 $\pm$ 0.002 & 0.191 $\pm$ 0.003 \\
+ & Modality dropout & 0.768 $\pm$ 0.004 & 0.594 $\pm$ 0.007 & 0.052 $\pm$ 0.004 & 0.190 $\pm$ 0.004 \\
+ & Uniform fusion & 0.778 $\pm$ 0.004 & 0.571 $\pm$ 0.004 & 0.034 $\pm$ 0.003 & 0.178 $\pm$ 0.003 \\
+ & Gated fusion & 0.767 $\pm$ 0.005 & 0.596 $\pm$ 0.008 & 0.041 $\pm$ 0.004 & 0.192 $\pm$ 0.005 \\
+ & CRF & \textbf{0.794 $\pm$ 0.003} & \textbf{0.551 $\pm$ 0.003} & \textbf{0.026 $\pm$ 0.004} & \textbf{0.162 $\pm$ 0.003} \\
+\addlinespace
+Silent failure & Early fusion & 0.764 $\pm$ 0.004 & 0.584 $\pm$ 0.004 & 0.039 $\pm$ 0.003 & 0.190 $\pm$ 0.004 \\
+ & Modality dropout & 0.766 $\pm$ 0.005 & 0.591 $\pm$ 0.006 & 0.059 $\pm$ 0.004 & 0.188 $\pm$ 0.004 \\
+ & Uniform fusion & 0.774 $\pm$ 0.003 & 0.572 $\pm$ 0.003 & 0.035 $\pm$ 0.003 & 0.180 $\pm$ 0.003 \\
+ & Gated fusion & 0.761 $\pm$ 0.004 & 0.591 $\pm$ 0.005 & 0.047 $\pm$ 0.005 & 0.193 $\pm$ 0.004 \\
+ & CRF & \textbf{0.780 $\pm$ 0.003} & \textbf{0.566 $\pm$ 0.004} & \textbf{0.032 $\pm$ 0.003} & \textbf{0.175 $\pm$ 0.003} \\
+\bottomrule
+\end{tabular}

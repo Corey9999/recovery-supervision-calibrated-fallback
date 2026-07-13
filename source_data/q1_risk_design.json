@@ -1,0 +1,30 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "methods": [
+    "PDRF_RCIA_R30"
+  ],
+  "fixed_test_fault_seed": 70001,
+  "fixed_calibration_fault_seed": 76001,
+  "full_method": "PDRF_RCIA_R30",
+  "selection": "PDRF-RCIA-R30 was fixed after staged three-seed development audits and before its formal ten-seed run",
+  "formal_methods": [
+    "CAGF",
+    "PDRF",
+    "PDRF_RC",
+    "PDRF_RCI",
+    "PDRF_RCIA_R30",
+    "PDRF_REC"
+  ],
+  "formal_seed_count": 10
+}

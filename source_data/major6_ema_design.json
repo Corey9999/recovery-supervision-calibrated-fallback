@@ -1,0 +1,18 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "teacher": "EMA of model parameters on clean view",
+  "ema_decay": 0.99,
+  "test_used_for_selection": false,
+  "elapsed_seconds": 241.45302290000836
+}

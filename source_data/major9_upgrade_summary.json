@@ -1,0 +1,166 @@
+{
+  "strict_estimand": [
+    {
+      "subset": "fault_applied_available",
+      "contrast": "RO-PDRF - PDRF",
+      "n_seeds": 10,
+      "mean_difference": 0.0156309465613681,
+      "sd_difference": 0.0047132602075626,
+      "wins": 10,
+      "wilcoxon_p": 0.001953125
+    },
+    {
+      "subset": "fault_applied_available",
+      "contrast": "RO-CAGF - CAGF",
+      "n_seeds": 10,
+      "mean_difference": 0.007692714611151,
+      "sd_difference": 0.02089861251204,
+      "wins": 6,
+      "wilcoxon_p": 0.322265625
+    },
+    {
+      "subset": "fault_applied_available",
+      "contrast": "RO-PDRF - RO-CAGF",
+      "n_seeds": 10,
+      "mean_difference": 0.0018349616841851,
+      "sd_difference": 0.0202926902778544,
+      "wins": 4,
+      "wilcoxon_p": 0.845703125
+    }
+  ],
+  "safe_recovery_aggregate": [
+    {
+      "scope": "four_fault_types",
+      "contrast": "Full - PDRF",
+      "left": "RO-PDRF-Full",
+      "right": "PDRF",
+      "mean_difference": 0.004718700352479293,
+      "sd_difference": 0.011301292721093597,
+      "wins": 4,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": -0.0011640660400900503,
+      "ci_high": 0.011450651219800849,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    },
+    {
+      "scope": "four_fault_types",
+      "contrast": "Balanced - Full",
+      "left": "SR-PDRF-Balanced",
+      "right": "RO-PDRF-Full",
+      "mean_difference": -0.0003702378334316858,
+      "sd_difference": 0.006620700649006259,
+      "wins": 2,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": -0.0039013246863669874,
+      "ci_high": 0.0028359686076815873,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    },
+    {
+      "scope": "four_fault_types",
+      "contrast": "Safe - Full",
+      "left": "SR-PDRF-Safe",
+      "right": "RO-PDRF-Full",
+      "mean_difference": -0.0005396780790650424,
+      "sd_difference": 0.008633886648911605,
+      "wins": 3,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": -0.00515354989237182,
+      "ci_high": 0.0035890655127287403,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    },
+    {
+      "scope": "four_fault_types",
+      "contrast": "Safe - PDRF",
+      "left": "SR-PDRF-Safe",
+      "right": "PDRF",
+      "mean_difference": 0.004179022273414251,
+      "sd_difference": 0.004706493043322446,
+      "wins": 4,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": 0.0020709737004740835,
+      "ci_high": 0.006596702725880994,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    }
+  ],
+  "modern_baseline_aggregate": [
+    {
+      "scope": "four_fault_types",
+      "contrast": "Full - MER",
+      "left": "RO-PDRF-Full",
+      "right": "RO-MER",
+      "mean_difference": 0.015363122205571855,
+      "sd_difference": 0.014596947752366415,
+      "wins": 4,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": 0.010647500003033675,
+      "ci_high": 0.020637691462369285,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    },
+    {
+      "scope": "four_fault_types",
+      "contrast": "MER - CAGF",
+      "left": "RO-MER",
+      "right": "RO-CAGF",
+      "mean_difference": 0.009460278417488163,
+      "sd_difference": 0.028411779324321415,
+      "wins": 3,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": -0.004252726619151073,
+      "ci_high": 0.02153542763146185,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    },
+    {
+      "scope": "four_fault_types",
+      "contrast": "Full - CAGF",
+      "left": "RO-PDRF-Full",
+      "right": "RO-CAGF",
+      "mean_difference": 0.02482340062306002,
+      "sd_difference": 0.031211286724846077,
+      "wins": 4,
+      "n": 4,
+      "wilcoxon_p": NaN,
+      "ci_low": 0.00898350170139284,
+      "ci_high": 0.039212676992275534,
+      "inference": "descriptive crossed fault-type and seed bootstrap; four top-level fault types"
+    }
+  ],
+  "safety_aggregate": [
+    {
+      "scope": "four_fault_types",
+      "variant": "Balanced",
+      "n_predictions": 57440,
+      "recovery_opportunities": 1692,
+      "recovery_preserved": 569,
+      "recovery_preservation_rate": 0.33628841607565013,
+      "negative_transfer_opportunities": 1375,
+      "negative_transfer_remaining": 294,
+      "negative_transfer_remaining_rate": 0.21381818181818182,
+      "negative_transfer_prevented_rate": 0.7861818181818182,
+      "recovery_usage": 0.6447423398328691
+    },
+    {
+      "scope": "four_fault_types",
+      "variant": "Safe",
+      "n_predictions": 57440,
+      "recovery_opportunities": 1692,
+      "recovery_preserved": 303,
+      "recovery_preservation_rate": 0.17907801418439717,
+      "negative_transfer_opportunities": 1375,
+      "negative_transfer_remaining": 137,
+      "negative_transfer_remaining_rate": 0.09963636363636363,
+      "negative_transfer_prevented_rate": 0.9003636363636364,
+      "recovery_usage": 0.49176532033426185
+    }
+  ],
+  "interpretation": {
+    "strict_subset": "Recovery supervision remains beneficial relative to PDRF, but the bounded-versus-gate architecture contrast is unresolved.",
+    "safe_layer": "The calibration-only selector prevents most base-correct/recovery-wrong losses but sacrifices recovery opportunities and is not uniformly AUROC-improving.",
+    "modern_baseline": "RO-MER is stronger than RO-CAGF for three fault types, yet RO-PDRF-Full retains the highest mean over all four controlled mechanisms."
+  }
+}

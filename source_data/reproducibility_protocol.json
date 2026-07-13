@@ -1,0 +1,92 @@
+{
+  "chemical": {
+    "groups_zero_based_sensor_indices": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6,
+        7
+      ],
+      [
+        8,
+        9,
+        10,
+        11
+      ],
+      [
+        12,
+        13,
+        14,
+        15
+      ]
+    ],
+    "split": "batches 1-6 train; first 60% of batch 7 selection; remainder calibration; batches 8-10 test",
+    "split_counts": {
+      "train": 5933,
+      "selection": 2168,
+      "calibration": 1445,
+      "test": 4364
+    },
+    "principal_fault": {
+      "fault_seed": 70001,
+      "missingness_and_fault_share_one_generator": true,
+      "missing_group_probability": 0.2,
+      "affected_probability_sampled_independently_of_missingness": 0.4,
+      "affected_group_zero_based": 0,
+      "standardized_gaussian_scale": 3.0,
+      "quality_values": 1.0
+    }
+  },
+  "hydraulic": {
+    "stable_cycle_filter": "profile column 4 equals zero",
+    "split": "within-native-condition acquisition-order 60/15/10/15 blocks",
+    "guard_cycles_per_boundary": 5,
+    "counts": {
+      "cooler": {
+        "train": 842,
+        "selection": 209,
+        "calibration": 139,
+        "test": 214,
+        "guard": 45
+      },
+      "valve": {
+        "train": 833,
+        "selection": 206,
+        "calibration": 137,
+        "test": 213,
+        "guard": 60
+      },
+      "pump": {
+        "train": 842,
+        "selection": 209,
+        "calibration": 139,
+        "test": 214,
+        "guard": 45
+      },
+      "accumulator": {
+        "train": 833,
+        "selection": 206,
+        "calibration": 137,
+        "test": 213,
+        "guard": 60
+      }
+    },
+    "controlled_faults": {
+      "affected_fraction": 0.4,
+      "pressure_group_zero_based": 0,
+      "vibration_group_zero_based": 4,
+      "fault_seeds": {
+        "pressure": 89000,
+        "vibration": 89004
+      }
+    }
+  },
+  "selection_policy": "minimum unweighted selection cross-entropy; patience 9; threshold 1e-4",
+  "test_used_for_model_or_checkpoint_selection": false
+}

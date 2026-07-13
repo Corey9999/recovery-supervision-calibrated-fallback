@@ -1,0 +1,28 @@
+{
+  "purpose": "architecture-specific regularizer sensitivity",
+  "formal_teacher": "clean-only",
+  "principal_test_fault_seed": 70001,
+  "settings": [
+    "RO-CAGF KL=0",
+    "RO-CAGF KL=.001",
+    "RO-CAGF KL=.020",
+    "RO-PDRF interior=0",
+    "RO-PDRF interior=.001",
+    "RO-PDRF interior=.020"
+  ],
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "checkpoint_criterion": "unweighted natural selection cross-entropy; patience 9",
+  "elapsed_seconds": 1126.6573220000137,
+  "test_data_used_for_selection": false
+}

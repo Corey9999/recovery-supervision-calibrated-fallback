@@ -1,0 +1,54 @@
+{
+  "config": {
+    "n_train": 5000,
+    "n_val": 1500,
+    "n_test": 3000,
+    "n_modalities": 4,
+    "feature_dim": 13,
+    "latent_dim": 6,
+    "epochs": 80,
+    "batch_size": 256,
+    "lr": 0.002,
+    "weight_decay": 0.0001,
+    "seeds": [
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ]
+  },
+  "device": "cpu",
+  "models": [
+    "EF",
+    "MD",
+    "UF",
+    "GF",
+    "QWF",
+    "LWF",
+    "RWF",
+    "CFA",
+    "CRF_NR",
+    "CRF"
+  ],
+  "strict_ablation": {
+    "CFA": "RWF plus matched counterfactual task augmentation only",
+    "CRF_NR": "CFA plus consistency and weight monotonicity, without variance ranking",
+    "CRF": "CRF_NR plus variance-ranking loss"
+  }
+}

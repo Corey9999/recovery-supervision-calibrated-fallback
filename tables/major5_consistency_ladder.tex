@@ -1,0 +1,21 @@
+\begin{tabular}{llrrr}
+\toprule
+Architecture & Training objective & Affected AUROC & SD & $P$ vs previous \\
+\midrule
+EF-PD & Paired degradation & 0.734 & nan & -- \\
+EF-PD & Clean distillation & 0.758 & 0.006 & 1.0000 \\
+UF-PD & Paired degradation & 0.716 & nan & -- \\
+UF-PD & Clean distillation & 0.791 & 0.008 & 1.0000 \\
+CAGF & Paired degradation & 0.706 & nan & -- \\
+CAGF & Clean distillation & 0.800 & 0.024 & 1.0000 \\
+CAGF & Full recovery & 0.797 & 0.022 & 0.6250 \\
+PDRF & Paired degradation & 0.754 & nan & -- \\
+PDRF & Clean distillation & 0.802 & 0.008 & 1.0000 \\
+PDRF & Full recovery & 0.804 & 0.009 & 0.1934 \\
+PDRF+CD-T07 & Control & 0.801 & 0.008 & -- \\
+ModDrop-SD & Control & 0.703 & 0.008 & -- \\
+RO-AT-GATE & Attention gate + full recovery & 0.784 & 0.029 & -- \\
+RO-PDRF-EMA & Full recovery + EMA & 0.806 & 0.009 & 0.2324 \\
+RO-PDRF-Full-CAL & Full recovery + 4x Brier & 0.804 & 0.008 & 0.6953 \\
+\bottomrule
+\end{tabular}

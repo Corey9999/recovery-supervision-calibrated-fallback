@@ -1,0 +1,4 @@
+building,rows_normal_or_sensor_fault,normal,sensor_fault,return_sensor_fault,supply_sensor_fault,ahu_units,exact_duplicate_rows,unavailable_group_rate,conflicting_duplicate_rows_excluded,same_label_duplicate_rows_collapsed
+auditorium,62357,60219,2138,1734,404,13,207,0.0,0,0
+hospital,62407,53619,8788,8779,9,8,9760,0.02630794048309326,66,128
+office,127432,119402,8030,6999,1031,20,60,0.0,0,0

@@ -1,0 +1,41 @@
+{
+  "control_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "fault_model_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "fault_realizations": [
+    70001,
+    70002,
+    70003,
+    70004,
+    70005,
+    70006,
+    70007,
+    70008
+  ],
+  "principal_fault": {
+    "group": 1,
+    "scale": 3.0,
+    "prevalence": 0.4
+  },
+  "clean_distillation_weight": 0.3,
+  "confidence_threshold": 0.7,
+  "moddrop_baseline": "early fusion; one available group removed per training pair; clean-view self-distillation",
+  "test_data_used_for_selection": false,
+  "elapsed_seconds": 640.2659378999961
+}

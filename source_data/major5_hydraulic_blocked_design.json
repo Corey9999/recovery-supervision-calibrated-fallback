@@ -1,0 +1,24 @@
+{
+  "split": "within-native-condition acquisition-order blocks",
+  "ratios": [
+    0.6,
+    0.15,
+    0.1,
+    0.15
+  ],
+  "guard_cycles_at_each_boundary": 5,
+  "global_chronological_split_rejected": "cooler and accumulator states do not overlap across global time partitions",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "methods": [
+    "RO-CAGF",
+    "RO-PDRF"
+  ],
+  "test_data_used_for_selection": false,
+  "elapsed_seconds": 69.21267369997804
+}

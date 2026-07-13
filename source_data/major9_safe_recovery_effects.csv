@@ -1,0 +1,21 @@
+scope,contrast,left,right,mean_difference,sd_difference,wins,n,wilcoxon_p,ci_low,ci_high,inference
+drift,Full - PDRF,RO-PDRF-Full,PDRF,0.00013209614376545885,0.0111140464650048,5,10,0.6953125,,,optimization-seed variability only
+gaussian,Full - PDRF,RO-PDRF-Full,PDRF,0.014328129886908281,0.005591845565437747,10,10,0.001953125,,,optimization-seed variability only
+offset,Full - PDRF,RO-PDRF-Full,PDRF,0.0009078734091524931,0.012297924462832994,5,10,0.556640625,,,optimization-seed variability only
+stuck_at,Full - PDRF,RO-PDRF-Full,PDRF,0.0035067019700909417,0.010182162516782818,8,10,0.16015625,,,optimization-seed variability only
+four_fault_types,Full - PDRF,RO-PDRF-Full,PDRF,0.004718700352479293,0.011301292721093597,4,4,,-0.0011640660400900503,0.011450651219800849,descriptive crossed fault-type and seed bootstrap; four top-level fault types
+drift,Balanced - Full,SR-PDRF-Balanced,RO-PDRF-Full,0.0019321978719177735,0.006119224675701465,7,10,0.375,,,optimization-seed variability only
+gaussian,Balanced - Full,SR-PDRF-Balanced,RO-PDRF-Full,-0.00502533434785728,0.004696568223710206,0,10,0.001953125,,,optimization-seed variability only
+offset,Balanced - Full,SR-PDRF-Balanced,RO-PDRF-Full,0.0023369686236608066,0.007862193197457738,7,10,0.322265625,,,optimization-seed variability only
+stuck_at,Balanced - Full,SR-PDRF-Balanced,RO-PDRF-Full,-0.0007247834814480437,0.005511650936944634,3,10,0.275390625,,,optimization-seed variability only
+four_fault_types,Balanced - Full,SR-PDRF-Balanced,RO-PDRF-Full,-0.0003702378334316858,0.006620700649006259,2,4,,-0.0039013246863669874,0.0028359686076815873,descriptive crossed fault-type and seed bootstrap; four top-level fault types
+drift,Safe - Full,SR-PDRF-Safe,RO-PDRF-Full,0.002415333397899755,0.008346740455429656,8,10,0.322265625,,,optimization-seed variability only
+gaussian,Safe - Full,SR-PDRF-Safe,RO-PDRF-Full,-0.006926588626920416,0.0048651730026661524,0,10,0.001953125,,,optimization-seed variability only
+offset,Safe - Full,SR-PDRF-Safe,RO-PDRF-Full,0.0021966565029183593,0.009322270584958919,6,10,0.625,,,optimization-seed variability only
+stuck_at,Safe - Full,SR-PDRF-Safe,RO-PDRF-Full,0.00015588640984213198,0.008882385604759369,3,10,0.322265625,,,optimization-seed variability only
+four_fault_types,Safe - Full,SR-PDRF-Safe,RO-PDRF-Full,-0.0005396780790650424,0.008633886648911605,3,4,,-0.00515354989237182,0.0035890655127287403,descriptive crossed fault-type and seed bootstrap; four top-level fault types
+drift,Safe - PDRF,SR-PDRF-Safe,PDRF,0.002547429541665214,0.00497067849864937,7,10,0.232421875,,,optimization-seed variability only
+gaussian,Safe - PDRF,SR-PDRF-Safe,PDRF,0.007401541259987865,0.0040673696437629955,10,10,0.001953125,,,optimization-seed variability only
+offset,Safe - PDRF,SR-PDRF-Safe,PDRF,0.0031045299120708524,0.005254761000154015,6,10,0.275390625,,,optimization-seed variability only
+stuck_at,Safe - PDRF,SR-PDRF-Safe,PDRF,0.0036625883799330738,0.0033239785024758405,9,10,0.00390625,,,optimization-seed variability only
+four_fault_types,Safe - PDRF,SR-PDRF-Safe,PDRF,0.004179022273414251,0.004706493043322446,4,4,,0.0020709737004740835,0.006596702725880994,descriptive crossed fault-type and seed bootstrap; four top-level fault types

@@ -1,0 +1,22 @@
+{
+  "zero_shot": [
+    "EF-PD source normalization",
+    "RO-PDRF-NOQ source normalization",
+    "GroupDRO-EF-PD",
+    "HGB-current"
+  ],
+  "unsupervised_adaptation": [
+    "target-building normalization",
+    "target-to-source CORAL"
+  ],
+  "target_labels_used_for_adaptation": false,
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "epochs": 12,
+  "reverse_auc_definition": "AUROC using 1-p(fault); diagnostic only"
+}

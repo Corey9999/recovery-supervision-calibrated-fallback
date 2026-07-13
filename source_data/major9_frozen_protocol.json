@@ -1,0 +1,23 @@
+{
+  "status": "frozen before formal rerun",
+  "primary_dataset": "UCI Gas Sensor Array Drift",
+  "primary_subset": "fault actually applied while the assigned sensor group is available",
+  "primary_metric": "macro_auroc",
+  "optimization_seeds": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+  "fault_types": ["gaussian", "offset", "drift", "stuck_at"],
+  "formal_fault_realization": 70001,
+  "safe_recovery": {
+    "models": ["PDRF", "RO-PDRF-Full", "SR-PDRF-Balanced", "SR-PDRF-Safe"],
+    "temperature_data": "first half of the Batch 7 calibration partition",
+    "selector_data": "second half of the Batch 7 calibration partition",
+    "selector_faults": "four fault types with two calibration-only realizations each",
+    "safe_threshold": "minimum calibration negative transfer, then maximum accuracy",
+    "balanced_threshold": "maximum calibration accuracy, then minimum negative transfer"
+  },
+  "modern_baseline": {
+    "models": ["RO-CAGF", "RO-PDRF-Full", "RO-MER"],
+    "RO-MER": "one expert per physical sensor group plus one joint expert and a sample-dependent router"
+  },
+  "test_labels_used_for_selection": false,
+  "external_data_boundary": "No located public candidate jointly provides natural sensor-failure events, independent downstream recovery labels and multiple devices; controlled or task-mismatched candidates remain boundary evidence."
+}

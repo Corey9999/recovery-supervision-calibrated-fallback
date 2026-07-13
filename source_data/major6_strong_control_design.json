@@ -1,0 +1,32 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "headline_fault": {
+    "group": 1,
+    "scale": 3.0,
+    "prevalence": 0.4,
+    "realization": 70001
+  },
+  "attention_gate": {
+    "group_token_width": 32,
+    "heads": 4,
+    "feedforward_width": 64,
+    "layers": 1
+  },
+  "ema_decay": 0.99,
+  "soft_teacher_weight": "maximum clean-view class probability",
+  "calibration_control_brier_weight": 0.2,
+  "temperature_scaling": "per seed on calibration split",
+  "test_used_for_selection": false,
+  "elapsed_seconds": 534.5283827999956
+}

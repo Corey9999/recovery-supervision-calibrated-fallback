@@ -1,0 +1,38 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "fault_realizations": [
+    70001,
+    70002,
+    70003,
+    70004,
+    70005,
+    70006,
+    70007,
+    70008
+  ],
+  "fault_types": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "group": 1,
+  "scale": 3.0,
+  "prevalence": 0.4,
+  "missingness": 0.2,
+  "shared_within_realization": "affected rows and group-missingness masks; intervention-specific values are fixed across methods",
+  "ema_decays": [
+    0.95,
+    0.99,
+    0.995
+  ],
+  "test_used_for_selection": false,
+  "scope": "repeated controlled faults on one chemical instrument, not independent devices",
+  "elapsed_seconds": 600.6466437000199
+}

@@ -1,0 +1,2 @@
+seed,n,raw_score_violation,unnormalized_weight_violation,normalized_weight_violation,other_weight_mean_change,score_saturation,mean_score_before,mean_score_after
+101,1383,0.05422993492407809,0.05422993492407809,0.05712219812002892,0.014944005757570267,0.0,0.5572346448898315,1.4856938123703003

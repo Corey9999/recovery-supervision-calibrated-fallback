@@ -1,0 +1,28 @@
+{
+  "method": "RO-PDRF-CEG",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "training_rule": "apply clean-to-fault KL only if clean CE <= degraded CE",
+  "label_use": "training labels already used by clean and degraded task losses",
+  "inference_rule": "ordinary single-pass RO-PDRF; no teacher or gate at inference",
+  "principal_fault": {
+    "type": "Gaussian",
+    "group": 1,
+    "scale": 3.0,
+    "prevalence": 0.4,
+    "realization": 70001
+  },
+  "test_used_for_selection": false,
+  "elapsed_seconds": 222.18696359999012
+}

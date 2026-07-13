@@ -1,0 +1,9 @@
+{
+  "question": "Does the principal conclusion persist when affected means a fault actually applied to an available group?",
+  "test_rows": 4364,
+  "assigned_rows": 1765,
+  "applied_available_rows": 1436,
+  "assigned_unavailable_rows": 329,
+  "assignment_and_applied_partition": true,
+  "fixed_ensemble_bootstrap_scope": "test-sample and batch uncertainty only; not model refitting or device replication"
+}

@@ -1,0 +1,6 @@
+subset,n,fraction_of_test
+assigned,1765,0.40444546287809346
+fault_applied_available,1436,0.3290559120073327
+assigned_unavailable,329,0.07538955087076077
+unaffected,2599,0.5955545371219065
+unaffected_available,2045,0.46860678276810264

@@ -1,0 +1,22 @@
+{
+  "dataset_doi": "10.6084/m9.figshare.27147678.v3",
+  "article_doi": "10.1038/s41597-025-05825-9",
+  "license": "CC BY 4.0 (dataset repository)",
+  "test_fault_source": "native expert annotations in real-operational BMS records; no test corruption",
+  "ground_truth_boundary": "expert rule-based labels, not maintenance-adjudicated hardware replacement records",
+  "held_out_design": "leave-one-building-out across auditorium, hospital, and office",
+  "task": "binary normal condition versus return/supply-air temperature sensor fault",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "epochs": 12,
+  "sha256": {
+    "auditorium_scientific_data.csv": "acfcd58d1dff5b76f64bbe716e824c4592f83a5cbfc7e6c8b77fe050bd414d3b",
+    "hospital_scientific_data.csv": "66feab7fe66d77ca1c632315a61a7a93412ff00dc2fb0cd9b2485394cecca9f7",
+    "office_scientific_data.csv": "7dfe5660c6d5b0db388e01a59956a3ce40136d42c7a1d2038bfc6a7ea2a80203"
+  }
+}

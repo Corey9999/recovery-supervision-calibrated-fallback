@@ -1,0 +1,26 @@
+{
+  "mode": "formal frozen rerun",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "temperature_calibration": "first half of Batch 7 calibration partition",
+  "selector_calibration": "second half of Batch 7; four controlled fault types; two realizations each",
+  "selector": "standardized logistic preference model fitted only where PDRF and RO-PDRF correctness differ",
+  "threshold_rules": {
+    "Safe": "minimize calibration negative transfer, then maximize accuracy and recovery",
+    "Balanced": "maximize calibration accuracy, then minimize negative transfer"
+  },
+  "inference": "use RO-PDRF-Full only above the corresponding frozen selector threshold; otherwise use PDRF",
+  "test_used_for_selection": false,
+  "elapsed_seconds": 372.5531656999956
+}

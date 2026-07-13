@@ -1,0 +1,25 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "methods": [
+    "CAGF",
+    "PDRF",
+    "PDRF_REC",
+    "PDRF_RC",
+    "PDRF_RCI"
+  ],
+  "fixed_test_fault_seed": 70001,
+  "fixed_calibration_fault_seed": 76001,
+  "full_method": "PDRF_RCI",
+  "selection": "PDRF-RCI was fixed after a three-seed development audit and before the formal ten-seed run"
+}

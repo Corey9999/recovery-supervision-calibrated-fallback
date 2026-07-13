@@ -1,0 +1,27 @@
+{
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "epochs": 60,
+  "CRA": "distil only when clean and affected-group-removal argmax agree; target is their mean probability",
+  "ECA": "distil only when student-clean and EMA-clean argmax agree; target is their mean probability",
+  "ema_decay": 0.99,
+  "principal_fault": {
+    "type": "Gaussian",
+    "group": 1,
+    "scale": 3.0,
+    "prevalence": 0.4,
+    "realization": 70001
+  },
+  "test_used_for_selection": false,
+  "elapsed_seconds": 372.8723839999875
+}

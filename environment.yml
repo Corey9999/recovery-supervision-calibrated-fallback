@@ -1,0 +1,13 @@
+name: ro-pdrf-reproduction
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.10
+  - numpy>=2.2,<3
+  - pandas>=2.3,<3
+  - scikit-learn>=1.7,<2
+  - scipy>=1.15,<2
+  - matplotlib>=3.10,<4
+  - pillow>=12,<13
+  - pytorch>=2.12,<3

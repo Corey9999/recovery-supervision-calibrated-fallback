@@ -1,0 +1,24 @@
+{
+  "public_name": "RO-PDRF-Lite",
+  "role": "primary practical model and software default",
+  "implementation": {
+    "base_spec": "run_major_revision_experiments.SPECS['PDRF']",
+    "recovery_distillation": true,
+    "recovery_teacher": "clean",
+    "w_recovery": 0.30,
+    "brier_regularization": false,
+    "interior_barrier": false,
+    "degraded_auc": false
+  },
+  "checkpoint": {
+    "criterion": "minimum unweighted selection cross-entropy",
+    "patience_epochs": 9,
+    "minimum_improvement": 0.0001,
+    "test_data_used": false
+  },
+  "notes": {
+    "mechanistic_model": "RO-PDRF-Full",
+    "calibration_sensitivity": "RO-PDRF-EMA",
+    "legacy_full_model_source_data_id": "RO-PDRF"
+  }
+}
