@@ -1,5 +1,5 @@
 {
-  "run_id": "CEE-CF10-R1",
+  "run_id": "CEE-CF10-R2",
   "mode": "formal frozen rerun",
   "seeds": [
     101,
@@ -42,8 +42,17 @@
     "assigned-but-masked",
     "unaffected"
   ],
-  "bootstrap": "1000 hierarchical replicates: fault type -> optimization seed/model pair -> observation within cell",
+  "bootstrap": "1000 crossed-cluster replicates: independently resample fault mechanisms and model-pair seed identities, retain the sampled seed draw across all sampled faults, then resample observations within each fault-by-seed cell",
+  "selector_model": {
+    "penalty": "l2",
+    "C": 0.5,
+    "solver": "lbfgs",
+    "max_iter": 2000,
+    "tolerance": 0.0001,
+    "class_weight": "balanced",
+    "random_state": 0
+  },
   "selector_uses_test_labels": false,
   "threshold_uses_in_fold_probabilities": false,
-  "elapsed_seconds": 518.3652106999943
+  "elapsed_seconds": 838.259562399995
 }

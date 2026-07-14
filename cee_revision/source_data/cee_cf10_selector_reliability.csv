@@ -1,4 +1,4 @@
-seed,bin,lower,upper,n,mean_probability,observed_recovery_preference
+seed,bin,lower,upper,n,mean_conditional_preference_score,observed_recovery_preference
 101,1,0.0,0.1,23,0.06463938149439535,0.08695652173913043
 101,2,0.1,0.2,28,0.1371729872083062,0.10714285714285714
 101,3,0.2,0.30000000000000004,19,0.2516708738673869,0.21052631578947367

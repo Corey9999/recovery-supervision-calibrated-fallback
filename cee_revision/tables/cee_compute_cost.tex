@@ -1,9 +1,9 @@
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrrr}
 \toprule
-Method & Parameters & State (KiB) & Passes & FLOPs / sample & CPU ms / sample \\
+Method & Parameters & State (KiB) & Passes & FLOPs / sample & Batch throughput / s & Batch-1 latency (ms) \\
 \midrule
-PDRF & 19,740 & 77.1 & 1 & 38,528 & 0.0008 \\
-RO-PDRF-Full & 19,740 & 77.1 & 1 & 38,528 & 0.0008 \\
-SR-PDRF-Safe-CF & 39,493 & 154.3 & 6 & 231,168 & 0.0069 \\
+PDRF & 19,740 & 77.1 & 1 & 38,528 & 676997 & 0.875 \\
+RO-PDRF-Full & 19,740 & 77.1 & 1 & 38,528 & 678381 & 0.880 \\
+SR-PDRF-Safe-CF & 39,493 & 154.3 & 6 & 231,168 & 84288 & 6.810 \\
 \bottomrule
 \end{tabular}

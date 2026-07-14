@@ -1,6 +1,6 @@
 # CEE main validation figure contract
 
-Core conclusion: Cross-fitted selective recovery limits negative transfer beyond simple rules and remains measurable on mixed and unseen-fault streams, but its benefit is conservative and its inference cost grows with the number of sensor groups.
+Core conclusion: Safe-CF trades retained corrections for a reproducible reduction in recovery-induced negative transfer; inference must respect the crossed fault-by-model-seed design and the ten unique seed units in clean or unaffected streams.
 
 Figure archetype: quantitative grid with a dominant risk--recovery panel.
 
@@ -12,7 +12,7 @@ Panel map:
 
 - a: full mixed-stream macro-AUROC at 0%, 10%, 40%, and 70% fault prevalence.
 - b: Safe-CF macro-AUROC differences for leave-one-family-out and unseen mechanisms.
-- c: simple-rule versus cross-fitted selector trade-off between negative-transfer prevention and recovery retention; hierarchical 95% interval for Safe-CF and an ideal-corner marker.
+- c: simple-rule versus cross-fitted selector trade-off between negative-transfer prevention and recovery retention; crossed-cluster 95% interval for Safe-CF and a correctness-disagreement opportunity-boundary marker.
 - d: inference FLOPs and forward-pass scaling at 4, 8, and 16 sensor groups.
 
 Evidence hierarchy:
@@ -21,9 +21,9 @@ Evidence hierarchy:
 - Validation evidence: panels a and b, covering deployment mixture and mechanism transfer.
 - Cost boundary: panel d, showing the G+2 pass requirement.
 
-Statistics: 10 matched optimization seeds; strict model--fault--observation predictions; Safe-CF interval from 1,000 hierarchical fault-type -> seed/model-pair -> observation bootstrap replicates; other error bars are seed/cell standard errors and are labelled as such.
+Statistics: 10 matched optimization seeds; strict model--fault--observation predictions; Safe-CF interval from 1,000 crossed-cluster replicates that independently resample fault mechanisms and model-pair seed identities, retain the same seed draw across faults, and then resample observations within cells. Clean 0% points use exactly one value per seed. Other error bars are seed-level two-sided 95% Student-t intervals.
 
-Reviewer risks: selector threshold leakage, use of labels at test time, unequal stream definitions, inflated independent-sample interpretation, missing uncertainty, unreadable dense annotations, and hidden six-pass deployment cost.
+Reviewer risks: selector threshold leakage, use of labels at test time, unequal stream definitions, pseudo-replication at 0% or in unaffected rows, crossed-factor misspecification, mislabelling the correctness oracle as a general AUROC bound, small-n uncertainty, unreadable annotations, and hidden six-pass deployment cost.
 
 Image integrity: no generated or altered experimental images; all panels are direct plots of source CSV outputs produced by the frozen CEE run.
 

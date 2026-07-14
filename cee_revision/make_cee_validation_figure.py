@@ -8,6 +8,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import t
 
 
 ROOT = Path(__file__).resolve().parent
@@ -59,9 +60,10 @@ def panel_label(ax, label):
     )
 
 
-def mean_se(values):
+def mean_t95(values):
     values = np.asarray(values, float)
-    return values.mean(), values.std(ddof=1) / np.sqrt(len(values))
+    se = values.std(ddof=1) / np.sqrt(len(values))
+    return values.mean(), t.ppf(0.975, len(values) - 1) * se
 
 
 def main():
@@ -69,7 +71,7 @@ def main():
     lofo = pd.read_csv(DATA / "cee_cf10_lofo.csv")
     unseen = pd.read_csv(DATA / "cee_cf10_unseen_faults.csv")
     simple = pd.read_csv(DATA / "cee_cf10_simple_rule_test.csv")
-    intervals = pd.read_csv(DATA / "cee_cf10_hierarchical_intervals.csv").set_index("quantity")
+    intervals = pd.read_csv(DATA / "cee_cf10_crossed_intervals.csv").set_index("quantity")
     scaling = pd.read_csv(DATA / "cee_cf10_group_scaling.csv")
 
     fig = plt.figure(figsize=(7.2, 6.25), constrained_layout=True)
@@ -100,7 +102,7 @@ def main():
                     & (metrics.method == method)
                 ]
                 per_seed = part.groupby("seed").value.mean()
-            mean, error = mean_se(per_seed)
+            mean, error = mean_t95(per_seed)
             means.append(mean)
             errors.append(error)
         label = {"PDRF": "Base", "RO-PDRF-Full": "Full", "SR-PDRF-Safe-CF": "Safe-CF"}[method]
@@ -136,12 +138,12 @@ def main():
     }
     for fault, group in lofo.groupby("held_out_fault"):
         diff = group.safe_macro_auroc - group.pdrf_macro_auroc
-        mean, se = mean_se(diff)
-        transfer_rows.append((label_map[fault], mean, 1.96 * se, "LOFO"))
+        mean, error = mean_t95(diff)
+        transfer_rows.append((label_map[fault], mean, error, "LOFO"))
     for fault, group in unseen.groupby("unseen_fault"):
         diff = group.safe_macro_auroc - group.pdrf_macro_auroc
-        mean, se = mean_se(diff)
-        transfer_rows.append((label_map[fault], mean, 1.96 * se, "Unseen"))
+        mean, error = mean_t95(diff)
+        transfer_rows.append((label_map[fault], mean, error, "Unseen"))
     y = np.arange(len(transfer_rows))[::-1]
     for yi, (label, mean, error, audit) in zip(y, transfer_rows):
         color = COLORS["proposed"] if audit == "LOFO" else COLORS["unseen"]
@@ -157,7 +159,7 @@ def main():
 
     # c: risk-recovery trade-off against simple selectors.
     selected_rules = [
-        ("Cross-fitted-logistic-Safe", "proposed", "Safe-CF"),
+        ("Safe-CF", "proposed", "Safe-CF"),
         ("Higher-confidence", "prevention_matched", "Confidence"),
         ("Lower-entropy", "prevention_matched", "Entropy"),
         ("Lower-LOO-disagreement", "prevention_matched", "LOO"),
@@ -165,17 +167,17 @@ def main():
         ("Random-matched-selection", "selection_rate_matched", "Random"),
     ]
     offsets = {
-        "Safe-CF": (6, 8),
-        "Confidence": (8, -13),
-        "Entropy": (8, 9),
-        "LOO": (-23, -16),
-        "JS": (-21, 13),
-        "Random": (5, 5),
+        "Safe-CF": (8, 16, "left"),
+        "Confidence": (10, 8, "left"),
+        "Entropy": (10, 23, "left"),
+        "LOO": (-18, 8, "right"),
+        "JS": (-18, 24, "right"),
+        "Random": (8, 8, "left"),
     }
     for rule, matching, label in selected_rules:
         group = simple[(simple.rule == rule) & (simple.matching == matching)]
-        x_mean, x_se = mean_se(group.negative_transfer_prevention)
-        y_mean, y_se = mean_se(group.recovery_retention)
+        x_mean, x_error = mean_t95(group.groupby("seed").negative_transfer_prevention.mean())
+        y_mean, y_error = mean_t95(group.groupby("seed").recovery_retention.mean())
         if label == "Safe-CF":
             xrow = intervals.loc["negative_transfer_prevention"]
             yrow = intervals.loc["recovery_retention"]
@@ -184,12 +186,12 @@ def main():
             yerr = np.array([[y_mean - yrow["ci_2.5"]], [yrow["ci_97.5"] - y_mean]])
             color, marker, size, zorder = COLORS["proposed"], "D", 36, 5
         else:
-            xerr, yerr = 1.96 * x_se, 1.96 * y_se
+            xerr, yerr = x_error, y_error
             color = COLORS["random"] if label == "Random" else COLORS["simple"]
             marker, size, zorder = ("s" if label == "Random" else "o"), 25, 3
         ax_c.errorbar(x_mean, y_mean, xerr=xerr, yerr=yerr, fmt="none", ecolor=color, elinewidth=0.8, capsize=1.8, zorder=zorder)
         ax_c.scatter(x_mean, y_mean, s=size, color=color, marker=marker, edgecolor="white", linewidth=0.5, zorder=zorder + 1)
-        dx, dy = offsets[label]
+        dx, dy, horizontal_alignment = offsets[label]
         ax_c.annotate(
             label,
             (x_mean, y_mean),
@@ -197,11 +199,11 @@ def main():
             textcoords="offset points",
             fontsize=6.0,
             color="#33363B",
-            ha="right" if label in {"LOO", "JS"} else "left",
-            va="top" if label in {"Confidence", "LOO"} else "bottom",
+            ha=horizontal_alignment,
+            va="bottom",
         )
     ax_c.scatter([1], [1], marker="*", s=55, color="#7A4EAB", edgecolor="white", linewidth=0.4, zorder=6)
-    ax_c.annotate("Ideal / oracle", (1, 1), xytext=(-4, -12), textcoords="offset points", ha="right", fontsize=6.2, color="#5D3B85")
+    ax_c.annotate("Correctness-disagreement\nopportunity boundary", (1, 1), xytext=(-5, -19), textcoords="offset points", ha="right", fontsize=6.0, color="#5D3B85")
     ax_c.set_xlim(-0.03, 1.04)
     ax_c.set_ylim(-0.03, 1.04)
     ax_c.set_xlabel("Negative-transfer prevention")
@@ -218,6 +220,7 @@ def main():
         ax_d.annotate(f"{int(passes)} passes", (xi, yi), xytext=(0, 6), textcoords="offset points", ha="center", fontsize=6.2, color=COLORS["proposed"])
     ax_d.set_yscale("log")
     ax_d.set_xticks(x)
+    ax_d.set_xlim(1.5, 16.8)
     ax_d.set_xlabel("Number of sensor groups (G)")
     ax_d.set_ylabel("Counted inference FLOPs / sample (log scale)")
     ax_d.grid(axis="y", which="both", color="#D9DCE1", linewidth=0.5, alpha=0.8)

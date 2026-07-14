@@ -9,8 +9,9 @@ Additions requested by the pre-submission review:
 2. Clean, mixed-stream, assigned-but-masked, and prevalence-shift evaluation.
 3. Leave-one-fault-family-out and genuinely unseen-mechanism audits.
 4. Simple selective-fallback baselines at matched calibration trade-offs.
-5. Hierarchical fault -> seed -> observation bootstrap intervals.
+5. Crossed fault x seed cluster-bootstrap intervals.
 6. Frozen-run identifiers, selector coefficients, reliability, and CPU cost.
+7. Selector feature ablations, convergence diagnostics, and batch-1 latency.
 """
 
 from __future__ import annotations
@@ -20,8 +21,10 @@ from pathlib import Path
 import json
 import math
 import os
+import platform
 import sys
 import time
+import warnings
 
 ROOT = Path(__file__).resolve().parent
 IMPORT_CANDIDATES = (ROOT.parent, ROOT.parent / "paper_package_q1_upgrade")
@@ -40,6 +43,7 @@ import numpy as np
 import pandas as pd
 import torch
 from scipy.stats import wilcoxon
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     average_precision_score,
@@ -63,7 +67,7 @@ OUT = ROOT / ("source_data_fast" if FAST else "source_data")
 OUT.mkdir(parents=True, exist_ok=True)
 SEEDS = (101,) if FAST else tuple(range(101, 111))
 EPOCHS = 5 if FAST else 60
-FROZEN_RUN = "CEE-CF10-R1"
+FROZEN_RUN = "CEE-CF10-R2"
 CAL_FAULTS = ("gaussian", "offset", "drift", "stuck_at")
 UNSEEN_FAULTS = ("gain_loss", "clipping", "correlated_dual")
 PREVALENCES = (0.10, 0.40, 0.70)
@@ -85,6 +89,27 @@ FEATURES = [
     "recovery_consensus_agreement",
     "removal_fraction",
 ]
+
+CONFIDENCE_ENTROPY_FEATURES = FEATURES[:6]
+DISAGREEMENT_FEATURES = [
+    "base_recovery_js",
+    "base_consensus_js",
+    "recovery_consensus_js",
+    "base_consensus_agreement",
+    "recovery_consensus_agreement",
+]
+FEATURE_SETS = {
+    "confidence_entropy_6": CONFIDENCE_ENTROPY_FEATURES,
+    "disagreement_5": DISAGREEMENT_FEATURES,
+    "all_12": FEATURES,
+}
+
+SELECTOR_C = 0.5
+SELECTOR_SOLVER = "lbfgs"
+SELECTOR_MAX_ITER = 2000
+SELECTOR_TOL = 1e-4
+SELECTOR_CLASS_WEIGHT = "balanced"
+SELECTOR_RANDOM_STATE = 0
 
 
 def normalized_entropy(p: np.ndarray) -> np.ndarray:
@@ -163,10 +188,13 @@ def new_selector() -> object:
     return make_pipeline(
         StandardScaler(),
         LogisticRegression(
-            C=0.5,
-            class_weight="balanced",
-            max_iter=2000,
-            random_state=0,
+            penalty="l2",
+            C=SELECTOR_C,
+            solver=SELECTOR_SOLVER,
+            class_weight=SELECTOR_CLASS_WEIGHT,
+            max_iter=SELECTOR_MAX_ITER,
+            tol=SELECTOR_TOL,
+            random_state=SELECTOR_RANDOM_STATE,
         ),
     )
 
@@ -201,10 +229,19 @@ class SelectorFit:
     balanced_threshold: float
     audit: pd.DataFrame
     fold_rows: pd.DataFrame
+    feature_names: tuple[str, ...]
+    final_n_iter: int
+    final_converged: bool
+    final_convergence_warning: bool
 
 
-def fit_crossfitted_selector(frame: pd.DataFrame, seed: int) -> SelectorFit:
+def fit_crossfitted_selector(
+    frame: pd.DataFrame,
+    seed: int,
+    feature_names: tuple[str, ...] | list[str] | None = None,
+) -> SelectorFit:
     frame = frame.reset_index(drop=True)
+    feature_names = tuple(feature_names or FEATURES)
     informative = frame.base_correct.to_numpy(bool) != frame.recovery_correct.to_numpy(bool)
     y_all = frame.recovery_correct.to_numpy(int)
     groups = frame["sample"].to_numpy(int)
@@ -216,22 +253,47 @@ def fit_crossfitted_selector(frame: pd.DataFrame, seed: int) -> SelectorFit:
     # preference model.
     stratify = np.where(informative, y_all, 2)
     for fold, (train_idx, valid_idx) in enumerate(
-        sgkf.split(frame[FEATURES], stratify, groups), start=1
+        sgkf.split(frame[list(feature_names)], stratify, groups), start=1
     ):
         fit_idx = train_idx[informative[train_idx]]
-        if len(np.unique(y_all[fit_idx])) != 2:
+        fit_positive = int(y_all[fit_idx].sum())
+        fit_negative = int(len(fit_idx) - fit_positive)
+        valid_informative = valid_idx[informative[valid_idx]]
+        valid_positive = int(y_all[valid_informative].sum())
+        valid_negative = int(len(valid_informative) - valid_positive)
+        if fit_positive == 0 or fit_negative == 0:
             raise RuntimeError(f"Fold {fold} has a one-class preference target")
         model = new_selector()
-        model.fit(frame.loc[fit_idx, FEATURES].to_numpy(float), y_all[fit_idx])
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always", ConvergenceWarning)
+            model.fit(
+                frame.loc[fit_idx, list(feature_names)].to_numpy(float),
+                y_all[fit_idx],
+            )
+        convergence_warning = any(
+            issubclass(item.category, ConvergenceWarning) for item in caught
+        )
+        n_iter = int(model.named_steps["logisticregression"].n_iter_[0])
         oof[valid_idx] = model.predict_proba(
-            frame.loc[valid_idx, FEATURES].to_numpy(float)
+            frame.loc[valid_idx, list(feature_names)].to_numpy(float)
         )[:, 1]
         fold_records.append(
             {
                 "fold": fold,
+                "feature_set": "+".join(feature_names),
+                "n_features": len(feature_names),
                 "fit_rows": int(len(fit_idx)),
+                "fit_recovery_positive": fit_positive,
+                "fit_negative_transfer": fit_negative,
                 "validation_rows": int(len(valid_idx)),
                 "validation_groups": int(len(np.unique(groups[valid_idx]))),
+                "validation_informative": int(len(valid_informative)),
+                "validation_recovery_positive": valid_positive,
+                "validation_negative_transfer": valid_negative,
+                "one_class_fit": False,
+                "n_iter": n_iter,
+                "convergence_warning": convergence_warning,
+                "converged": bool((not convergence_warning) and n_iter < SELECTOR_MAX_ITER),
             }
         )
     if np.isnan(oof).any():
@@ -250,9 +312,16 @@ def fit_crossfitted_selector(frame: pd.DataFrame, seed: int) -> SelectorFit:
         ascending=[False, True, False, False],
     ).iloc[0]
     final_model = new_selector()
-    final_model.fit(
-        frame.loc[informative, FEATURES].to_numpy(float), y_all[informative]
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", ConvergenceWarning)
+        final_model.fit(
+            frame.loc[informative, list(feature_names)].to_numpy(float),
+            y_all[informative],
+        )
+    final_warning = any(
+        issubclass(item.category, ConvergenceWarning) for item in caught
     )
+    final_n_iter = int(final_model.named_steps["logisticregression"].n_iter_[0])
     return SelectorFit(
         model=final_model,
         oof_probability=oof,
@@ -260,6 +329,10 @@ def fit_crossfitted_selector(frame: pd.DataFrame, seed: int) -> SelectorFit:
         balanced_threshold=float(balanced.threshold),
         audit=audit,
         fold_rows=pd.DataFrame(fold_records),
+        feature_names=feature_names,
+        final_n_iter=final_n_iter,
+        final_converged=bool((not final_warning) and final_n_iter < SELECTOR_MAX_ITER),
+        final_convergence_warning=final_warning,
     )
 
 
@@ -287,7 +360,7 @@ def reliability_rows(seed, y, p, bins=10):
                 "lower": lo,
                 "upper": hi,
                 "n": int(take.sum()),
-                "mean_probability": float(p[take].mean()) if take.any() else np.nan,
+                "mean_conditional_preference_score": float(p[take].mean()) if take.any() else np.nan,
                 "observed_recovery_preference": float(y[take].mean()) if take.any() else np.nan,
             }
         )
@@ -298,7 +371,7 @@ def selector_parameters(seed, fit: SelectorFit):
     scaler = fit.model.named_steps["standardscaler"]
     logistic = fit.model.named_steps["logisticregression"]
     rows = []
-    for idx, feature in enumerate(FEATURES):
+    for idx, feature in enumerate(fit.feature_names):
         rows.append(
             {
                 "seed": seed,
@@ -424,7 +497,7 @@ def strict_prediction_records(
     y,
     pb,
     pr,
-    selector_probability,
+    conditional_preference_score,
     choose_safe,
     choose_balanced,
     simple_choices,
@@ -442,7 +515,7 @@ def strict_prediction_records(
             "sample": int(sample),
             "batch": int(batch[local]),
             "y": int(y[local]),
-            "selector_probability": float(selector_probability[local]),
+            "conditional_preference_score": float(conditional_preference_score[local]),
             "choose_safe": bool(choose_safe[local]),
             "choose_balanced": bool(choose_balanced[local]),
             "base_correct": bool(pb[local].argmax() == y[local]),
@@ -469,9 +542,17 @@ def macro_auroc(y, p):
     return float(roc_auc_score(yb, p, average="macro", multi_class="ovr"))
 
 
-def hierarchical_bootstrap(frame: pd.DataFrame, rng_seed=20260714):
+def crossed_cluster_bootstrap(frame: pd.DataFrame, rng_seed=20260714):
+    """Resample crossed fault and fitted-model identities, then observations.
+
+    Each optimization seed identifies one fitted PDRF/RO-PDRF-Full pair reused
+    across all fault mechanisms.  Seed identities are therefore drawn once per
+    replicate and retained across every sampled fault, rather than sampled
+    independently within faults.
+    """
     rng = np.random.default_rng(rng_seed)
     faults = np.array(sorted(frame.fault_type.unique()))
+    seeds = np.array(sorted(frame.seed.unique()))
     classes = len([c for c in frame.columns if c.startswith("base_p")])
     cells = {
         (fault, int(seed)): group.reset_index(drop=True)
@@ -480,9 +561,10 @@ def hierarchical_bootstrap(frame: pd.DataFrame, rng_seed=20260714):
     boot = []
     for replicate in range(N_BOOTSTRAP):
         sampled_cells = []
-        for fault in rng.choice(faults, len(faults), replace=True):
-            seed_values = np.array(sorted(frame.loc[frame.fault_type == fault, "seed"].unique()))
-            for seed in rng.choice(seed_values, len(seed_values), replace=True):
+        sampled_faults = rng.choice(faults, len(faults), replace=True)
+        sampled_seeds = rng.choice(seeds, len(seeds), replace=True)
+        for fault in sampled_faults:
+            for seed in sampled_seeds:
                 cell = cells[(fault, int(seed))]
                 idx = rng.integers(0, len(cell), len(cell))
                 sampled_cells.append(cell.iloc[idx])
@@ -539,6 +621,22 @@ def benchmark(callable_, repeats=7):
     return float(np.median(times)), float(np.quantile(times, 0.25)), float(np.quantile(times, 0.75))
 
 
+def cpu_model_name():
+    """Return a human-readable CPU identifier without adding a dependency."""
+    if sys.platform == "win32":
+        try:
+            import winreg
+
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                r"HARDWARE\DESCRIPTION\System\CentralProcessor\0",
+            ) as key:
+                return str(winreg.QueryValueEx(key, "ProcessorNameString")[0]).strip()
+        except (OSError, ImportError):
+            pass
+    return platform.processor() or platform.machine() or "unavailable"
+
+
 def main():
     started = time.perf_counter()
     split = q2.prepare_grouped(
@@ -557,6 +655,11 @@ def main():
     selector_folds = []
     selector_parameter_rows = []
     selector_diagnostic_rows = []
+    selector_calibration_records = []
+    feature_ablation_calibration_rows = []
+    feature_ablation_test_rows = []
+    feature_ablation_fold_rows = []
+    recovery_eligibility_rows = []
     reliability = []
     simple_threshold_rows = []
     simple_test_rows = []
@@ -567,6 +670,18 @@ def main():
     for seed in SEEDS:
         seed_started = time.perf_counter()
         train, select, _, class_weights = q2.train_views(split, seed)
+        train_mask = np.asarray(train[1])
+        recovery_eligible = train_mask.sum(axis=1) > 1
+        recovery_eligibility_rows.append(
+            {
+                "seed": seed,
+                "training_rows": int(len(train_mask)),
+                "eligible_rows": int(recovery_eligible.sum()),
+                "excluded_rows": int((~recovery_eligible).sum()),
+                "eligible_fraction": float(recovery_eligible.mean()),
+                "excluded_fraction": float((~recovery_eligible).mean()),
+            }
+        )
         temp_view = (
             *base.make_view(
                 temperature_x, 25000 + seed, "missing_drift", train=True
@@ -618,6 +733,7 @@ def main():
                     row.update(dict(zip(FEATURES, features[sample])))
                     calibration_rows.append(row)
         calibration = pd.DataFrame(calibration_rows)
+        selector_calibration_records.extend(calibration.to_dict("records"))
         fit = fit_crossfitted_selector(calibration, seed)
         fit.audit.insert(0, "seed", seed)
         selector_audits.extend(fit.audit.to_dict("records"))
@@ -626,19 +742,66 @@ def main():
         selector_folds.extend(fold.to_dict("records"))
         selector_parameter_rows.extend(selector_parameters(seed, fit))
         informative = calibration.base_correct != calibration.recovery_correct
+        recovery_positive = int(
+            ((~calibration.base_correct) & calibration.recovery_correct).sum()
+        )
+        negative_transfer = int(
+            (calibration.base_correct & (~calibration.recovery_correct)).sum()
+        )
         selector_diagnostic_rows.append(
             {
                 "seed": seed,
                 "calibration_rows": int(len(calibration)),
                 "correctness_disagreements": int(informative.sum()),
+                "recovery_positive_rows": recovery_positive,
+                "negative_transfer_rows": negative_transfer,
+                "minority_events_per_variable": float(
+                    min(recovery_positive, negative_transfer) / len(FEATURES)
+                ),
                 "safe_threshold": fit.safe_threshold,
                 "balanced_threshold": fit.balanced_threshold,
+                "final_n_iter": fit.final_n_iter,
+                "final_converged": fit.final_converged,
+                "final_convergence_warning": fit.final_convergence_warning,
                 **binary_selector_diagnostics(
                     calibration.loc[informative, "recovery_correct"].to_numpy(int),
                     fit.oof_probability[informative.to_numpy()],
                 ),
             }
         )
+        ablation_fits = {"all_12": fit}
+        for feature_set, feature_names in FEATURE_SETS.items():
+            if feature_set != "all_12":
+                ablation_fits[feature_set] = fit_crossfitted_selector(
+                    calibration, seed, feature_names
+                )
+            ablation_fit = ablation_fits[feature_set]
+            ablation_informative_y = calibration.loc[
+                informative, "recovery_correct"
+            ].to_numpy(int)
+            feature_ablation_calibration_rows.append(
+                {
+                    "seed": seed,
+                    "feature_set": feature_set,
+                    "n_features": len(feature_names),
+                    "informative_rows": int(informative.sum()),
+                    "recovery_positive_rows": recovery_positive,
+                    "negative_transfer_rows": negative_transfer,
+                    "safe_threshold": ablation_fit.safe_threshold,
+                    "balanced_threshold": ablation_fit.balanced_threshold,
+                    "final_n_iter": ablation_fit.final_n_iter,
+                    "final_converged": ablation_fit.final_converged,
+                    "final_convergence_warning": ablation_fit.final_convergence_warning,
+                    **binary_selector_diagnostics(
+                        ablation_informative_y,
+                        ablation_fit.oof_probability[informative.to_numpy()],
+                    ),
+                }
+            )
+            fold_rows = ablation_fit.fold_rows.copy()
+            fold_rows["seed"] = seed
+            fold_rows["feature_set"] = feature_set
+            feature_ablation_fold_rows.extend(fold_rows.to_dict("records"))
         reliability.extend(
             reliability_rows(
                 seed,
@@ -669,9 +832,9 @@ def main():
                 pb, pr, _, features = predict_pair(
                     base_model, recovery_model, faultx, mask, quality, tb, tr
                 )
-                selector_probability = fit.model.predict_proba(features)[:, 1]
-                choose_safe = selector_probability >= fit.safe_threshold
-                choose_balanced = selector_probability >= fit.balanced_threshold
+                conditional_preference_score = fit.model.predict_proba(features)[:, 1]
+                choose_safe = conditional_preference_score >= fit.safe_threshold
+                choose_balanced = conditional_preference_score >= fit.balanced_threshold
                 p_safe, safe_summary = evaluate_selection_method(
                     pb, pr, choose_safe, testy
                 )
@@ -760,6 +923,29 @@ def main():
                     )
                     base_correct = pb[strict].argmax(axis=1) == testy[strict]
                     recovery_correct = pr[strict].argmax(axis=1) == testy[strict]
+                    for feature_set, ablation_fit in ablation_fits.items():
+                        indices = [FEATURES.index(name) for name in ablation_fit.feature_names]
+                        ablation_score = ablation_fit.model.predict_proba(
+                            strict_features[:, indices]
+                        )[:, 1]
+                        ablation_choose = ablation_score >= ablation_fit.safe_threshold
+                        ablation_p, ablation_summary = evaluate_selection_method(
+                            pb[strict], pr[strict], ablation_choose, testy[strict]
+                        )
+                        ablation_metrics = risk.all_metrics(testy[strict], ablation_p)
+                        feature_ablation_test_rows.append(
+                            {
+                                "seed": seed,
+                                "fault_type": fault_type,
+                                "feature_set": feature_set,
+                                "n_features": len(ablation_fit.feature_names),
+                                "safe_threshold": ablation_fit.safe_threshold,
+                                **ablation_summary,
+                                "accuracy": ablation_metrics["accuracy"],
+                                "macro_f1": ablation_metrics["macro_f1"],
+                                "macro_auroc": ablation_metrics["macro_auroc"],
+                            }
+                        )
                     oracle_choose = ~base_correct & recovery_correct
                     oracle_p, oracle_summary = evaluate_selection_method(
                         pb[strict], pr[strict], oracle_choose, testy[strict]
@@ -768,8 +954,8 @@ def main():
                         {
                             "seed": seed,
                             "fault_type": fault_type,
-                            "rule": "Oracle",
-                            "matching": "upper_bound",
+                            "rule": "Correctness-disagreement-oracle",
+                            "matching": "opportunity_boundary",
                             "threshold": np.nan,
                             **oracle_summary,
                             "macro_auroc": macro_auroc(testy[strict], oracle_p),
@@ -808,7 +994,7 @@ def main():
                             {
                                 "seed": seed,
                                 "fault_type": fault_type,
-                                "rule": "Cross-fitted-logistic-Safe",
+                                "rule": "Safe-CF",
                                 "matching": "proposed",
                                 "threshold": fit.safe_threshold,
                                 **selection_summary(
@@ -828,7 +1014,7 @@ def main():
                             testy[strict],
                             pb[strict],
                             pr[strict],
-                            selector_probability[strict],
+                            conditional_preference_score[strict],
                             choose_safe[strict],
                             choose_balanced[strict],
                             strict_simple_choices,
@@ -966,8 +1152,9 @@ def main():
                 }
             )
 
-        # Actual single-thread-state CPU batch latency. The numerical model is
-        # unchanged; the thread count is recorded rather than silently forced.
+        # CPU latency is reported both for a complete held-out batch and for
+        # batch size one.  The active thread settings are recorded rather than
+        # silently changed during timing.
         bench_x = clean_x
         bench_mask = clean_mask
         bench_quality = clean_quality
@@ -994,26 +1181,70 @@ def main():
                 )[3]
             )
         )
-        for method, timing, params in (
-            ("PDRF", base_time, base_cost["parameters"]),
-            ("RO-PDRF-Full", recovery_time, recovery_cost["parameters"]),
+        base_time_one = benchmark(
+            lambda: major.predict(
+                base_model, bench_x[:1], bench_mask[:1], bench_quality[:1], tb
+            )
+        )
+        recovery_time_one = benchmark(
+            lambda: major.predict(
+                recovery_model,
+                bench_x[:1],
+                bench_mask[:1],
+                bench_quality[:1],
+                tr,
+            )
+        )
+        end_to_end_time_one = benchmark(
+            lambda: fit.model.predict_proba(
+                predict_pair(
+                    base_model,
+                    recovery_model,
+                    bench_x[:1],
+                    bench_mask[:1],
+                    bench_quality[:1],
+                    tb,
+                    tr,
+                )[3]
+            )
+        )
+        for method, timing, timing_one, params, forward_passes in (
+            ("PDRF", base_time, base_time_one, base_cost["parameters"], 1),
+            (
+                "RO-PDRF-Full",
+                recovery_time,
+                recovery_time_one,
+                recovery_cost["parameters"],
+                1,
+            ),
             (
                 "SR-PDRF-Safe-CF",
                 end_to_end_time,
+                end_to_end_time_one,
                 base_cost["parameters"] + recovery_cost["parameters"] + 13,
+                6,
             ),
         ):
             median, q1, q3 = timing
+            median_one, q1_one, q3_one = timing_one
             cost_rows.append(
                 {
                     "seed": seed,
                     "method": method,
                     "batch_size": len(bench_x),
+                    "cpu_model": cpu_model_name(),
                     "cpu_threads": torch.get_num_threads(),
+                    "cpu_interop_threads": torch.get_num_interop_threads(),
+                    "torch_version": torch.__version__,
                     "latency_batch_ms_median": 1000 * median,
                     "latency_batch_ms_q1": 1000 * q1,
                     "latency_batch_ms_q3": 1000 * q3,
                     "latency_ms_per_observation": 1000 * median / len(bench_x),
+                    "throughput_observations_per_second": len(bench_x) / median,
+                    "latency_batch1_ms_median": 1000 * median_one,
+                    "latency_batch1_ms_q1": 1000 * q1_one,
+                    "latency_batch1_ms_q3": 1000 * q3_one,
+                    "forward_passes_per_observation": forward_passes,
                     "stored_parameters": params,
                     "model_state_kib_fp32": 4 * params / 1024,
                     "base_train_seconds": base_cost["train_seconds"],
@@ -1049,6 +1280,23 @@ def main():
     pd.DataFrame(selector_diagnostic_rows).to_csv(
         OUT / "cee_cf10_selector_diagnostics.csv", index=False
     )
+    pd.DataFrame(selector_calibration_records).to_csv(
+        OUT / "cee_cf10_selector_calibration.csv.gz",
+        index=False,
+        compression="gzip",
+    )
+    pd.DataFrame(feature_ablation_calibration_rows).to_csv(
+        OUT / "cee_cf10_feature_ablation_calibration.csv", index=False
+    )
+    pd.DataFrame(feature_ablation_test_rows).to_csv(
+        OUT / "cee_cf10_feature_ablation_test.csv", index=False
+    )
+    pd.DataFrame(feature_ablation_fold_rows).to_csv(
+        OUT / "cee_cf10_feature_ablation_folds.csv", index=False
+    )
+    pd.DataFrame(recovery_eligibility_rows).to_csv(
+        OUT / "cee_cf10_recovery_eligibility.csv", index=False
+    )
     pd.DataFrame(reliability).to_csv(
         OUT / "cee_cf10_selector_reliability.csv", index=False
     )
@@ -1060,10 +1308,15 @@ def main():
     unseen.to_csv(OUT / "cee_cf10_unseen_faults.csv", index=False)
     costs.to_csv(OUT / "cee_cf10_cpu_cost.csv", index=False)
 
-    bootstrap = hierarchical_bootstrap(strict_predictions)
-    bootstrap.to_csv(OUT / "cee_cf10_hierarchical_bootstrap.csv", index=False)
+    for obsolete in (
+        "cee_cf10_hierarchical_bootstrap.csv",
+        "cee_cf10_hierarchical_intervals.csv",
+    ):
+        (OUT / obsolete).unlink(missing_ok=True)
+    bootstrap = crossed_cluster_bootstrap(strict_predictions)
+    bootstrap.to_csv(OUT / "cee_cf10_crossed_bootstrap.csv", index=False)
     intervals = interval_summary(bootstrap)
-    intervals.to_csv(OUT / "cee_cf10_hierarchical_intervals.csv", index=False)
+    intervals.to_csv(OUT / "cee_cf10_crossed_intervals.csv", index=False)
 
     strict_metric = metrics[
         (metrics.prevalence == 0.40)
@@ -1138,8 +1391,19 @@ def main():
             "unaffected",
         ],
         "bootstrap": (
-            f"{N_BOOTSTRAP} hierarchical replicates: fault type -> optimization seed/model pair -> observation within cell"
+            f"{N_BOOTSTRAP} crossed-cluster replicates: independently resample fault mechanisms and "
+            "model-pair seed identities, retain the sampled seed draw across all sampled faults, "
+            "then resample observations within each fault-by-seed cell"
         ),
+        "selector_model": {
+            "penalty": "l2",
+            "C": SELECTOR_C,
+            "solver": SELECTOR_SOLVER,
+            "max_iter": SELECTOR_MAX_ITER,
+            "tolerance": SELECTOR_TOL,
+            "class_weight": SELECTOR_CLASS_WEIGHT,
+            "random_state": SELECTOR_RANDOM_STATE,
+        },
         "selector_uses_test_labels": False,
         "threshold_uses_in_fold_probabilities": False,
         "elapsed_seconds": time.perf_counter() - started,
@@ -1165,7 +1429,7 @@ def main():
                 float(pd.DataFrame(selector_diagnostic_rows).balanced_threshold.max()),
             ],
         },
-        "hierarchical_intervals": intervals.to_dict("records"),
+        "crossed_intervals": intervals.to_dict("records"),
     }
     (OUT / "cee_cf10_summary.json").write_text(
         json.dumps(summary, indent=2), encoding="utf-8"

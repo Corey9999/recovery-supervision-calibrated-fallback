@@ -1,5 +1,5 @@
 {
-  "run_id": "CEE-CF10-R1",
+  "run_id": "CEE-CF10-R2",
   "strict_n_per_fault": 1436,
   "gaussian_full_minus_pdrf": {
     "fault_type": "gaussian",
@@ -17,41 +17,45 @@
   },
   "four_fault_full_minus_pdrf_mean": 0.004718700352479293,
   "four_fault_safe_minus_pdrf_mean": 0.003113582514325597,
-  "hierarchical_intervals": {
+  "crossed_intervals": {
     "negative_transfer_prevention": {
-      "bootstrap_mean": 0.9057544891218252,
-      "ci_2.5": 0.85957372627149,
-      "ci_97.5": 0.9404319899185112,
+      "bootstrap_mean": 0.9028518706193668,
+      "ci_2.5": 0.8225997061548966,
+      "ci_97.5": 0.95193198005698,
       "replicates": 1000
     },
     "recovery_retention": {
-      "bootstrap_mean": 0.1399839281312684,
-      "ci_2.5": 0.0619164737654321,
-      "ci_97.5": 0.2450333900790506,
+      "bootstrap_mean": 0.1440957404059051,
+      "ci_2.5": 0.0555197594501718,
+      "ci_97.5": 0.2622793371757192,
       "replicates": 1000
     },
     "full_selection_rate": {
-      "bootstrap_mean": 0.4378948119777159,
-      "ci_2.5": 0.3544942548746518,
-      "ci_97.5": 0.5183765668523677,
+      "bootstrap_mean": 0.442504422005571,
+      "ci_2.5": 0.2708656859331476,
+      "ci_97.5": 0.6047175313370473,
       "replicates": 1000
     },
     "safe_minus_pdrf_auroc": {
-      "bootstrap_mean": 0.0048763760292979,
-      "ci_2.5": 0.0028717024487812,
-      "ci_97.5": 0.0069587239100474,
+      "bootstrap_mean": 0.004828537135045,
+      "ci_2.5": 0.0016554948502247,
+      "ci_97.5": 0.0077956246109782,
       "replicates": 1000
     },
     "safe_minus_full_auroc": {
-      "bootstrap_mean": -0.0021695781394197,
-      "ci_2.5": -0.0067105390338544,
-      "ci_97.5": 0.0021734915154609,
+      "bootstrap_mean": -0.0023291568769851,
+      "ci_2.5": -0.007769910117807,
+      "ci_97.5": 0.0034865536571571,
       "replicates": 1000
     }
   },
   "selector": {
     "calibration_rows_mean": 1860.9,
     "disagreement_rows_mean": 129.8,
+    "recovery_positive_rows_mean": 75.1,
+    "negative_transfer_rows_mean": 54.7,
+    "minority_events_per_variable_mean": 4.15,
+    "converged_fits": 10,
     "safe_threshold_median": 0.85,
     "safe_threshold_range": [
       0.55,
@@ -79,22 +83,132 @@
   },
   "cost": {
     "PDRF": {
-      "latency_ms_per_observation_median": 0.000763324931492,
+      "latency_ms_per_observation_median": 0.0014775779104567,
+      "batch1_latency_ms_median": 0.8746000094106421,
+      "throughput_observations_per_second_median": 676997.2884237999,
       "stored_parameters": 19740,
       "flops_per_sample": 38528,
       "forward_passes": 1
     },
     "RO-PDRF-Full": {
-      "latency_ms_per_observation_median": 0.0008045714915692001,
+      "latency_ms_per_observation_median": 0.00147412923992905,
+      "batch1_latency_ms_median": 0.8798000053502619,
+      "throughput_observations_per_second_median": 678381.4239192847,
       "stored_parameters": 19740,
       "flops_per_sample": 38528,
       "forward_passes": 1
     },
     "SR-PDRF-Safe-CF": {
-      "latency_ms_per_observation_median": 0.0068930568268015,
+      "latency_ms_per_observation_median": 0.0118649518786883,
+      "batch1_latency_ms_median": 6.809599988628179,
+      "throughput_observations_per_second_median": 84288.1336178601,
       "stored_parameters": 39493,
       "flops_per_sample": 231168,
       "forward_passes": 6
+    }
+  },
+  "operational_utility": {
+    "0.1": {
+      "prevented_per_10k": {
+        "mean": 171.45967002749768,
+        "std": 124.77443828792576
+      },
+      "retained_per_10k": {
+        "mean": 11.514665444546289,
+        "std": 8.86436382241062
+      },
+      "residual_harm_per_10k": {
+        "mean": 15.123739688359304,
+        "std": 12.490352779430843
+      },
+      "net_vs_pdrf_per_10k": {
+        "mean": -3.6090742438130157,
+        "std": 15.24317036035994
+      },
+      "net_vs_full_per_10k": {
+        "mean": -6.530705774518791,
+        "std": 87.14522932028231
+      },
+      "extra_passes_per_prevented_transfer": {
+        "mean": 407.8530707270828,
+        "std": 198.98629104793233
+      }
+    },
+    "0.4": {
+      "prevented_per_10k": {
+        "mean": 185.55224564619616,
+        "std": 157.5768987441997
+      },
+      "retained_per_10k": {
+        "mean": 20.852428964252983,
+        "std": 13.38111945064751
+      },
+      "residual_harm_per_10k": {
+        "mean": 17.415215398716775,
+        "std": 15.34366918759671
+      },
+      "net_vs_pdrf_per_10k": {
+        "mean": 3.4372135655362057,
+        "std": 16.404469595871166
+      },
+      "net_vs_full_per_10k": {
+        "mean": -12.20210815765353,
+        "std": 69.4482920520596
+      },
+      "extra_passes_per_prevented_transfer": {
+        "mean": 403.9626423210335,
+        "std": 200.8570606476894
+      }
+    },
+    "0.7": {
+      "prevented_per_10k": {
+        "mean": 192.71310724106326,
+        "std": 186.45105453730892
+      },
+      "retained_per_10k": {
+        "mean": 29.330889092575614,
+        "std": 13.848743463237229
+      },
+      "residual_harm_per_10k": {
+        "mean": 21.53987167736022,
+        "std": 19.084552239962825
+      },
+      "net_vs_pdrf_per_10k": {
+        "mean": 7.791017415215398,
+        "std": 18.512325356554477
+      },
+      "net_vs_full_per_10k": {
+        "mean": -24.346929422548122,
+        "std": 103.62657192110015
+      },
+      "extra_passes_per_prevented_transfer": {
+        "mean": 431.837704637576,
+        "std": 240.10771321222225
+      }
+    }
+  },
+  "recovery_eligibility": {
+    "excluded_fraction_mean": 0.0038597674026630197,
+    "excluded_fraction_std": 0.000517676251465328
+  },
+  "feature_ablation": {
+    "confidence_entropy_6": {
+      "calibration_oof_auroc_mean": 0.7816794063562369,
+      "test_macro_auroc_mean": 0.8155738173128032,
+      "prevention_mean": 0.9422793514422434,
+      "retention_mean": 0.061375812462971205
+    },
+    "disagreement_5": {
+      "calibration_oof_auroc_mean": 0.8409858427999787,
+      "test_macro_auroc_mean": 0.8119028402155521,
+      "prevention_mean": 0.8753655302289953,
+      "retention_mean": 0.10084022332599778
+    },
+    "all_12": {
+      "calibration_oof_auroc_mean": 0.8723839116011559,
+      "test_macro_auroc_mean": 0.8146067688179943,
+      "prevention_mean": 0.8995087665989356,
+      "retention_mean": 0.13082040996206
     }
   }
 }

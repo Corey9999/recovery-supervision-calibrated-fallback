@@ -46,7 +46,10 @@ def main():
     scaling = pd.read_csv(DATA / "cee_cf10_group_scaling.csv")
     selector_parameters = pd.read_csv(DATA / "cee_cf10_selector_parameters.csv")
     reliability = pd.read_csv(DATA / "cee_cf10_selector_reliability.csv")
-    intervals = pd.read_csv(DATA / "cee_cf10_hierarchical_intervals.csv")
+    ablation_calibration = pd.read_csv(DATA / "cee_cf10_feature_ablation_calibration.csv")
+    ablation_test = pd.read_csv(DATA / "cee_cf10_feature_ablation_test.csv")
+    eligibility = pd.read_csv(DATA / "cee_cf10_recovery_eligibility.csv")
+    intervals = pd.read_csv(DATA / "cee_cf10_crossed_intervals.csv")
     design = json.loads((DATA / "cee_cf10_design.json").read_text(encoding="utf-8"))
 
     strict = metrics[
@@ -92,7 +95,6 @@ def main():
         part = metrics[
             (metrics.stream == stream_name)
             & (metrics.prevalence == prevalence)
-            & (metrics.metric == "macro_auroc")
         ]
         row = {"Evaluation stream": label}
         for method, short in (
@@ -100,10 +102,96 @@ def main():
             ("RO-PDRF-Full", "Full"),
             ("SR-PDRF-Safe-CF", "Safe-CF"),
         ):
-            values = part.loc[part.method == method, "value"]
-            row[short] = pm(values.mean(), values.std())
+            method_part = part[part.method == method]
+            per_seed = method_part.groupby(["seed", "metric"], as_index=False).value.mean()
+            summaries = {
+                metric: group.value
+                for metric, group in per_seed.groupby("metric")
+            }
+            auroc = summaries["macro_auroc"]
+            accuracy = summaries["accuracy"]
+            macro_f1 = summaries["macro_f1"]
+            row[f"{short} AUROC"] = pm(auroc.mean(), auroc.std())
+            row[f"{short} Acc. / F1"] = (
+                f"{accuracy.mean():.3f}/{macro_f1.mean():.3f}"
+            )
         stream_rows.append(row)
-    save_latex(pd.DataFrame(stream_rows), "cee_deployment_streams.tex", "lccc")
+    save_latex(
+        pd.DataFrame(stream_rows),
+        "cee_deployment_streams.tex",
+        "lcccccc",
+    )
+
+    # Operational utility is first calculated within fault-by-seed cells, then
+    # averaged across faults within a seed.  Thus uncertainty has ten fitted
+    # model-pair units rather than 40 pseudo-independent fault rows.
+    operational_rows = []
+    operational_facts = {}
+    for prevalence in (0.10, 0.40, 0.70):
+        part = safety[
+            (safety.prevalence == prevalence)
+            & (safety.stream == "full_mixed_stream")
+            & (safety.variant == "Safe-CF")
+        ].copy()
+        part["prevented_per_10k"] = (
+            part.negative_transfer_opportunities - part.negative_transfer_remaining
+        ) / part.n * 10000
+        part["retained_per_10k"] = part.recovery_retained / part.n * 10000
+        part["residual_harm_per_10k"] = part.negative_transfer_remaining / part.n * 10000
+        part["net_vs_pdrf_per_10k"] = (
+            part.recovery_retained - part.negative_transfer_remaining
+        ) / part.n * 10000
+        part["net_vs_full_per_10k"] = (
+            (part.negative_transfer_opportunities - part.negative_transfer_remaining)
+            - (part.recovery_opportunities - part.recovery_retained)
+        ) / part.n * 10000
+        per_seed = part.groupby("seed")[[
+            "prevented_per_10k",
+            "retained_per_10k",
+            "residual_harm_per_10k",
+            "net_vs_pdrf_per_10k",
+            "net_vs_full_per_10k",
+        ]].mean()
+        per_seed["extra_passes_per_prevented_transfer"] = (
+            5 * 10000 / per_seed.prevented_per_10k
+        )
+        operational_rows.append(
+            {
+                "Fault prevalence": f"{int(100 * prevalence)}%",
+                "Harm prevented / 10,000": pm(
+                    per_seed.prevented_per_10k.mean(),
+                    per_seed.prevented_per_10k.std(),
+                    1,
+                ),
+                "Corrections retained / 10,000": pm(
+                    per_seed.retained_per_10k.mean(),
+                    per_seed.retained_per_10k.std(),
+                    1,
+                ),
+                "Residual harm / 10,000": pm(
+                    per_seed.residual_harm_per_10k.mean(),
+                    per_seed.residual_harm_per_10k.std(),
+                    1,
+                ),
+                "Net correct vs PDRF / 10,000": pm(
+                    per_seed.net_vs_pdrf_per_10k.mean(),
+                    per_seed.net_vs_pdrf_per_10k.std(),
+                    1,
+                ),
+            }
+        )
+        operational_facts[str(prevalence)] = {
+            column: {
+                "mean": float(per_seed[column].mean()),
+                "std": float(per_seed[column].std()),
+            }
+            for column in per_seed.columns
+        }
+    save_latex(
+        pd.DataFrame(operational_rows),
+        "cee_operational_utility.tex",
+        "lcccc",
+    )
 
     safe_strict = safety[
         (safety.prevalence == 0.40)
@@ -127,6 +215,18 @@ def main():
         {
             "Quantity": "OOF selector Brier score",
             "Estimate": f"{diagnostics.selector_brier.mean():.3f} $\\pm$ {diagnostics.selector_brier.std():.3f}",
+        },
+        {
+            "Quantity": "Preference events: recovery / negative transfer",
+            "Estimate": f"{diagnostics.recovery_positive_rows.mean():.1f} / {diagnostics.negative_transfer_rows.mean():.1f} per seed",
+        },
+        {
+            "Quantity": "Minority events per variable",
+            "Estimate": f"{diagnostics.minority_events_per_variable.mean():.2f} $\\pm$ {diagnostics.minority_events_per_variable.std():.2f}",
+        },
+        {
+            "Quantity": "Converged final selector fits",
+            "Estimate": f"{int(diagnostics.final_converged.sum())}/{len(diagnostics)}; no one-class fold",
         },
         {
             "Quantity": "Safe threshold, median (range)",
@@ -178,7 +278,7 @@ def main():
     save_latex(pd.DataFrame(transfer_rows), "cee_unseen_transfer.tex", "llcccc")
 
     simple_order = [
-        ("Cross-fitted-logistic-Safe", "proposed"),
+        ("Safe-CF", "proposed"),
         ("Higher-confidence", "prevention_matched"),
         ("Lower-entropy", "prevention_matched"),
         ("Lower-LOO-disagreement", "prevention_matched"),
@@ -186,7 +286,7 @@ def main():
         ("Random-matched-selection", "selection_rate_matched"),
         ("Always-PDRF", "endpoint"),
         ("Always-RO-PDRF-Full", "endpoint"),
-        ("Oracle", "upper_bound"),
+        ("Correctness-disagreement-oracle", "opportunity_boundary"),
     ]
     simple_rows = []
     for rule, matching in simple_order:
@@ -195,8 +295,8 @@ def main():
             continue
         simple_rows.append(
             {
-                "Selection rule": ("Decision oracle" if rule == "Oracle" else rule.replace("-", " ")),
-                "Matching": ("label informed" if matching == "upper_bound" else matching.replace("_", " ")),
+                "Selection rule": rule.replace("-", " "),
+                "Matching": matching.replace("_", " "),
                 "Prevention": f"{group.negative_transfer_prevention.mean():.3f}",
                 "Retention": f"{group.recovery_retention.mean():.3f}",
                 "Full use": f"{group.full_selection_rate.mean():.3f}",
@@ -220,12 +320,13 @@ def main():
                 "Method": method,
                 "Parameters": f"{int(round(group.stored_parameters.mean())):,}",
                 "State (KiB)": f"{group.model_state_kib_fp32.mean():.1f}",
-                "Passes": passes[method],
+                "Passes": int(round(group.forward_passes_per_observation.mean())),
                 "FLOPs / sample": f"{flops[method]:,}",
-                "CPU ms / sample": f"{group.latency_ms_per_observation.median():.4f}",
+                "Batch throughput / s": f"{group.throughput_observations_per_second.median():.0f}",
+                "Batch-1 latency (ms)": f"{group.latency_batch1_ms_median.median():.3f}",
             }
         )
-    save_latex(pd.DataFrame(cost_rows), "cee_compute_cost.tex", "lrrrrr")
+    save_latex(pd.DataFrame(cost_rows), "cee_compute_cost.tex", "lrrrrrr")
 
     parameter_labels = {
         "base_confidence": "Base confidence",
@@ -249,15 +350,79 @@ def main():
                 "Center": pm(group.standardization_mean.mean(), group.standardization_mean.std(), 3),
                 "Scale": pm(group.standardization_scale.mean(), group.standardization_scale.std(), 3),
                 "Coefficient": pm(group.logistic_coefficient.mean(), group.logistic_coefficient.std(), 3),
+                "Sign agreement": f"{max((group.logistic_coefficient > 0).mean(), (group.logistic_coefficient < 0).mean()):.2f}",
             }
         )
-    save_latex(pd.DataFrame(parameter_rows), "cee_selector_parameters.tex", "lccc")
+    save_latex(pd.DataFrame(parameter_rows), "cee_selector_parameters.tex", "lcccc")
+
+    ablation_rows = []
+    ablation_labels = {
+        "confidence_entropy_6": "Confidence and entropy (6)",
+        "disagreement_5": "Disagreement only (5)",
+        "all_12": "All features (12)",
+    }
+    for feature_set in ("confidence_entropy_6", "disagreement_5", "all_12"):
+        cal = ablation_calibration[ablation_calibration.feature_set == feature_set]
+        test = ablation_test[ablation_test.feature_set == feature_set]
+        per_seed = test.groupby("seed")[[
+            "negative_transfer_prevention",
+            "recovery_retention",
+            "macro_auroc",
+            "accuracy",
+            "macro_f1",
+        ]].mean()
+        ablation_rows.append(
+            {
+                "Feature set": ablation_labels[feature_set],
+                "OOF AUROC": pm(cal.selector_auroc.mean(), cal.selector_auroc.std(), 3),
+                "Prevention": pm(per_seed.negative_transfer_prevention.mean(), per_seed.negative_transfer_prevention.std(), 3),
+                "Retention": pm(per_seed.recovery_retention.mean(), per_seed.recovery_retention.std(), 3),
+                "Test AUROC": pm(per_seed.macro_auroc.mean(), per_seed.macro_auroc.std(), 4),
+            }
+        )
+    save_latex(pd.DataFrame(ablation_rows), "cee_selector_feature_ablation.tex", "lcccc")
+
+    balanced = safety[
+        (safety.prevalence == 0.40)
+        & (safety.stream == "full_mixed_stream")
+        & (safety.variant.isin(["Balanced-CF", "Safe-CF"]))
+    ]
+    balanced_rows = []
+    for variant, group in balanced.groupby("variant"):
+        per_seed = group.groupby("seed")[[
+            "negative_transfer_prevention",
+            "recovery_retention",
+            "full_selection_rate",
+            "selected_accuracy",
+        ]].mean()
+        balanced_rows.append(
+            {
+                "Operating point": variant,
+                "Prevention": pm(per_seed.negative_transfer_prevention.mean(), per_seed.negative_transfer_prevention.std(), 3),
+                "Retention": pm(per_seed.recovery_retention.mean(), per_seed.recovery_retention.std(), 3),
+                "Full use": pm(per_seed.full_selection_rate.mean(), per_seed.full_selection_rate.std(), 3),
+                "Accuracy": pm(per_seed.selected_accuracy.mean(), per_seed.selected_accuracy.std(), 3),
+            }
+        )
+    save_latex(pd.DataFrame(balanced_rows), "cee_balanced_sensitivity.tex", "lcccc")
+
+    eligibility_summary = pd.DataFrame(
+        [{
+            "Training rows": f"{eligibility.training_rows.mean():.0f}",
+            "Recovery-loss eligible": pm(eligibility.eligible_rows.mean(), eligibility.eligible_rows.std(), 1),
+            "Excluded": pm(eligibility.excluded_rows.mean(), eligibility.excluded_rows.std(), 1),
+            "Excluded fraction": pm(eligibility.excluded_fraction.mean(), eligibility.excluded_fraction.std(), 3),
+        }]
+    )
+    save_latex(eligibility_summary, "cee_recovery_eligibility.tex", "rrrr")
 
     seed_rows = diagnostics[
         [
             "seed",
             "calibration_rows",
             "correctness_disagreements",
+            "recovery_positive_rows",
+            "negative_transfer_rows",
             "safe_threshold",
             "balanced_threshold",
             "selector_auroc",
@@ -265,20 +430,20 @@ def main():
             "selector_brier",
         ]
     ].copy()
-    seed_rows.columns = ["Seed", "Calibration n", "Disagreement n", "Safe threshold", "Balanced threshold", "AUROC", "AUPRC", "Brier"]
+    seed_rows.columns = ["Seed", "Calibration n", "Disagreement n", "Recovery positive", "Negative transfer", "Safe threshold", "Balanced threshold", "AUROC", "AUPRC", "Brier"]
     for column in ("Safe threshold", "Balanced threshold", "AUROC", "AUPRC", "Brier"):
         seed_rows[column] = seed_rows[column].map(lambda value: f"{value:.3f}")
-    save_latex(seed_rows, "cee_selector_seed_diagnostics.tex", "rrrrrrrr")
+    save_latex(seed_rows, "cee_selector_seed_diagnostics.tex", "rrrrrrrrrr")
 
     reliability_rows = []
     for bin_id, group in reliability.groupby("bin"):
-        group = group[(group.n > 0) & group.mean_probability.notna() & group.observed_recovery_preference.notna()]
+        group = group[(group.n > 0) & group.mean_conditional_preference_score.notna() & group.observed_recovery_preference.notna()]
         total = int(group.n.sum())
         reliability_rows.append(
             {
                 "Probability bin": f"{group.lower.min():.1f}--{group.upper.max():.1f}",
                 "n": total,
-                "Mean probability": f"{np.average(group.mean_probability, weights=group.n):.3f}",
+                "Mean conditional preference score": f"{np.average(group.mean_conditional_preference_score, weights=group.n):.3f}",
                 "Observed recovery preference": f"{np.average(group.observed_recovery_preference, weights=group.n):.3f}",
             }
         )
@@ -328,10 +493,14 @@ def main():
         "gaussian_safe_minus_pdrf": gaussian_effects.loc["Safe_minus_PDRF"].to_dict(),
         "four_fault_full_minus_pdrf_mean": float(all_full_minus_base.mean()),
         "four_fault_safe_minus_pdrf_mean": float(all_safe_minus_base.mean()),
-        "hierarchical_intervals": interval_map,
+        "crossed_intervals": interval_map,
         "selector": {
             "calibration_rows_mean": float(diagnostics.calibration_rows.mean()),
             "disagreement_rows_mean": float(diagnostics.correctness_disagreements.mean()),
+            "recovery_positive_rows_mean": float(diagnostics.recovery_positive_rows.mean()),
+            "negative_transfer_rows_mean": float(diagnostics.negative_transfer_rows.mean()),
+            "minority_events_per_variable_mean": float(diagnostics.minority_events_per_variable.mean()),
+            "converged_fits": int(diagnostics.final_converged.sum()),
             "safe_threshold_median": float(diagnostics.safe_threshold.median()),
             "safe_threshold_range": [float(diagnostics.safe_threshold.min()), float(diagnostics.safe_threshold.max())],
             "oof_auroc_mean": float(diagnostics.selector_auroc.mean()),
@@ -357,11 +526,27 @@ def main():
         "cost": {
             method: {
                 "latency_ms_per_observation_median": float(cost.loc[cost.method == method, "latency_ms_per_observation"].median()),
+                "batch1_latency_ms_median": float(cost.loc[cost.method == method, "latency_batch1_ms_median"].median()),
+                "throughput_observations_per_second_median": float(cost.loc[cost.method == method, "throughput_observations_per_second"].median()),
                 "stored_parameters": int(round(cost.loc[cost.method == method, "stored_parameters"].mean())),
                 "flops_per_sample": flops[method],
                 "forward_passes": passes[method],
             }
             for method in ("PDRF", "RO-PDRF-Full", "SR-PDRF-Safe-CF")
+        },
+        "operational_utility": operational_facts,
+        "recovery_eligibility": {
+            "excluded_fraction_mean": float(eligibility.excluded_fraction.mean()),
+            "excluded_fraction_std": float(eligibility.excluded_fraction.std()),
+        },
+        "feature_ablation": {
+            feature_set: {
+                "calibration_oof_auroc_mean": float(ablation_calibration.loc[ablation_calibration.feature_set == feature_set, "selector_auroc"].mean()),
+                "test_macro_auroc_mean": float(ablation_test.loc[ablation_test.feature_set == feature_set].groupby("seed").macro_auroc.mean().mean()),
+                "prevention_mean": float(ablation_test.loc[ablation_test.feature_set == feature_set].groupby("seed").negative_transfer_prevention.mean().mean()),
+                "retention_mean": float(ablation_test.loc[ablation_test.feature_set == feature_set].groupby("seed").recovery_retention.mean().mean()),
+            }
+            for feature_set in ("confidence_entropy_6", "disagreement_5", "all_12")
         },
     }
     (DATA / "cee_manuscript_facts.json").write_text(

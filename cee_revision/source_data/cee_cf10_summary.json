@@ -1,6 +1,6 @@
 {
   "design": {
-    "run_id": "CEE-CF10-R1",
+    "run_id": "CEE-CF10-R2",
     "mode": "formal frozen rerun",
     "seeds": [
       101,
@@ -43,17 +43,32 @@
       "assigned-but-masked",
       "unaffected"
     ],
-    "bootstrap": "1000 hierarchical replicates: fault type -> optimization seed/model pair -> observation within cell",
+    "bootstrap": "1000 crossed-cluster replicates: independently resample fault mechanisms and model-pair seed identities, retain the sampled seed draw across all sampled faults, then resample observations within each fault-by-seed cell",
+    "selector_model": {
+      "penalty": "l2",
+      "C": 0.5,
+      "solver": "lbfgs",
+      "max_iter": 2000,
+      "tolerance": 0.0001,
+      "class_weight": "balanced",
+      "random_state": 0
+    },
     "selector_uses_test_labels": false,
     "threshold_uses_in_fold_probabilities": false,
-    "elapsed_seconds": 518.3652106999943
+    "elapsed_seconds": 838.259562399995
   },
   "selector_diagnostics_mean": {
     "seed": 105.5,
     "calibration_rows": 1860.9,
     "correctness_disagreements": 129.8,
+    "recovery_positive_rows": 75.1,
+    "negative_transfer_rows": 54.7,
+    "minority_events_per_variable": 4.15,
     "safe_threshold": 0.8150000000000001,
     "balanced_threshold": 0.5525,
+    "final_n_iter": 13.7,
+    "final_converged": 1.0,
+    "final_convergence_warning": 0.0,
     "selector_auroc": 0.8723839116011559,
     "selector_auprc": 0.8855259271175928,
     "selector_brier": 0.13329599571760217
@@ -70,40 +85,40 @@
       0.675
     ]
   },
-  "hierarchical_intervals": [
+  "crossed_intervals": [
     {
       "quantity": "negative_transfer_prevention",
-      "bootstrap_mean": 0.9057544891218252,
-      "ci_2.5": 0.85957372627149,
-      "ci_97.5": 0.9404319899185111,
+      "bootstrap_mean": 0.9028518706193668,
+      "ci_2.5": 0.8225997061548966,
+      "ci_97.5": 0.95193198005698,
       "replicates": 1000
     },
     {
       "quantity": "recovery_retention",
-      "bootstrap_mean": 0.1399839281312684,
-      "ci_2.5": 0.0619164737654321,
-      "ci_97.5": 0.24503339007905067,
+      "bootstrap_mean": 0.1440957404059051,
+      "ci_2.5": 0.05551975945017182,
+      "ci_97.5": 0.2622793371757192,
       "replicates": 1000
     },
     {
       "quantity": "full_selection_rate",
-      "bootstrap_mean": 0.4378948119777159,
-      "ci_2.5": 0.3544942548746518,
-      "ci_97.5": 0.5183765668523677,
+      "bootstrap_mean": 0.44250442200557105,
+      "ci_2.5": 0.27086568593314764,
+      "ci_97.5": 0.6047175313370473,
       "replicates": 1000
     },
     {
       "quantity": "safe_minus_pdrf_auroc",
-      "bootstrap_mean": 0.0048763760292979495,
-      "ci_2.5": 0.0028717024487812325,
-      "ci_97.5": 0.0069587239100474705,
+      "bootstrap_mean": 0.004828537135045083,
+      "ci_2.5": 0.0016554948502247619,
+      "ci_97.5": 0.007795624610978229,
       "replicates": 1000
     },
     {
       "quantity": "safe_minus_full_auroc",
-      "bootstrap_mean": -0.0021695781394197315,
-      "ci_2.5": -0.0067105390338544485,
-      "ci_97.5": 0.002173491515460956,
+      "bootstrap_mean": -0.002329156876985172,
+      "ci_2.5": -0.0077699101178070416,
+      "ci_97.5": 0.0034865536571571983,
       "replicates": 1000
     }
   ]
