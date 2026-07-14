@@ -1,4 +1,4 @@
-seed,fault_type,prevalence,stream,variant,n,recovery_opportunities,recovery_retained,recovery_retention,negative_transfer_opportunities,negative_transfer_remaining,negative_transfer_rate,negative_transfer_prevention,full_selection_rate,selected_accuracy,false_switch_rate,harmful_switch_rate
+seed,fault_type,prevalence,stream,variant,n,recovery_opportunities,recovery_retained,recovery_retention,negative_transfer_opportunities,negative_transfer_remaining,negative_transfer_rate,negative_transfer_prevention,full_selection_rate,selected_accuracy,no_fault_recovery_selection_rate,harmful_switch_rate
 101,gaussian,0.1,full_mixed_stream,Balanced-CF,4364,72,5,0.06944444444444445,94,11,0.11702127659574468,0.8829787234042553,0.6079285059578369,0.5756186984417965,,
 101,gaussian,0.1,full_mixed_stream,Safe-CF,4364,72,2,0.027777777777777776,94,6,0.06382978723404255,0.9361702127659575,0.3547204399633364,0.576076993583868,,
 101,offset,0.1,full_mixed_stream,Balanced-CF,4364,62,2,0.03225806451612903,92,10,0.10869565217391304,0.8913043478260869,0.6040329972502292,0.5774518790100825,,

@@ -1,0 +1,359 @@
+{
+  "run": "CEE-CF10-R2-Q1S",
+  "source_run": "CEE-CF10-R2",
+  "routing_rows": 630,
+  "repeated_grouped_cv_rows": 100,
+  "coefficient_stability": [
+    {
+      "feature": "base_confidence",
+      "n": 500,
+      "median": 0.15076702515690565,
+      "q1": -0.06069513042837323,
+      "q3": 0.3132108876392397,
+      "positive_fraction": 0.666,
+      "dominant_sign_fraction": 0.666
+    },
+    {
+      "feature": "base_consensus_agreement",
+      "n": 500,
+      "median": 0.4964681550705994,
+      "q1": 0.29922689796367363,
+      "q3": 0.7066422213009997,
+      "positive_fraction": 0.972,
+      "dominant_sign_fraction": 0.972
+    },
+    {
+      "feature": "base_consensus_js",
+      "n": 500,
+      "median": -0.38554082760458264,
+      "q1": -0.6170241182139716,
+      "q3": -0.13079398097262407,
+      "positive_fraction": 0.168,
+      "dominant_sign_fraction": 0.832
+    },
+    {
+      "feature": "base_entropy",
+      "n": 500,
+      "median": -0.25861110688181915,
+      "q1": -0.4057512014371018,
+      "q3": -0.07804648880631702,
+      "positive_fraction": 0.208,
+      "dominant_sign_fraction": 0.792
+    },
+    {
+      "feature": "base_recovery_js",
+      "n": 500,
+      "median": 0.7374617243393065,
+      "q1": 0.35337487660894923,
+      "q3": 1.09311044768183,
+      "positive_fraction": 0.852,
+      "dominant_sign_fraction": 0.852
+    },
+    {
+      "feature": "confidence_delta",
+      "n": 500,
+      "median": 0.4243119231300201,
+      "q1": 0.16547518633003294,
+      "q3": 0.563499893746263,
+      "positive_fraction": 0.934,
+      "dominant_sign_fraction": 0.934
+    },
+    {
+      "feature": "entropy_delta",
+      "n": 500,
+      "median": 0.21251439885149603,
+      "q1": -0.12968264081183214,
+      "q3": 0.5548651635933344,
+      "positive_fraction": 0.64,
+      "dominant_sign_fraction": 0.64
+    },
+    {
+      "feature": "recovery_confidence",
+      "n": 500,
+      "median": 0.588571817589163,
+      "q1": 0.4107374431238789,
+      "q3": 0.7212970369771172,
+      "positive_fraction": 0.964,
+      "dominant_sign_fraction": 0.964
+    },
+    {
+      "feature": "recovery_consensus_agreement",
+      "n": 500,
+      "median": -0.668050123476874,
+      "q1": -0.9955467160705788,
+      "q3": -0.44615529990044445,
+      "positive_fraction": 0.076,
+      "dominant_sign_fraction": 0.924
+    },
+    {
+      "feature": "recovery_consensus_js",
+      "n": 500,
+      "median": 0.4113861112607744,
+      "q1": 0.051226183581798264,
+      "q3": 0.6428861581086592,
+      "positive_fraction": 0.77,
+      "dominant_sign_fraction": 0.77
+    },
+    {
+      "feature": "recovery_entropy",
+      "n": 500,
+      "median": -0.024545917185179372,
+      "q1": -0.34521933231102925,
+      "q3": 0.2543536742542303,
+      "positive_fraction": 0.484,
+      "dominant_sign_fraction": 0.516
+    },
+    {
+      "feature": "removal_fraction",
+      "n": 500,
+      "median": 0.09575551228710583,
+      "q1": -0.16544548784050356,
+      "q3": 0.6639790482611474,
+      "positive_fraction": 0.584,
+      "dominant_sign_fraction": 0.584
+    }
+  ],
+  "regularization_summary": [
+    {
+      "C": 0.01,
+      "auroc": 0.7392680422113128,
+      "auprc": 0.8004766346321586,
+      "brier": 0.21636972702061408
+    },
+    {
+      "C": 0.05,
+      "auroc": 0.7566995509425395,
+      "auprc": 0.8087701677501095,
+      "brier": 0.19651045744522122
+    },
+    {
+      "C": 0.1,
+      "auroc": 0.7653558665158446,
+      "auprc": 0.8152166801659426,
+      "brier": 0.1908190858617207
+    },
+    {
+      "C": 0.5,
+      "auroc": 0.7882515716079871,
+      "auprc": 0.8255723201145968,
+      "brier": 0.18039806737684166
+    },
+    {
+      "C": 1.0,
+      "auroc": 0.7899786782471019,
+      "auprc": 0.8264870275104869,
+      "brier": 0.17887246677240096
+    },
+    {
+      "C": 5.0,
+      "auroc": 0.786586725014094,
+      "auprc": 0.8231963547412634,
+      "brier": 0.17920058548865803
+    }
+  ],
+  "routing_summary": [
+    {
+      "method": "Always PDRF",
+      "prevention": 1.0,
+      "retention": 0.0,
+      "selection": 0.0,
+      "passes": 1.0,
+      "macro_AUROC": 0.8114969624061764,
+      "NLL": 2.8238693480963684,
+      "Brier": 0.8285882132653081,
+      "ECE15": 0.34917936872174
+    },
+    {
+      "method": "Always RO-PDRF-Full",
+      "prevention": 0.0,
+      "retention": 1.0,
+      "selection": 1.0,
+      "passes": 1.0,
+      "macro_AUROC": 0.816214832210681,
+      "NLL": 2.624412361714427,
+      "Brier": 0.8139946106446443,
+      "ECE15": 0.3406461081368136
+    },
+    {
+      "method": "Cascade-25",
+      "prevention": 0.9590584183342046,
+      "retention": 0.053360833519343884,
+      "selection": 0.47315459610027855,
+      "passes": 2.9107938718662956,
+      "macro_AUROC": 0.8148974214673445,
+      "NLL": 2.6491578051644504,
+      "Brier": 0.820800800833792,
+      "ECE15": 0.3457850990157063
+    },
+    {
+      "method": "Safe-CF-12",
+      "prevention": 0.8995087665989356,
+      "retention": 0.13082040996206007,
+      "selection": 0.4397806406685237,
+      "passes": 6.0,
+      "macro_AUROC": 0.814609294944348,
+      "NLL": 2.692738024983377,
+      "Brier": 0.8249073824025336,
+      "ECE15": 0.3490207643871235
+    },
+    {
+      "method": "Shrink-6",
+      "prevention": 0.954794565437546,
+      "retention": 0.039524046627050065,
+      "selection": 0.5146239554317549,
+      "passes": 2.0,
+      "macro_AUROC": 0.814854967786377,
+      "NLL": 2.634430987242563,
+      "Brier": 0.81811804085494,
+      "ECE15": 0.344191072848666
+    },
+    {
+      "method": "Three-outcome-6",
+      "prevention": 0.9444573798000363,
+      "retention": 0.0847613267641615,
+      "selection": 0.046048050139275765,
+      "passes": 2.0,
+      "macro_AUROC": 0.811743426618914,
+      "NLL": 2.8104117010519283,
+      "Brier": 0.8261888885585016,
+      "ECE15": 0.34904959531661434
+    },
+    {
+      "method": "Tree-6",
+      "prevention": 0.9190038314622235,
+      "retention": 0.09402332042340729,
+      "selection": 0.2450208913649025,
+      "passes": 2.0,
+      "macro_AUROC": 0.8120099912767846,
+      "NLL": 2.750806400861467,
+      "Brier": 0.8233984709292479,
+      "ECE15": 0.3461026843065138
+    }
+  ],
+  "mechanism_fixed_intervals": [
+    {
+      "fault_type": "drift",
+      "comparison": "full_minus_pdrf_auroc",
+      "mean": 0.0001292859721936379,
+      "ci_2.5": -0.007820527973604762,
+      "ci_97.5": 0.008079099917992038,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "drift",
+      "comparison": "safe_minus_pdrf_auroc",
+      "mean": 0.0015044412871419222,
+      "ci_2.5": -0.0018284266633001546,
+      "ci_97.5": 0.004837309237583999,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "drift",
+      "comparison": "safe_minus_full_auroc",
+      "mean": 0.0013751553149482843,
+      "ci_2.5": -0.0038068741377089072,
+      "ci_97.5": 0.006557184767605476,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "gaussian",
+      "comparison": "full_minus_pdrf_auroc",
+      "mean": 0.014329481674424892,
+      "ci_2.5": 0.010331713659882877,
+      "ci_97.5": 0.018327249688966908,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "gaussian",
+      "comparison": "safe_minus_pdrf_auroc",
+      "mean": 0.006635616494217178,
+      "ci_2.5": 0.003992861485642466,
+      "ci_97.5": 0.00927837150279189,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "gaussian",
+      "comparison": "safe_minus_full_auroc",
+      "mean": -0.007693865180207715,
+      "ci_2.5": -0.011666086803763773,
+      "ci_97.5": -0.0037216435566516572,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "offset",
+      "comparison": "full_minus_pdrf_auroc",
+      "mean": 0.0009091563239178258,
+      "ci_2.5": -0.007887255834502383,
+      "ci_97.5": 0.009705568482338035,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "offset",
+      "comparison": "safe_minus_pdrf_auroc",
+      "mean": 0.002205406465470494,
+      "ci_2.5": -0.0013454468612588504,
+      "ci_97.5": 0.005756259792199838,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "offset",
+      "comparison": "safe_minus_full_auroc",
+      "mean": 0.0012962501415526683,
+      "ci_2.5": -0.004864512657832109,
+      "ci_97.5": 0.007457012940937446,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "stuck_at",
+      "comparison": "full_minus_pdrf_auroc",
+      "mean": 0.0035035552474821487,
+      "ci_2.5": -0.0037798267112892168,
+      "ci_97.5": 0.010786937206253514,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "stuck_at",
+      "comparison": "safe_minus_pdrf_auroc",
+      "mean": 0.0021038659058566834,
+      "ci_2.5": -0.0011984735175485854,
+      "ci_97.5": 0.005406205329261952,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    },
+    {
+      "fault_type": "stuck_at",
+      "comparison": "safe_minus_full_auroc",
+      "mean": -0.0013996893416254653,
+      "ci_2.5": -0.006238118974194065,
+      "ci_97.5": 0.0034387402909431338,
+      "n_fitted_pairs": 10,
+      "interval_unit": "fitted model pair; mechanism fixed"
+    }
+  ],
+  "response_range": {
+    "model": "RO-PDRF-Full",
+    "clean_min": -2.757962226867676,
+    "clean_max": 2.9974489212036133,
+    "fault_min": -2.899454116821289,
+    "fault_max": 3.0,
+    "combined_min": -2.899454116821289,
+    "combined_max": 3.0,
+    "n_seed_observations": 17650,
+    "n_fitted_pairs": 10,
+    "theoretical_open_lower": -3.0,
+    "theoretical_open_upper": 3.0,
+    "implementation": "Linear(32,16,bias=True)-ReLU-Linear(16,1,bias=True)-3*tanh(u/3)"
+  },
+  "inference_boundary": "mechanism-fixed fitted-pair intervals; no four-mechanism population bootstrap used for new claims",
+  "energy_boundary": "energy not measured; utility uses a transparent forward-pass/FLOP penalty proxy"
+}

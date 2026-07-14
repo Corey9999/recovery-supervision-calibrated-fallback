@@ -1,0 +1,36 @@
+{
+  "run_id": "CEE-CF10-R2-LITE",
+  "source_run": "CEE-CF10-R2",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "faults": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "test_realization": 70001,
+  "selector_features": [
+    "base_confidence",
+    "recovery_confidence",
+    "confidence_delta",
+    "base_entropy",
+    "recovery_entropy",
+    "entropy_delta"
+  ],
+  "selector_C": 0.05,
+  "selector_training": "correctness disagreements in Batch-7 selector half; grouped OOF threshold",
+  "temperature": "one scalar per endpoint and seed fitted on the disjoint first half of Batch 7",
+  "post_routing_recalibration": false,
+  "elapsed_seconds": 362.9444749999675
+}

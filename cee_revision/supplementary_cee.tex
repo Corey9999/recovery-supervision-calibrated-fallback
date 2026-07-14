@@ -4,7 +4,7 @@
 \hypersetup{hidelinks}
 \graphicspath{{figures/}}
 \setlength{\emergencystretch}{2em}
-\title{Supplementary information\\Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption}
+\title{Supplementary information\\Cross-fitted selective recovery under controlled multi-sensor corruption}
 \author{Riyang Luo}
 \date{}
 \renewcommand{\thetable}{S\arabic{table}}
@@ -24,9 +24,22 @@ The RO-PDRF family uses the same architecture and data views. In the formal prot
 \resizebox{0.72\textwidth}{!}{\input{tables/cee_recovery_eligibility.tex}}
 \end{table}
 
-The chemical-array group encoder is Linear(32,64), ReLU, Linear(64,32), ReLU. The hydraulic encoder is Linear(48,64), ReLU, Linear(64,32), ReLU. The AHU group encoder uses the same architecture with four inputs. The logit head is Linear(32,$C$). The score head is Linear(32,16), ReLU, Linear(16,1). The CAGF/DWR gate is Linear($32M+2M$,64), ReLU, Linear(64,$M$). Early fusion is Linear($Md+2M$,128), ReLU, Linear(128,64), ReLU, Linear(64,$C$). No batch normalization, layer normalization or dropout is used.
+The chemical-array group encoder is Linear(32,64, bias=true), ReLU, Linear(64,32, bias=true), ReLU. The hydraulic encoder is Linear(48,64, bias=true), ReLU, Linear(64,32, bias=true), ReLU. The AHU group encoder uses the same architecture with four inputs. The logit head is Linear(32,$C$, bias=true). The score head is Linear(32,16, bias=true), ReLU, Linear(16,1, bias=true), with no output activation before $3\tanh(u/3)$. The CAGF/DWR gate is Linear($32M+2M$,64), ReLU, Linear(64,$M$). Early fusion is Linear($Md+2M$,128), ReLU, Linear(128,64), ReLU, Linear(64,$C$). No batch normalization, layer normalization or dropout is used.
+
+\begin{table}[ht]
+\centering
+\caption{Empirical bounded-response audit. The reported 3.000000 faulted maximum is a stored float32 value after rounding; the real-arithmetic tanh transformation remains inside the open interval.}
+\resizebox{0.72\textwidth}{!}{\input{tables/q1_response_audit.tex}}
+\end{table}
 
 RO-MER contains the common group classifiers, one joint expert Linear($32M+2M$,64), ReLU, Linear(64,$C$), and an independent router Linear($32M+2M$,64), ReLU, Linear(64,$M+1$). The router mixes the $M$ group experts and joint expert after unavailable group experts have been masked. It contains 35,811 parameters for four chemical groups and receives the complete recovery objective. The joint-expert router probability is distributed uniformly over available physical groups only when calculating the shared directional-weight diagnostic; the prediction uses the unmodified $M+1$ expert distribution.
+
+\begin{table}[ht]
+\centering
+\caption{Separate architecture-control estimand. Strict fault-applied-and-available macro-AUROC values are means $\pm$ standard deviations across 10 matched optimization seeds. RO-MER includes group experts and a joint expert; all four mechanisms remain controlled interventions on one instrument.}
+\label{tab:supp-major9-modern}
+\resizebox{0.82\textwidth}{!}{\input{tables/major9_modern_baseline.tex}}
+\end{table}
 
 RO-AT-GATE uses one 32-dimensional token per group, four attention heads (head dimension 8), a 64-unit feed-forward block and dropout 0. Group-identity embeddings are initialized independently from $\mathcal N(0,0.02^2)$. Its shared gate head is Linear(34,16), ReLU, Linear(16,1); the two additional inputs are availability and optional quality. The unweighted selection cross-entropy, $10^{-4}$ improvement threshold and nine-epoch patience rule are identical to the other models.
 
@@ -39,6 +52,59 @@ All models use AdamW, learning rate $2\times10^{-3}$, weight decay $10^{-4}$, ba
 \caption{Parameter count and measured CPU cost on the chemical-array run. Training times include early stopping and therefore vary with selected epoch. Inference excludes data loading.}
 \resizebox{0.82\textwidth}{!}{\input{tables/major_compute_table.tex}}
 \end{table}
+
+\section{Q1 selector-stability, utility and probability audit}
+
+The Q1 revision adds frozen run CEE-CF10-R2-LITE. It reuses the chemical split, fixed test realization, optimization seeds 101--110 and training-only preprocessing of CEE-CF10-R2, but routes between PDRF and RO-PDRF-Lite. Six confidence/entropy features are calculated from temperature-scaled endpoint probabilities. The router emits the selected temperature-scaled probability vector, and no post-routing recalibration is performed. The primary selector uses $L_2$-regularized logistic regression with $C=0.05$ and requires two endpoint passes.
+
+\begin{table}[ht]
+\centering
+\caption{Result-to-run manifest for the Q1 revision. Every listed file is stored under \texttt{source\_data/}; producing scripts and fixed configuration files accompany the submission.}
+\label{tab:supp-q1-manifest}
+\resizebox{\textwidth}{!}{\input{tables/q1_result_manifest.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Endpoint and final routed-output quality on strict, complete 40\%-prevalence and no-imposed-fault streams. Values are equal-weight means over the relevant fixed mechanism--seed cells. ECE uses 15 equal-width bins.}
+\resizebox{\textwidth}{!}{\input{tables/q1_lite_stream_quality.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Probability quality split by endpoint-class agreement on the strict subset. This audit tests the selected-sample concern directly: agreement rows are not automatically harmless in probability space.}
+\resizebox{0.82\textwidth}{!}{\input{tables/q1_lite_agreement_quality.tex}}
+\end{table}
+
+Repeated grouped cross-fitting uses 10 split seeds for each of 10 fitted endpoint pairs. All corruption realizations derived from one calibration observation remain in one fold. Across the resulting 100 fits, conditional preference AUROC was $0.720\pm0.138$ and ranged from 0.327 to 0.954. Thresholds ranged from 0.525 to 0.90. The mean primary-objective tie count was 1.78 and the maximum was 9. The formal once-per-pair fit had 1.5 tied thresholds on average (range 1--4). Ties are broken by the highest threshold after realized harms, selected accuracy and retained corrections are equal.
+
+\begin{table}[ht]
+\centering
+\caption{Lite-CF standardized coefficient and sign stability over 500 fold fits. Dominant sign is the larger of positive- and negative-sign frequency; it is not a causal importance measure.}
+\resizebox{0.74\textwidth}{!}{\input{tables/q1_lite_coefficient_stability.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Lite-CF regularization path. Values average five grouped repeats for each of 10 endpoint pairs. The deployed $C=0.05$ is a strong-shrinkage choice rather than the calibration-discrimination optimum.}
+\resizebox{0.72\textwidth}{!}{\input{tables/q1_lite_regularization.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Calibration-set-size sensitivity. Values pool seed--repeat summaries and therefore do not share the equal-weight mechanism--seed estimand of the main headline result.}
+\resizebox{0.70\textwidth}{!}{\input{tables/q1_lite_calibration_size.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Batch-fixed Lite-CF minus PDRF macro-AUROC. Each cell holds a paired mean and 95\% Student-$t$ interval over 10 fitted model pairs while mechanism, batch and observations remain fixed.}
+\resizebox{\textwidth}{!}{\input{tables/q1_lite_batch_intervals.tex}}
+\end{table}
+
+The decision analysis computes $U=V_C N_C-C_H N_H-\lambda(P-1)$ per 10,000 observations. Harm-to-correction ratios are 1, 2, 5 and 10; pass penalties are 0, 0.5 and 2 correction equivalents per 10,000. The complete source file preserves seed- and mechanism-level values. Energy was not measured. Consequently, neither the pass penalty nor counted FLOPs are presented as electrical-energy estimates.
+
+The all-row three-outcome comparator uses the same six features and calibration rows, including endpoint-equivalent cases. A multinomial logistic model predicts base better, equivalent or recovery better; its routing score is $p(\text{recovery better})-p(\text{base better})$. The shallow-tree control uses depth 2 and a minimum leaf size of 35. The staged Full-endpoint cascade computes the 12-feature leave-one-group-out selector only for the 25\% of out-of-fold six-feature scores nearest the cheap threshold. All thresholds use the same grouped cross-fitting and lexicographic hard-decision objective.
 
 \section{Frozen CEE cross-fitted deployment analysis}
 
@@ -74,11 +140,18 @@ Five-fold stratified group cross-fitting assigns all fault realizations derived 
 
 \begin{table}[ht]
 \centering
+\caption{Legacy Full-endpoint cross-fitted selector sensitivity. Out-of-fold discrimination and Brier values summarize 10 fitted pairs. Prevention and retention use the earlier 1,000-replicate crossed bootstrap. With only four top-level mechanisms, these intervals are not used for Q1 headline inference and must not be read as fault-population intervals.}
+\label{tab:supp-selector-diagnostics}
+\resizebox{0.66\textwidth}{!}{\input{tables/cee_selector_diagnostics.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
 \caption{Out-of-fold conditional preference-score reliability. Counts pool held-out-fold scores across 10 fitted pairs; the mean score and observed recovery preference are weighted by bin counts. Empty seed--bin combinations contribute no pseudo-counts. The score is not claimed as a generally calibrated reliability probability.}
 \resizebox{0.76\textwidth}{!}{\input{tables/cee_selector_reliability.tex}}
 \end{table}
 
-Uncertainty for the selector audit uses 1,000 crossed-cluster bootstrap replicates. Fault mechanism and fitted model-pair seed are independently sampled with replacement; the same sampled set of 10 seed identities is retained across every sampled mechanism, after which strict observations are resampled within each fault-by-seed cell. Retaining the seed draw across faults represents reuse of one fitted endpoint pair and avoids incorrectly nesting seed under mechanism. The resulting intervals quantify variation over the four tested mechanisms, repeated fitting and observations. They do not treat 57,440 repeated model--fault--observation predictions as independent physical events, and they do not represent a population of devices.
+The legacy selector audit used 1,000 crossed-cluster bootstrap replicates. Fault mechanism and fitted model-pair seed were sampled with replacement, followed by observation resampling within fault--seed cells. This procedure is preserved for auditability, but four top-level mechanisms are insufficient for reliable mechanism-population resampling. The Q1 revision therefore replaces it in the main article with mechanism-fixed and mechanism--batch-fixed paired intervals. Neither analysis treats 57,440 repeated predictions as independent physical events or represents a population of devices.
 
 \begin{table}[ht]
 \centering
@@ -94,7 +167,8 @@ Uncertainty for the selector audit uses 1,000 crossed-cluster bootstrap replicat
 
 \begin{table}[ht]
 \centering
-\caption{Selector feature-set ablation. Calibration discrimination uses out-of-fold disagreement rows; strict-test quantities first average mechanisms within fitted seed.}
+\caption{Selector feature-set ablation. Calibration discrimination uses out-of-fold disagreement rows; strict-test quantities first average mechanisms within fitted seed. The all-feature selector was fixed before test evaluation and was not selected using test AUROC.}
+\label{tab:supp-selector-feature-ablation}
 \resizebox{0.92\textwidth}{!}{\input{tables/cee_selector_feature_ablation.tex}}
 \end{table}
 
@@ -125,6 +199,7 @@ Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one
 \begin{table}[ht]
 \centering
 \caption{Four-group deployment cost. State assumes 32-bit parameters. Complete-batch throughput and batch-size-one latency are reported separately; neither is a hardware-independent real-time guarantee.}
+\label{tab:supp-cee-cost}
 \resizebox{0.86\textwidth}{!}{\input{tables/cee_compute_cost.tex}}
 \end{table}
 
@@ -150,6 +225,26 @@ Batch & Class 1 & Class 2 & Class 3 & Class 4 & Class 5 & Class 6 & Total\\
 10 & 600 & 600 & 600 & 600 & 600 & 600 & 3600\\
 \bottomrule
 \end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Strict applied-and-available class counts by held-out acquisition batch. Counts are identical across the four formal mechanisms because assignment and missingness masks are shared.}
+\resizebox{0.76\textwidth}{!}{\input{tables/q1_strict_class_batch_counts.tex}}
+\end{table}
+
+Standardization means and standard deviations are fitted on batches 1--6 only. Batches 7--10 are transformed with those frozen quantities and clipped featurewise to $[-8,8]$ before grouping. Controlled faults are then imposed in standardized grouped space. The formal test fixes all quality values to one. Independent fault assignment and missingness are used to isolate a factorial stress condition; they do not assert a natural joint failure mechanism.
+
+\begin{table}[ht]
+\centering
+\caption{Severity audit against the empirical training distribution. Percentile shifts are absolute changes in empirical cumulative probability. The formal scale-3 setting is a severe stress test.}
+\resizebox{0.88\textwidth}{!}{\input{tables/q1_fault_severity.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Representative inverse-transformed scale-3 examples from one Batch~8 strict observation. Features are engineered gas-response statistics, not raw voltages; their heterogeneous scales explain the large inverse-transformed magnitudes. The examples demonstrate severity rather than physical plausibility. The complete example file contains five observations per mechanism.}
+\resizebox{0.84\textwidth}{!}{\input{tables/q1_fault_examples.tex}}
 \end{table}
 
 The assignment-defined mixed test set combines 40\% assigned and 60\% unassigned observations. The following archived table separates those subsets. The assignment index is generated once and shared by all methods and seeds; the main text uses the stricter fault-applied-and-available subset.
@@ -739,8 +834,8 @@ We searched for an external dataset that simultaneously provides (i) naturally o
 
 \section{Reproducibility and scope}
 
-The supplied Python scripts reproduce data processing, model fitting, targeted extensions, statistical analysis, tables and figures. The upgrade-specific entry points are \path{analyse_major9_estimand.py}, \path{run_major9_safe_recovery.py}, \path{run_major9_modern_baseline.py}, \path{analyse_major9_upgrade.py} and \path{make_major9_figure.py}. The frozen design is stored in \path{source_data/major9_frozen_protocol.json}; prediction-level outputs, selector thresholds, safety accounting, model costs and bootstrap summaries are stored under \path{source_data/major9_*}. Figures use Python/matplotlib exclusively. Editable SVG/PDF figures and a 600-dpi TIFF are included in the manuscript package. Script names and execution order are listed in the package README.
+The Q1 entry points are \path{run_cee_lite_routing_validation.py}, \path{analyse_cee_lite_results.py}, \path{analyse_cee_q1_scores.py}, \path{analyse_cee_fault_plausibility.py} and \path{make_cee_q1_figures.py}. The machine-readable frozen design is \path{cee_cf10_r2_lite_config.json}. Exact local package versions are recorded in \path{requirements-lock.txt} and \path{environment.yml}. Prediction-level outputs, selector thresholds, safety accounting, model costs, probability metrics and fixed-mechanism/batch intervals are stored under \path{source_data/q1_*}. Figures use Python/matplotlib exclusively. Editable SVG/PDF figures and 600-dpi TIFFs are included. The versioned release archive contains a SHA-256 manifest, and the public repository URL and exact commit are reported in the main article.
 
-The chemical-array experiment uses real longitudinal measurements with controlled feature-level sensor faults. The hydraulic experiment uses native test-rig component-condition labels with controlled sensor faults. The AHU audit adds naturally observed operational records with expert-annotated sensor-fault classes from 41 installed AHUs across three buildings. Those labels were assigned from engineering rules and expert review rather than maintenance-confirmed sensor replacement records. The evidence therefore supports field-operational fault recognition but not hardware-failure prognosis or zero-shot building transfer.
+The chemical-array experiment uses real longitudinal measurements with controlled feature-level sensor faults. The hydraulic experiment uses native test-rig component-condition labels with controlled sensor faults. The AHU audit adds naturally observed operational records with expert-annotated sensor-fault classes from 41 installed AHUs across three buildings. Those labels were assigned from engineering rules and expert review rather than maintenance-confirmed sensor replacement records. The evidence supports a controlled-corruption risk-control protocol and a field-operational direct-diagnosis boundary, not hardware-failure prognosis, downstream field recovery or zero-shot building transfer.
 
 \end{document}

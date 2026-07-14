@@ -1,0 +1,9 @@
+\begin{tabular}{p{0.14\textwidth}p{0.13\textwidth}p{0.18\textwidth}p{0.16\textwidth}p{0.21\textwidth}}
+\toprule
+Version & Task/input & Confidence & Fusion & Ranking objective \\
+\midrule
+Original QMF & Text--image; RGB--D & $\operatorname{LSE}(\boldsymbol\mu)/10$ & Unnormalized; confidence detached & Cumulative CE history; normalized margin; weight 1 \\
+Primary adaptation & Four chemical sensor groups & $\max(10^{-6},\bar c)$ & Unnormalized; confidence detached & Cumulative CE history; normalized margin; weight 1 \\
+Sensitivity variants & Same groups and paired fault & Scales 0.03, 0.10 or 0.30 & Normalized or unnormalized & Weights 0, 0.10 or 1; instantaneous or cumulative history \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,33 @@
+\begin{tabular}{llccccc}
+\toprule
+Regime & Method & Accuracy $\uparrow$ & Macro-F1 $\uparrow$ & Macro-AUROC $\uparrow$ & NLL $\downarrow$ & AURC $\downarrow$ \\
+\midrule
+Natural temporal drift & Early fusion & \textbf{0.625 $\pm$ 0.008} & \textbf{0.612 $\pm$ 0.009} & 0.873 $\pm$ 0.002 & 1.633 $\pm$ 0.082 & 0.188 $\pm$ 0.006 \\
+ & Modality dropout & 0.608 $\pm$ 0.013 & 0.589 $\pm$ 0.009 & 0.871 $\pm$ 0.004 & 1.636 $\pm$ 0.094 & 0.195 $\pm$ 0.009 \\
+ & Uniform fusion & 0.603 $\pm$ 0.021 & 0.578 $\pm$ 0.019 & \textbf{0.880 $\pm$ 0.004} & \textbf{1.294 $\pm$ 0.049} & \textbf{0.168 $\pm$ 0.018} \\
+ & Gated fusion & 0.540 $\pm$ 0.026 & 0.522 $\pm$ 0.028 & 0.838 $\pm$ 0.015 & 1.666 $\pm$ 0.206 & 0.265 $\pm$ 0.033 \\
+ & Factorized reliability & 0.582 $\pm$ 0.013 & 0.560 $\pm$ 0.013 & 0.872 $\pm$ 0.004 & 1.473 $\pm$ 0.049 & 0.192 $\pm$ 0.011 \\
+ & CRF & 0.600 $\pm$ 0.019 & 0.570 $\pm$ 0.019 & 0.872 $\pm$ 0.006 & 1.489 $\pm$ 0.080 & 0.189 $\pm$ 0.017 \\
+\addlinespace
+Drift + missingness & Early fusion & \textbf{0.592 $\pm$ 0.007} & \textbf{0.588 $\pm$ 0.008} & 0.856 $\pm$ 0.003 & 1.554 $\pm$ 0.049 & 0.221 $\pm$ 0.005 \\
+ & Modality dropout & 0.587 $\pm$ 0.011 & 0.570 $\pm$ 0.007 & \textbf{0.858 $\pm$ 0.003} & 1.530 $\pm$ 0.072 & 0.221 $\pm$ 0.008 \\
+ & Uniform fusion & 0.564 $\pm$ 0.019 & 0.546 $\pm$ 0.015 & 0.857 $\pm$ 0.006 & \textbf{1.508 $\pm$ 0.057} & \textbf{0.218 $\pm$ 0.017} \\
+ & Gated fusion & 0.508 $\pm$ 0.020 & 0.491 $\pm$ 0.020 & 0.816 $\pm$ 0.012 & 1.768 $\pm$ 0.192 & 0.306 $\pm$ 0.027 \\
+ & Factorized reliability & 0.559 $\pm$ 0.008 & 0.538 $\pm$ 0.010 & 0.851 $\pm$ 0.004 & 1.657 $\pm$ 0.072 & 0.230 $\pm$ 0.010 \\
+ & CRF & 0.574 $\pm$ 0.015 & 0.547 $\pm$ 0.015 & 0.855 $\pm$ 0.005 & 1.648 $\pm$ 0.079 & 0.224 $\pm$ 0.013 \\
+\addlinespace
+Reported sensor fault & Early fusion & 0.516 $\pm$ 0.006 & 0.507 $\pm$ 0.007 & 0.788 $\pm$ 0.004 & 2.647 $\pm$ 0.125 & 0.334 $\pm$ 0.009 \\
+ & Modality dropout & 0.509 $\pm$ 0.008 & 0.492 $\pm$ 0.005 & 0.781 $\pm$ 0.005 & 2.689 $\pm$ 0.149 & 0.345 $\pm$ 0.010 \\
+ & Uniform fusion & 0.509 $\pm$ 0.014 & 0.494 $\pm$ 0.011 & 0.799 $\pm$ 0.004 & 2.362 $\pm$ 0.085 & 0.304 $\pm$ 0.010 \\
+ & Gated fusion & 0.456 $\pm$ 0.020 & 0.439 $\pm$ 0.019 & 0.752 $\pm$ 0.014 & 2.704 $\pm$ 0.193 & 0.407 $\pm$ 0.027 \\
+ & Factorized reliability & 0.542 $\pm$ 0.006 & 0.519 $\pm$ 0.009 & 0.836 $\pm$ 0.004 & 1.856 $\pm$ 0.089 & 0.253 $\pm$ 0.009 \\
+ & CRF & \textbf{0.564 $\pm$ 0.014} & \textbf{0.538 $\pm$ 0.014} & \textbf{0.847 $\pm$ 0.005} & \textbf{1.724 $\pm$ 0.076} & \textbf{0.236 $\pm$ 0.012} \\
+\addlinespace
+Silent sensor fault & Early fusion & 0.516 $\pm$ 0.005 & 0.507 $\pm$ 0.006 & 0.787 $\pm$ 0.004 & 2.661 $\pm$ 0.126 & 0.335 $\pm$ 0.009 \\
+ & Modality dropout & 0.508 $\pm$ 0.008 & 0.492 $\pm$ 0.006 & 0.780 $\pm$ 0.005 & 2.708 $\pm$ 0.151 & 0.347 $\pm$ 0.010 \\
+ & Uniform fusion & 0.509 $\pm$ 0.014 & 0.494 $\pm$ 0.011 & 0.799 $\pm$ 0.004 & 2.362 $\pm$ 0.085 & 0.304 $\pm$ 0.010 \\
+ & Gated fusion & 0.456 $\pm$ 0.020 & 0.439 $\pm$ 0.020 & 0.752 $\pm$ 0.014 & 2.707 $\pm$ 0.195 & 0.407 $\pm$ 0.027 \\
+ & Factorized reliability & 0.503 $\pm$ 0.006 & 0.482 $\pm$ 0.009 & 0.789 $\pm$ 0.007 & 2.614 $\pm$ 0.152 & 0.327 $\pm$ 0.009 \\
+ & CRF & \textbf{0.533 $\pm$ 0.015} & \textbf{0.513 $\pm$ 0.015} & \textbf{0.824 $\pm$ 0.008} & \textbf{2.026 $\pm$ 0.126} & \textbf{0.272 $\pm$ 0.017} \\
+\bottomrule
+\end{tabular}

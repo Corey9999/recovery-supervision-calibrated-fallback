@@ -1,0 +1,15 @@
+\begin{tabular}{lp{0.17\textwidth}rrrrrr}
+\toprule
+Method & Role & Parameters & Seeds & Affected AUROC & NLL & Brier & ECE \\
+\midrule
+QMF-PD & Published-method adaptation & 17,560 & 10 & 0.775 & 2.514 & 0.792 & 0.287 \\
+RO-AT-GATE & Strong learned baseline & 26,809 & 10 & 0.784 & 1.826 & 0.736 & 0.210 \\
+RO-CAGF & Architecture-matched baseline & 26,588 & 10 & 0.797 & 2.071 & 0.770 & 0.275 \\
+RO-PDRF-Lite & Practical default & 19,740 & 10 & 0.802 & 2.717 & 0.809 & 0.342 \\
+RO-PDRF-Full & Mechanistic full model & 19,740 & 10 & 0.804 & 2.650 & 0.809 & 0.342 \\
+RO-PDRF-EMA & Calibration sensitivity & 19,740 & 10 & 0.806 & 2.413 & 0.792 & 0.321 \\
+RO-PDRF-Full-CRA & Diagnostic audit & 19,740 & 10 & 0.803 & 2.730 & 0.819 & 0.349 \\
+RO-PDRF-Full-ECA & Diagnostic audit & 19,740 & 10 & 0.805 & 2.494 & 0.804 & 0.332 \\
+CE-conflict training audit & Diagnostic audit & 19,740 & 10 & 0.806 & 2.592 & 0.801 & 0.336 \\
+\bottomrule
+\end{tabular}

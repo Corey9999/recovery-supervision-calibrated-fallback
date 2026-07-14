@@ -203,7 +203,7 @@ def main():
             va="bottom",
         )
     ax_c.scatter([1], [1], marker="*", s=55, color="#7A4EAB", edgecolor="white", linewidth=0.4, zorder=6)
-    ax_c.annotate("Correctness-disagreement\nopportunity boundary", (1, 1), xytext=(-5, -19), textcoords="offset points", ha="right", fontsize=6.0, color="#5D3B85")
+    ax_c.annotate("Correctness opportunity\nboundary", (1, 1), xytext=(-5, -19), textcoords="offset points", ha="right", fontsize=6.0, color="#5D3B85")
     ax_c.set_xlim(-0.03, 1.04)
     ax_c.set_ylim(-0.03, 1.04)
     ax_c.set_xlabel("Negative-transfer prevention")

@@ -500,6 +500,7 @@ def strict_prediction_records(
     conditional_preference_score,
     choose_safe,
     choose_balanced,
+    features,
     simple_choices,
     batch,
     sample_ids,
@@ -528,8 +529,60 @@ def strict_prediction_records(
             row[f"recovery_p{c}"] = float(pr[local, c])
             row[f"safe_p{c}"] = float(ps[local, c])
             row[f"balanced_p{c}"] = float(pbal[local, c])
+        row.update(
+            {
+                feature: float(features[local, index])
+                for index, feature in enumerate(FEATURES)
+            }
+        )
         for name, choose in simple_choices.items():
             row[f"choose_{name}"] = bool(choose[local])
+        records.append(row)
+    return records
+
+
+def stream_prediction_records(
+    seed,
+    fault,
+    prevalence,
+    stream,
+    y,
+    pb,
+    pr,
+    features,
+    conditional_preference_score,
+    choose_safe,
+    batch,
+    sample_ids,
+):
+    """Store emitted probabilities and selector inputs for final-output audits."""
+    ps = np.where(choose_safe[:, None], pr, pb)
+    records = []
+    for local, sample in enumerate(sample_ids):
+        row = {
+            "run_id": FROZEN_RUN,
+            "seed": seed,
+            "fault_type": fault,
+            "prevalence": prevalence,
+            "stream": stream,
+            "sample": int(sample),
+            "batch": int(batch[local]),
+            "y": int(y[local]),
+            "conditional_preference_score": float(
+                conditional_preference_score[local]
+            ),
+            "choose_safe": bool(choose_safe[local]),
+        }
+        for c in range(pb.shape[1]):
+            row[f"base_p{c}"] = float(pb[local, c])
+            row[f"recovery_p{c}"] = float(pr[local, c])
+            row[f"safe_p{c}"] = float(ps[local, c])
+        row.update(
+            {
+                feature: float(features[local, index])
+                for index, feature in enumerate(FEATURES)
+            }
+        )
         records.append(row)
     return records
 
@@ -651,6 +704,7 @@ def main():
     metric_records = []
     safety_records = []
     strict_records = []
+    stream_prediction_rows = []
     selector_audits = []
     selector_folds = []
     selector_parameter_rows = []
@@ -1017,9 +1071,26 @@ def main():
                             conditional_preference_score[strict],
                             choose_safe[strict],
                             choose_balanced[strict],
+                            strict_features,
                             strict_simple_choices,
                             test_batches[strict],
                             np.flatnonzero(strict),
+                        )
+                    )
+                    stream_prediction_rows.extend(
+                        stream_prediction_records(
+                            seed,
+                            fault_type,
+                            prevalence,
+                            "full_mixed_stream",
+                            testy,
+                            pb,
+                            pr,
+                            features,
+                            conditional_preference_score,
+                            choose_safe,
+                            test_batches,
+                            np.arange(len(testy)),
                         )
                     )
 
@@ -1038,6 +1109,7 @@ def main():
             tr,
         )
         clean_probability = fit.model.predict_proba(clean_features)[:, 1]
+        clean_choose_safe = clean_probability >= fit.safe_threshold
         for variant, threshold in (
             ("Balanced-CF", fit.balanced_threshold),
             ("Safe-CF", fit.safe_threshold),
@@ -1046,7 +1118,7 @@ def main():
             selected, summary = evaluate_selection_method(
                 clean_pb, clean_pr, choose, testy
             )
-            false_switch = float(choose.mean())
+            no_fault_recovery_selection = float(choose.mean())
             harmful_switch = float(
                 (
                     choose
@@ -1061,7 +1133,7 @@ def main():
                     "prevalence": 0.0,
                     "stream": "clean_no_imposed_fault",
                     "variant": variant,
-                    "false_switch_rate": false_switch,
+                    "no_fault_recovery_selection_rate": no_fault_recovery_selection,
                     "harmful_switch_rate": harmful_switch,
                     **summary,
                 }
@@ -1078,6 +1150,22 @@ def main():
                     len(testy),
                 )
             )
+        stream_prediction_rows.extend(
+            stream_prediction_records(
+                seed,
+                "none",
+                0.0,
+                "clean_no_imposed_fault",
+                testy,
+                clean_pb,
+                clean_pr,
+                clean_features,
+                clean_probability,
+                clean_choose_safe,
+                test_batches,
+                np.arange(len(testy)),
+            )
+        )
         for method, probability in (
             ("PDRF", clean_pb),
             ("RO-PDRF-Full", clean_pr),
@@ -1267,6 +1355,11 @@ def main():
     safety.to_csv(OUT / "cee_cf10_stream_safety.csv", index=False)
     strict_predictions.to_csv(
         OUT / "cee_cf10_strict_predictions.csv.gz", index=False, compression="gzip"
+    )
+    pd.DataFrame(stream_prediction_rows).to_csv(
+        OUT / "cee_cf10_stream_predictions.csv.gz",
+        index=False,
+        compression="gzip",
     )
     pd.DataFrame(selector_audits).to_csv(
         OUT / "cee_cf10_threshold_audit.csv", index=False

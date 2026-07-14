@@ -1,62 +1,55 @@
-# CEE cross-fitted deployment revision
+# CEE Q1-scores revision: two-pass Lite-CF
 
-This directory reproduces frozen run `CEE-CF10-R2` for the *Computers & Electrical Engineering* submission.
+This directory contains the frozen computational snapshot for the *Computers & Electrical Engineering* manuscript **Cross-fitted selective recovery under controlled multi-sensor corruption**.
 
-## Design
+## Primary design
 
-- Optimization seeds: 101--110
-- Test realization: 70001
-- Temperature fitting: first chronological half of the Batch 7 calibration partition
-- Selector development: second half, five-fold stratified group cross-fitting by original observation
-- Calibration faults: Gaussian noise, offset, drift and stuck-at
-- Unseen faults: gain loss, clipping and correlated dual-group corruption
-- Primary estimand: the controlled fault is applied while the affected group remains available
-- Uncertainty: 1,000 crossed-cluster replicates that independently resample fault mechanisms and fitted-pair seeds, retain the seed draw across faults, and then resample observations within cells
+- Frozen endpoint run: `CEE-CF10-R2`, optimization seeds 101--110.
+- Primary subset: a controlled fault is applied to an available sensor group (`n = 1,436` per mechanism and seed).
+- Router: Lite-CF logistic selector with six temperature-scaled endpoint features and `C = 0.05`.
+- Validation: five-fold cross-fitting grouped by original observation; coefficients and threshold selection are separated.
+- Deployment: one bounded-base pass plus one recovery pass; no leave-one-group-out passes are required.
+- Primary objective: hard-decision safety (negative-transfer prevention, retained corrections and cost-weighted utility).
+- Secondary outcomes: macro-AUROC, macro-AUPRC, NLL, Brier score and ECE of the emitted probability stream.
+- Fault mechanisms: Gaussian noise, offset, drift and stuck-at corruption, applied after training-only standardization and clipping.
 
-The test label and fault type are not selector inputs. Out-of-fold conditional preference scores tune the thresholds; final coefficients are then refitted while thresholds remain frozen. The score is not claimed as a generally calibrated reliability probability.
+The test label and fault identity are not router inputs. Fault scale 3 is treated as a severe controlled stress test, not as a natural-failure prevalence model.
 
 ## Reproduction
 
-From the repository root:
+Create the environment using `environment.yml` or install the exact versions in `requirements-lock.txt`, then run from the repository root:
 
 ```bash
 python cee_revision/run_cee_selector_validation.py
-python cee_revision/analyse_cee_results.py
-python cee_revision/make_cee_validation_figure.py
-python cee_revision/make_cee_graphical_abstract.py
+python cee_revision/run_cee_lite_routing_validation.py
+python cee_revision/analyse_cee_q1_scores.py
+python cee_revision/analyse_cee_lite_results.py
+python cee_revision/analyse_cee_fault_plausibility.py
+python cee_revision/make_cee_q1_figures.py
 ```
 
-For a short smoke test:
+`cee_cf10_r2_lite_config.json` records the frozen selector, split, threshold-grid and utility settings. Exact derived outputs are included under `source_data/`; no rerun is needed to inspect the reported values.
 
-```powershell
-$env:CEE_FAST='1'
-python cee_revision/run_cee_selector_validation.py
-```
+## Primary audited results
 
-The formal rerun takes several minutes on a CPU-only environment. It writes only inside `cee_revision/source_data/`.
+- PDRF macro-AUROC: 0.8115; unconditional recovery: 0.8175; Lite-CF: 0.8151.
+- Lite-CF prevented 94.7% of recovery-induced harmful decision changes and retained 9.7% of available corrections.
+- Equal-cost net utility: +15.8 correct decisions per 10,000 strict observations.
+- The utility changes sign when one harmful change is valued at approximately 2.9 corrections.
+- Mechanism-fixed Lite-CF AUROC effects were positive for Gaussian and stuck-at corruption; offset and drift intervals included zero.
+- Repeated grouped validation (100 fits) gave mean selector AUROC 0.720 with SD 0.138, documenting sparse-event instability.
+- Lite-CF requires two endpoint passes. Energy consumption was not measured.
 
-## Principal audited results
+These results establish risk control under controlled available-group corruption. They do not establish maintenance-confirmed natural sensor failure, population-level failure prevalence or device-independent field recovery.
 
-- Gaussian RO-PDRF-Full minus PDRF macro-AUROC: +0.0143, positive in 10/10 fits.
-- Safe-CF minus PDRF macro-AUROC: +0.00483, crossed-cluster 95% interval +0.00166 to +0.00780.
-- Negative-transfer prevention: 90.3%, interval 82.3% to 95.2%.
-- Recovery retention: 14.4%, interval 5.6% to 26.2%.
-- At 40% prevalence: 185.6 harmful decisions prevented, 20.9 corrections retained and 3.4 net additional correct decisions per 10,000 observations.
-- Leave-one-family-out prevention: 86.2% mean.
-- Unseen-mechanism prevention: 86.8% mean.
-- Four-group Safe-CF deployment: six forward passes and 231,168 counted FLOPs per observation.
+## Contents
 
-These results concern controlled corruptions on one chemical-sensor array. They do not establish maintenance-confirmed natural-failure or device-independent transfer.
+- `manuscript_cee.*` and `supplementary_cee.*`: manuscript and supplementary sources, editable Word exports and compiled PDFs.
+- `run_cee_lite_routing_validation.py`: frozen two-pass Lite-CF evaluation.
+- `analyse_cee_q1_scores.py`, `analyse_cee_lite_results.py`: stability, comparator, interval, probability-quality and utility analyses.
+- `analyse_cee_fault_plausibility.py`: standardized- and original-unit intervention audit.
+- `make_cee_q1_figures.py`: Figures 3 and 4 in PDF, SVG, PNG and TIFF formats.
+- `source_data/`: machine-readable frozen inputs and derived outputs.
+- `tables/`: exact LaTeX table bodies.
 
-## Files
-
-- `run_cee_selector_validation.py`: frozen model, cross-fitting, stream, transfer, baseline, uncertainty and cost analysis.
-- `analyse_cee_results.py`: manuscript fact ledger and LaTeX tables.
-- `make_cee_validation_figure.py`: main deployment/transfer/cost figure.
-- `make_cee_graphical_abstract.py`: optional CEE graphical abstract.
-- `source_data/`: exact CSV/JSON outputs, including crossed-bootstrap replicates, selector calibration rows, feature ablations, coefficients, fold diagnostics, recovery eligibility and batch/batch-1 timing.
-- `tables/`: generated CEE table bodies.
-- `figures/`: editable SVG/PDF and PNG previews.
-- `manuscript_cee.*`, `supplementary_cee.*`: submitted CEE-specific manuscript sources and compiled PDFs.
-
-The repository is released under the MIT License. No software DOI is claimed in this revision; cite the repository URL and exact Git commit.
+The repository is released under the MIT License. The versioned Git tag is `v1.1.0-cee-q1`. A software DOI has not been assigned.

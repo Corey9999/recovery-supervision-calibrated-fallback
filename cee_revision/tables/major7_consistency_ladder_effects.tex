@@ -1,0 +1,16 @@
+\begin{tabular}{llrrr}
+\toprule
+Architecture & Model/training condition & Affected AUROC & $\Delta$ vs clean distillation (95\% CI) & $P$ \\
+\midrule
+EF-PD & EF-PD & 0.747 $\pm$ 0.006 & -0.012 [-0.016, -0.007] & 0.0020 \\
+EF-PD & EF-PD + clean distillation & 0.758 $\pm$ 0.006 & Reference & -- \\
+UF-PD & UF-PD & 0.763 $\pm$ 0.010 & -0.027 [-0.036, -0.018] & 0.0039 \\
+UF-PD & UF-PD + clean distillation & 0.791 $\pm$ 0.008 & Reference & -- \\
+CAGF & CAGF & 0.792 $\pm$ 0.027 & -0.009 [-0.023, +0.006] & 0.2754 \\
+CAGF & CAGF + clean distillation & 0.800 $\pm$ 0.024 & Reference & -- \\
+CAGF & RO-CAGF & 0.797 $\pm$ 0.022 & -0.003 [-0.012, +0.006] & 0.6250 \\
+PDRF & PDRF & 0.791 $\pm$ 0.010 & -0.012 [-0.014, -0.009] & 0.0020 \\
+PDRF & RO-PDRF-Lite & 0.802 $\pm$ 0.008 & Reference & -- \\
+PDRF & RO-PDRF-Full & 0.804 $\pm$ 0.009 & +0.002 [-0.001, +0.005] & 0.1934 \\
+\bottomrule
+\end{tabular}

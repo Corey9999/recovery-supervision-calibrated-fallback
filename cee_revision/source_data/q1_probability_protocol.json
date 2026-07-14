@@ -1,0 +1,19 @@
+{
+  "equal_width_ece": {
+    "bins": 15,
+    "range": [
+      0.0,
+      1.0
+    ]
+  },
+  "equal_mass_ece": {
+    "bins": 15,
+    "ordering": "maximum class probability"
+  },
+  "classwise_ece": {
+    "bins": 15,
+    "aggregation": "unweighted mean over six one-vs-rest classes"
+  },
+  "post_routing_recalibration": false,
+  "emitted_probabilities": "temperature-scaled endpoint probabilities selected without interpolation"
+}

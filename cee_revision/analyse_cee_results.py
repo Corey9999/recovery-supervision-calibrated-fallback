@@ -158,17 +158,17 @@ def main():
         operational_rows.append(
             {
                 "Fault prevalence": f"{int(100 * prevalence)}%",
-                "Harm prevented / 10,000": pm(
+                "Full-model harm prevented / 10,000": pm(
                     per_seed.prevented_per_10k.mean(),
                     per_seed.prevented_per_10k.std(),
                     1,
                 ),
-                "Corrections retained / 10,000": pm(
+                "Full-model corrections retained / 10,000": pm(
                     per_seed.retained_per_10k.mean(),
                     per_seed.retained_per_10k.std(),
                     1,
                 ),
-                "Residual harm / 10,000": pm(
+                "Residual Full-model harm / 10,000": pm(
                     per_seed.residual_harm_per_10k.mean(),
                     per_seed.residual_harm_per_10k.std(),
                     1,
@@ -202,6 +202,7 @@ def main():
         (safety.stream == "clean_no_imposed_fault")
         & (safety.variant == "Safe-CF")
     ]
+    no_fault_selection = clean_safe["no_fault_recovery_selection_rate"]
     interval_map = intervals.set_index("quantity").to_dict("index")
     diag_rows = [
         {
@@ -249,11 +250,11 @@ def main():
             ),
         },
         {
-            "Quantity": "Clean false-switch rate",
-            "Estimate": f"{clean_safe.false_switch_rate.mean():.3f} $\\pm$ {clean_safe.false_switch_rate.std():.3f}",
+            "Quantity": "No-fault recovery-selection rate",
+            "Estimate": f"{no_fault_selection.mean():.3f} $\\pm$ {no_fault_selection.std():.3f}",
         },
         {
-            "Quantity": "Clean harmful-switch rate",
+            "Quantity": "No-fault harmful-switch rate",
             "Estimate": f"{clean_safe.harmful_switch_rate.mean():.3f} $\\pm$ {clean_safe.harmful_switch_rate.std():.3f}",
         },
     ]
@@ -293,9 +294,15 @@ def main():
         group = simple[(simple.rule == rule) & (simple.matching == matching)]
         if group.empty:
             continue
+        display_rule = {
+            "Safe-CF": "Safe-CF",
+            "Always-PDRF": "Always PDRF",
+            "Always-RO-PDRF-Full": "Always RO-PDRF-Full",
+            "Correctness-disagreement-oracle": "Correctness opportunity boundary",
+        }.get(rule, rule.replace("-", " "))
         simple_rows.append(
             {
-                "Selection rule": rule.replace("-", " "),
+                "Selection rule": display_rule,
                 "Matching": matching.replace("_", " "),
                 "Prevention": f"{group.negative_transfer_prevention.mean():.3f}",
                 "Retention": f"{group.recovery_retention.mean():.3f}",
@@ -317,7 +324,7 @@ def main():
         group = cost[cost.method == method]
         cost_rows.append(
             {
-                "Method": method,
+                "Method": "Safe-CF" if method == "SR-PDRF-Safe-CF" else method,
                 "Parameters": f"{int(round(group.stored_parameters.mean())):,}",
                 "State (KiB)": f"{group.model_state_kib_fp32.mean():.1f}",
                 "Passes": int(round(group.forward_passes_per_observation.mean())),
@@ -508,7 +515,7 @@ def main():
             "oof_brier_mean": float(diagnostics.selector_brier.mean()),
         },
         "clean": {
-            "false_switch_rate_mean": float(clean_safe.false_switch_rate.mean()),
+            "no_fault_recovery_selection_rate_mean": float(no_fault_selection.mean()),
             "harmful_switch_rate_mean": float(clean_safe.harmful_switch_rate.mean()),
         },
         "lofo": {
@@ -524,7 +531,7 @@ def main():
             "retention_mean": float(unseen.recovery_retention.mean()),
         },
         "cost": {
-            method: {
+            public_name: {
                 "latency_ms_per_observation_median": float(cost.loc[cost.method == method, "latency_ms_per_observation"].median()),
                 "batch1_latency_ms_median": float(cost.loc[cost.method == method, "latency_batch1_ms_median"].median()),
                 "throughput_observations_per_second_median": float(cost.loc[cost.method == method, "throughput_observations_per_second"].median()),
@@ -532,7 +539,11 @@ def main():
                 "flops_per_sample": flops[method],
                 "forward_passes": passes[method],
             }
-            for method in ("PDRF", "RO-PDRF-Full", "SR-PDRF-Safe-CF")
+            for public_name, method in (
+                ("PDRF", "PDRF"),
+                ("RO-PDRF-Full", "RO-PDRF-Full"),
+                ("Safe-CF", "SR-PDRF-Safe-CF"),
+            )
         },
         "operational_utility": operational_facts,
         "recovery_eligibility": {

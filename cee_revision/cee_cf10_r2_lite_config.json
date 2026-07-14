@@ -1,0 +1,51 @@
+{
+  "run_id": "CEE-CF10-R2-LITE",
+  "source_run_id": "CEE-CF10-R2",
+  "optimization_seeds": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+  "test_realization": 70001,
+  "fault_mechanisms": ["gaussian", "offset", "drift", "stuck_at"],
+  "train_batches": [1, 2, 3, 4, 5, 6],
+  "checkpoint_and_calibration_batch": 7,
+  "test_batches": [8, 9, 10],
+  "preprocessing": {
+    "standardization_fit": "batches 1-6 only",
+    "clip_after_standardization": [-8, 8]
+  },
+  "strict_test": {
+    "fault_assignment_prevalence": 0.4,
+    "group_missingness": 0.2,
+    "affected_group": 1,
+    "quality_values": 1.0,
+    "n_applied_and_available": 1436
+  },
+  "endpoints": {
+    "base": "PDRF",
+    "recovery": "RO-PDRF-Lite",
+    "recovery_distillation_weight": 0.3,
+    "recovery_teacher": "detached clean-view probability"
+  },
+  "temperature": "one scalar per endpoint and seed fitted on the first chronological half of the Batch-7 calibration partition",
+  "selector": {
+    "features": [
+      "base_confidence",
+      "recovery_confidence",
+      "confidence_delta",
+      "base_entropy",
+      "recovery_entropy",
+      "entropy_delta"
+    ],
+    "model": "standardized L2 logistic regression",
+    "C": 0.05,
+    "class_weight": "balanced",
+    "cross_fitting": "five-fold stratified group",
+    "threshold_grid": [0.5, 0.525, 0.55, 0.575, 0.6, 0.625, 0.65, 0.675, 0.7, 0.725, 0.75, 0.775, 0.8, 0.825, 0.85, 0.875, 0.9],
+    "threshold_objective": [
+      "minimize realized harms",
+      "maximize selected accuracy",
+      "maximize retained corrections",
+      "choose highest threshold"
+    ]
+  },
+  "post_routing_recalibration": false,
+  "energy_measured": false
+}

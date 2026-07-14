@@ -1,0 +1,37 @@
+\begin{tabular}{llcc}
+\toprule
+Regime & Variant & AUROC $\uparrow$ & NLL $\downarrow$ \\
+\midrule
+ID missingness & Uniform & 0.790 $\pm$ 0.004 & 0.554 $\pm$ 0.004 \\
+ & Quality only & 0.790 $\pm$ 0.004 & 0.554 $\pm$ 0.004 \\
+ & Learned precision only & 0.792 $\pm$ 0.003 & 0.552 $\pm$ 0.004 \\
+ & Factorized reliability & 0.793 $\pm$ 0.004 & 0.551 $\pm$ 0.004 \\
+ & CF-Aug & \textbf{0.793 $\pm$ 0.004} & \textbf{0.550 $\pm$ 0.004} \\
+ & CRF without ranking & 0.793 $\pm$ 0.004 & \textbf{0.550 $\pm$ 0.004} \\
+ & Full CRF & 0.792 $\pm$ 0.004 & 0.551 $\pm$ 0.004 \\
+\addlinespace
+Noise shift & Uniform & 0.783 $\pm$ 0.003 & 0.562 $\pm$ 0.003 \\
+ & Quality only & 0.784 $\pm$ 0.003 & 0.561 $\pm$ 0.003 \\
+ & Learned precision only & 0.784 $\pm$ 0.003 & 0.560 $\pm$ 0.003 \\
+ & Factorized reliability & \textbf{0.788 $\pm$ 0.003} & 0.555 $\pm$ 0.003 \\
+ & CF-Aug & 0.788 $\pm$ 0.003 & \textbf{0.555 $\pm$ 0.003} \\
+ & CRF without ranking & 0.788 $\pm$ 0.003 & 0.555 $\pm$ 0.003 \\
+ & Full CRF & 0.787 $\pm$ 0.003 & 0.557 $\pm$ 0.004 \\
+\addlinespace
+Outlier shift & Uniform & 0.778 $\pm$ 0.004 & 0.571 $\pm$ 0.004 \\
+ & Quality only & 0.790 $\pm$ 0.004 & 0.555 $\pm$ 0.004 \\
+ & Learned precision only & 0.772 $\pm$ 0.004 & 0.596 $\pm$ 0.006 \\
+ & Factorized reliability & 0.794 $\pm$ 0.003 & 0.550 $\pm$ 0.003 \\
+ & CF-Aug & 0.794 $\pm$ 0.003 & 0.550 $\pm$ 0.003 \\
+ & CRF without ranking & \textbf{0.794 $\pm$ 0.003} & \textbf{0.550 $\pm$ 0.003} \\
+ & Full CRF & 0.794 $\pm$ 0.003 & 0.551 $\pm$ 0.003 \\
+\addlinespace
+Silent failure & Uniform & 0.774 $\pm$ 0.003 & 0.572 $\pm$ 0.003 \\
+ & Quality only & 0.775 $\pm$ 0.003 & 0.572 $\pm$ 0.004 \\
+ & Learned precision only & 0.772 $\pm$ 0.004 & 0.579 $\pm$ 0.005 \\
+ & Factorized reliability & 0.774 $\pm$ 0.004 & 0.574 $\pm$ 0.005 \\
+ & CF-Aug & 0.774 $\pm$ 0.004 & 0.573 $\pm$ 0.005 \\
+ & CRF without ranking & 0.775 $\pm$ 0.004 & 0.572 $\pm$ 0.005 \\
+ & Full CRF & \textbf{0.780 $\pm$ 0.003} & \textbf{0.566 $\pm$ 0.004} \\
+\bottomrule
+\end{tabular}

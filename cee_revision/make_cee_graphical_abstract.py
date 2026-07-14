@@ -88,7 +88,7 @@ def main():
     retention = FACTS["crossed_intervals"]["recovery_retention"]
     unseen = FACTS["unseen"]
     cards = [
-        (0.775, 0.63, f"{100*prevention['bootstrap_mean']:.1f}%", "negative transfer\nprevented", TEAL, LIGHT_TEAL),
+        (0.775, 0.63, f"{100*prevention['bootstrap_mean']:.1f}%", "Full-model harm\nprevented", TEAL, LIGHT_TEAL),
         (0.775, 0.40, f"{100*retention['bootstrap_mean']:.1f}%", "recovery\nretained", ORANGE, LIGHT_ORANGE),
         (0.890, 0.63, "86.8%", "unseen-mechanism\nprevention", BLUE, LIGHT_BLUE),
         (0.890, 0.40, "6 passes", "four-group\ndeployment cost", GRAY, "#F2F3F5"),
@@ -99,7 +99,7 @@ def main():
     ax.text(
         0.02,
         0.18,
-        f"Crossed-cluster 95% intervals: prevention {100*prevention['ci_2.5']:.1f}--{100*prevention['ci_97.5']:.1f}%  |  "
+        f"Conditional crossed 95% intervals: prevention {100*prevention['ci_2.5']:.1f}--{100*prevention['ci_97.5']:.1f}%  |  "
         f"retention {100*retention['ci_2.5']:.1f}--{100*retention['ci_97.5']:.1f}%",
         fontsize=10.5,
         color="#353B44",

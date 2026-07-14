@@ -1,0 +1,13 @@
+fault_type,comparison,mean,ci_2.5,ci_97.5,n_fitted_pairs,interval_unit
+drift,lite_minus_pdrf_auroc,0.001953659685928244,-0.00045442267741322307,0.004361742049269711,10,fitted model pair; mechanism fixed
+drift,lite_cf_minus_pdrf_auroc,0.001764280502728266,-0.00019988167918610369,0.0037284426846426353,10,fitted model pair; mechanism fixed
+drift,lite_cf_minus_lite_auroc,-0.00018937918319997805,-0.0019854553412869355,0.0016066969748869794,10,fitted model pair; mechanism fixed
+gaussian,lite_minus_pdrf_auroc,0.012390672318986273,0.010196760818806876,0.014584583819165671,10,fitted model pair; mechanism fixed
+gaussian,lite_cf_minus_pdrf_auroc,0.0063509040382758175,0.0034085460070706003,0.009293262069481036,10,fitted model pair; mechanism fixed
+gaussian,lite_cf_minus_lite_auroc,-0.006039768280710456,-0.008699794636890117,-0.003379741924530794,10,fitted model pair; mechanism fixed
+offset,lite_minus_pdrf_auroc,0.0033537993807422175,0.0007058997277243542,0.006001699033760081,10,fitted model pair; mechanism fixed
+offset,lite_cf_minus_pdrf_auroc,0.002814572181436004,-2.36106109303782e-05,0.005652754973802385,10,fitted model pair; mechanism fixed
+offset,lite_cf_minus_lite_auroc,-0.0005392271993062137,-0.0026083721670544626,0.0015299177684420353,10,fitted model pair; mechanism fixed
+stuck_at,lite_minus_pdrf_auroc,0.0064004487382664736,0.0033319359385591794,0.009468961537973768,10,fitted model pair; mechanism fixed
+stuck_at,lite_cf_minus_pdrf_auroc,0.00340959930001723,0.0004939172681740671,0.006325281331860393,10,fitted model pair; mechanism fixed
+stuck_at,lite_cf_minus_lite_auroc,-0.0029908494382492436,-0.005731101500366728,-0.00025059737613175896,10,fitted model pair; mechanism fixed

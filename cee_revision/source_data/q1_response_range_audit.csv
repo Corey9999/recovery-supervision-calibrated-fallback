@@ -1,0 +1,2 @@
+model,clean_min,clean_max,fault_min,fault_max,combined_min,combined_max,n_seed_observations,n_fitted_pairs,theoretical_open_lower,theoretical_open_upper,implementation
+RO-PDRF-Full,-2.757962226867676,2.9974489212036133,-2.899454116821289,3.0,-2.899454116821289,3.0,17650,10,-3.0,3.0,"Linear(32,16,bias=True)-ReLU-Linear(16,1,bias=True)-3*tanh(u/3)"
