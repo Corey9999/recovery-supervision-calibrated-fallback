@@ -1,8 +1,8 @@
-# Verification of 54 manuscript references
+# Verification of 62 manuscript references
 
-Audit date: 2026-07-13. DOI records were resolved and compared with Crossref or DataCite metadata. Records without a DOI were checked against their official proceedings or journal page.
+Audit date: 2026-07-14. DOI records were resolved and compared with Crossref or DataCite metadata. Records without a DOI were checked against their official proceedings or journal page.
 
-Outcome: 54 of 54 records verified.
+Outcome: 62 of 62 records verified.
 
 | Key | Year | Identifier or official record | Verification |
 |---|---:|---|---|
@@ -60,3 +60,11 @@ Outcome: 54 of 54 records verified.
 | `mirza2022normalization` | 2022 | https://openaccess.thecvf.com/content/CVPR2022/html/Mirza_The_Norm_Must_Go_On_Dynamic_Unsupervised_Domain_Adaptation_by_CVPR_2022_paper.html | verified_resolution (official URL) |
 | `tarvainen2017mean` | 2017 | https://proceedings.neurips.cc/paper_files/paper/2017/hash/68053af2923e00204c3ca7c6a3150cf7-Abstract.html | verified_resolution (official URL) |
 | `zhang2023qmf` | 2023 | https://proceedings.mlr.press/v202/zhang23ar.html | verified_resolution (official URL) |
+| `elyaniv2010selective` | 2010 | https://jmlr.org/papers/v11/el-yaniv10a.html | verified_resolution (official JMLR page) |
+| `geifman2019selectivenet` | 2019 | https://proceedings.mlr.press/v97/geifman19a.html | verified_resolution (official PMLR page) |
+| `mozannar2020defer` | 2020 | https://proceedings.mlr.press/v119/mozannar20b.html | verified_resolution (official PMLR page) |
+| `tailor2024population` | 2024 | https://proceedings.mlr.press/v238/tailor24a.html | verified_resolution (official PMLR page) |
+| `franc2023reject` | 2023 | https://www.jmlr.org/papers/v24/21-0048.html | verified_resolution (official JMLR page) |
+| `liang2024selective` | 2024 | https://openreview.net/forum?id=dmxMGW6J7N | verified_resolution (official TMLR/OpenReview record) |
+| `cruz2018dynamic` | 2018 | 10.1016/j.inffus.2017.09.010 | verified (Elsevier/Crossref record) |
+| `chen2012cascade` | 2012 | https://proceedings.mlr.press/v22/chen12c.html | verified_resolution (official PMLR page) |

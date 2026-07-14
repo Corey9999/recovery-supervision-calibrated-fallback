@@ -84,12 +84,12 @@ def main():
 
     box(ax, 0.62, 0.40, 0.13, 0.25, "Select the safer\nendpoint for each\nobservation", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
 
-    prevention = FACTS["hierarchical_intervals"]["negative_transfer_prevention"]
-    retention = FACTS["hierarchical_intervals"]["recovery_retention"]
+    prevention = FACTS["crossed_intervals"]["negative_transfer_prevention"]
+    retention = FACTS["crossed_intervals"]["recovery_retention"]
     unseen = FACTS["unseen"]
     cards = [
-        (0.775, 0.63, "90.6%", "negative transfer\nprevented", TEAL, LIGHT_TEAL),
-        (0.775, 0.40, "14.0%", "recovery\nretained", ORANGE, LIGHT_ORANGE),
+        (0.775, 0.63, f"{100*prevention['bootstrap_mean']:.1f}%", "negative transfer\nprevented", TEAL, LIGHT_TEAL),
+        (0.775, 0.40, f"{100*retention['bootstrap_mean']:.1f}%", "recovery\nretained", ORANGE, LIGHT_ORANGE),
         (0.890, 0.63, "86.8%", "unseen-mechanism\nprevention", BLUE, LIGHT_BLUE),
         (0.890, 0.40, "6 passes", "four-group\ndeployment cost", GRAY, "#F2F3F5"),
     ]
@@ -99,7 +99,7 @@ def main():
     ax.text(
         0.02,
         0.18,
-        f"Hierarchical 95% intervals: prevention {100*prevention['ci_2.5']:.1f}--{100*prevention['ci_97.5']:.1f}%  |  "
+        f"Crossed-cluster 95% intervals: prevention {100*prevention['ci_2.5']:.1f}--{100*prevention['ci_97.5']:.1f}%  |  "
         f"retention {100*retention['ci_2.5']:.1f}--{100*retention['ci_97.5']:.1f}%",
         fontsize=10.5,
         color="#353B44",

@@ -16,7 +16,13 @@
 
 For every training minibatch, PDRF encodes each available sensor group, computes group logits and bounded scores, and forms normalized weights. One available group is sampled from the training prior. The group receives Gaussian degradation whose scale is determined by a uniformly sampled retention factor. The model then evaluates the degraded view and, when another group remains, the selected-group removal view. The main-text objective combines clean classification, bounded score, boundary, degraded classification, consistency, normalized-weight monotonicity and severity-linked score ranking. All random choices use explicitly recorded seeds.
 
-The RO-PDRF family uses the same architecture and data views. In the formal protocol, the detached clean-view probability vector is the teacher for degraded-view KL distillation; it therefore requires no test label or oracle view selection. RO-PDRF-Lite adds only this recovery term at weight 0.30 to the base PDRF objective and is the primary practical model and software default. RO-PDRF-Full additionally applies clean/degraded multiclass Brier terms, a log interior penalty on both response paths and a smooth one-versus-rest pairwise loss on degraded logits at weights 0.05, 0.005 and 0.10; it is the mechanistic full model. For a minibatch $\mathcal B$, both task losses use the exact class-weighted mean $\sum_{i\in\mathcal B}\omega_{y_i}[-\log p_{iy_i}]/\sum_{i\in\mathcal B}\omega_{y_i}$, evaluated on clean and degraded logits respectively. Consistency, recovery and removal-dependent directional terms are averaged only over observations with at least two available groups and are zero when that eligible subset is empty. With $\epsilon=10^{-4}$, the interior term is the sum of the clean and degraded available-group means of $-\log\{\max[\epsilon,1-(r/B)^2]\}$. The pairwise ranking term averages only over classes having at least one positive and one negative minibatch observation and is zero when no class is eligible. RO-PDRF-EMA is a calibration-oriented sensitivity based on Full. Label-assisted best-view, affected-group-removal and confidence-selected rules are separate sensitivity experiments. Development ablations used seeds 101--103; the selected combination was frozen before formal evaluation on seeds 101--110.
+The RO-PDRF family uses the same architecture and data views. In the formal protocol, the detached clean-view probability vector is the teacher for degraded-view KL distillation; it therefore requires no test label or oracle view selection. RO-PDRF-Lite adds only this recovery term at weight 0.30 to the base PDRF objective and is the primary practical model and software default. RO-PDRF-Full additionally applies clean/degraded multiclass Brier terms, a log interior penalty on both response paths and a smooth one-versus-rest pairwise loss on degraded logits at weights 0.05, 0.005 and 0.10; it is the mechanistic full model. For a minibatch $\mathcal B$, both task losses use the exact class-weighted mean $\sum_{i\in\mathcal B}\omega_{y_i}[-\log p_{iy_i}]/\sum_{i\in\mathcal B}\omega_{y_i}$, evaluated on clean and degraded logits respectively. Consistency, recovery and removal-dependent directional terms are averaged only over observations with at least two available groups: removal of the degraded group is otherwise undefined because no predictor remains. With $\epsilon=10^{-4}$, the interior term is the sum of the clean and degraded available-group means of $-\log\{\max[\epsilon,1-(r/B)^2]\}$. The pairwise ranking term averages only over classes having at least one positive and one negative minibatch observation and is zero when no class is eligible. RO-PDRF-EMA is a calibration-oriented sensitivity based on Full. Label-assisted best-view, affected-group-removal and confidence-selected rules are separate sensitivity experiments. Development ablations used seeds 101--103; the selected combination was frozen before formal evaluation on seeds 101--110.
+
+\begin{table}[ht]
+\centering
+\caption{Eligibility of chemical training observations for the removal-dependent recovery loss. Values summarize 10 fixed training-mask realizations.}
+\resizebox{0.72\textwidth}{!}{\input{tables/cee_recovery_eligibility.tex}}
+\end{table}
 
 The chemical-array group encoder is Linear(32,64), ReLU, Linear(64,32), ReLU. The hydraulic encoder is Linear(48,64), ReLU, Linear(64,32), ReLU. The AHU group encoder uses the same architecture with four inputs. The logit head is Linear(32,$C$). The score head is Linear(32,16), ReLU, Linear(16,1). The CAGF/DWR gate is Linear($32M+2M$,64), ReLU, Linear(64,$M$). Early fusion is Linear($Md+2M$,128), ReLU, Linear(128,64), ReLU, Linear(64,$C$). No batch normalization, layer normalization or dropout is used.
 
@@ -36,11 +42,11 @@ All models use AdamW, learning rate $2\times10^{-3}$, weight decay $10^{-4}$, ba
 
 \section{Frozen CEE cross-fitted deployment analysis}
 
-The formal deployment rerun is identified as CEE-CF10-R1. It uses optimization seeds 101--110 and reuses one PDRF/RO-PDRF-Full checkpoint pair per seed across every prevalence, selector and fault audit. The strict estimand contains an observation only when the controlled intervention reaches an available affected group. For the 40\% group-1 assignment, 1,436 of 1,765 assigned observations satisfy this definition and 329 are assigned but masked. The latter cannot transmit the intervention and are reported only as a sensitivity subset.
+The formal deployment rerun is identified as CEE-CF10-R2. It uses optimization seeds 101--110 and reuses one PDRF/RO-PDRF-Full checkpoint pair per seed across every prevalence, selector and fault audit. The strict estimand contains an observation only when the controlled intervention reaches an available affected group. For the 40\% group-1 assignment, 1,436 of 1,765 assigned observations satisfy this definition and 329 are assigned but masked. The latter cannot transmit the intervention and are reported only as a sensitivity subset.
 
 \begin{table}[ht]
 \centering
-\caption{Frozen run manifest. The test realization, temperature protocol, checkpoint pair and selector protocol are common to all CEE-CF10-R1 headline tables.}
+\caption{Frozen run manifest. The test realization, temperature protocol, checkpoint pair and selector protocol are common to all CEE-CF10-R2 headline tables.}
 \resizebox{0.84\textwidth}{!}{\input{tables/cee_run_manifest.tex}}
 \end{table}
 
@@ -52,32 +58,50 @@ The formal deployment rerun is identified as CEE-CF10-R1. It uses optimization s
 
 The second chronological half of the Batch~7 calibration partition contains two method-shared realizations of Gaussian, offset, drift and stuck-at corruption. Only applied-and-available rows are retained. Selector features are base and recovery confidence, their difference, both normalized entropies and their difference, base--recovery Jensen--Shannon (JS) divergence, each endpoint's JS divergence from leave-one-group-out (LOO) recovery consensus, each endpoint's class agreement with that consensus and the legal-removal fraction. The selector contains no class label or fault-type input at inference.
 
-Five-fold stratified group cross-fitting assigns all fault realizations derived from the same original calibration observation to one fold. Within each fold, standardization and logistic coefficients are fitted only on informative rows from the other four folds, where the endpoint models differ in correctness. Pooled out-of-fold probabilities, rather than fitted probabilities, determine thresholds on the grid $0.50,0.525,\ldots,0.90$. Safe-CF first minimizes negative transfer, then maximizes selector accuracy and retained recovery. Balanced-CF first maximizes accuracy, then minimizes negative transfer. Once thresholds are selected, coefficients are refitted on all informative calibration rows; the thresholds remain frozen. Test labels are loaded only for evaluation after this process.
+Five-fold stratified group cross-fitting assigns all fault realizations derived from the same original calibration observation to one fold. Within each fold, standardization and logistic coefficients are fitted only on informative rows from the other four folds, where the endpoint models differ in correctness. Pooled out-of-fold conditional preference scores, rather than fitted scores, determine thresholds on the grid $0.50,0.525,\ldots,0.90$. The score is conditional on endpoint correctness disagreement and is not a general reliability probability. Every fit uses standardized inputs, $L_2$ regularization with $C=0.5$, the \texttt{lbfgs} solver, balanced class weights, tolerance $10^{-4}$, 2,000 maximum iterations and random state 0. Safe-CF first minimizes negative transfer, then maximizes selector accuracy and retained recovery. Balanced-CF first maximizes accuracy, then minimizes negative transfer. Once thresholds are selected, coefficients are refitted on all informative calibration rows; the thresholds remain frozen. Every training fold contained both classes, no convergence warning occurred, and test labels are loaded only for evaluation after this process.
 
 \begin{table}[p]
 \centering
-\caption{Selector standardization and final logistic coefficients. Values are means $\pm$ standard deviations across 10 independently fitted endpoint pairs. Centers and scales are fitted within each seed; exact seed-level values are provided in the source-data archive.}
+\caption{Selector standardization and final logistic coefficients. Values are means $\pm$ standard deviations across 10 independently fitted endpoint pairs. Sign agreement is the larger fraction sharing either coefficient sign and is a stability diagnostic, not evidence of causal feature importance. Centers and scales are fitted within each seed; exact seed-level values are provided in the source-data archive.}
 \resizebox{0.92\textwidth}{!}{\input{tables/cee_selector_parameters.tex}}
 \end{table}
 
 \begin{table}[p]
 \centering
-\caption{Seed-level selector sample sizes, frozen thresholds and out-of-fold diagnostics. Calibration $n$ counts applied-and-available rows; disagreement $n$ counts rows informative for logistic fitting.}
+\caption{Seed-level selector sample sizes, class counts, frozen thresholds and out-of-fold diagnostics. Calibration $n$ counts applied-and-available rows; disagreement $n$ counts rows informative for logistic fitting. Recovery-positive and negative-transfer columns confirm that both preference classes are present.}
 \resizebox{\textwidth}{!}{\input{tables/cee_selector_seed_diagnostics.tex}}
 \end{table}
 
 \begin{table}[ht]
 \centering
-\caption{Out-of-fold selector reliability. Counts pool held-out-fold predictions across 10 fitted pairs; the mean probability and observed preference are weighted by bin counts. Empty seed--bin combinations contribute no pseudo-counts.}
+\caption{Out-of-fold conditional preference-score reliability. Counts pool held-out-fold scores across 10 fitted pairs; the mean score and observed recovery preference are weighted by bin counts. Empty seed--bin combinations contribute no pseudo-counts. The score is not claimed as a generally calibrated reliability probability.}
 \resizebox{0.76\textwidth}{!}{\input{tables/cee_selector_reliability.tex}}
 \end{table}
 
-Uncertainty for the selector audit uses 1,000 hierarchical bootstrap replicates. Each replicate samples a fault mechanism with replacement, samples one fitted seed/model pair within each sampled mechanism and then samples strict observations within that cell. The resulting intervals quantify variation over the four tested mechanisms, repeated fitting and observations. They do not treat 57,440 repeated model--fault--observation predictions as independent physical events, and they do not represent a population of devices.
+Uncertainty for the selector audit uses 1,000 crossed-cluster bootstrap replicates. Fault mechanism and fitted model-pair seed are independently sampled with replacement; the same sampled set of 10 seed identities is retained across every sampled mechanism, after which strict observations are resampled within each fault-by-seed cell. Retaining the seed draw across faults represents reuse of one fitted endpoint pair and avoids incorrectly nesting seed under mechanism. The resulting intervals quantify variation over the four tested mechanisms, repeated fitting and observations. They do not treat 57,440 repeated model--fault--observation predictions as independent physical events, and they do not represent a population of devices.
 
 \begin{table}[ht]
 \centering
-\caption{Complete deployment-stream macro-AUROC means $\pm$ standard deviations. The no-fault and mixed streams contain all held-out observations and use identical 20\% group-missingness masks.}
-\resizebox{0.78\textwidth}{!}{\input{tables/cee_deployment_streams.tex}}
+\caption{Complete deployment-stream macro-AUROC, accuracy and macro-F1. Clean/no-fault predictions occur once per seed. Other mechanism-specific values are averaged within seed before the 10 seed units are summarized, preventing unaffected predictions repeated across fault mechanisms from becoming pseudo-replicates.}
+\resizebox{\textwidth}{!}{\input{tables/cee_deployment_streams.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Operational Safe-CF event counts per 10,000 complete-stream observations. Values are means $\pm$ standard deviations across 10 seed-level averages over four mechanisms.}
+\resizebox{\textwidth}{!}{\input{tables/cee_operational_utility.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Selector feature-set ablation. Calibration discrimination uses out-of-fold disagreement rows; strict-test quantities first average mechanisms within fitted seed.}
+\resizebox{0.92\textwidth}{!}{\input{tables/cee_selector_feature_ablation.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Operating-point sensitivity at 40\% fault prevalence. Balanced-CF prioritizes calibration accuracy; Safe-CF prioritizes negative-transfer prevention. Values first average mechanisms within seed.}
+\resizebox{0.78\textwidth}{!}{\input{tables/cee_balanced_sensitivity.tex}}
 \end{table}
 
 The leave-one-family-out audit refits standardization, logistic coefficients and threshold using three calibration families and applies them to the fourth. The unseen audit retains the four-family selector unchanged and applies gain loss, clipping and correlated dual-group corruption, none of which appears in selector calibration. Both audits use the same endpoint checkpoints and fixed test realization as the main run.
@@ -88,7 +112,7 @@ The leave-one-family-out audit refits standardization, logistic coefficients and
 \resizebox{\textwidth}{!}{\input{tables/cee_unseen_transfer.tex}}
 \end{table}
 
-Scalar confidence, entropy, LOO-disagreement and JS rules fit thresholds on out-of-fold calibration scores. Prevention-matched rules minimize absolute difference from Safe-CF calibration prevention; the random rule matches recovery-model usage. Always-base, always-recovery and a label-informed decision oracle define endpoints. Because the oracle chooses probabilities by hard-decision correctness, it defines the prevention--retention corner but is not an AUROC upper bound.
+Scalar confidence, entropy, LOO-disagreement and JS rules fit thresholds on out-of-fold calibration scores. Prevention-matched rules minimize absolute difference from Safe-CF calibration prevention; the random rule matches recovery-model usage. Always-base, always-recovery and a correctness-disagreement oracle define endpoints. Because the oracle chooses endpoint predictions by hard-decision correctness, it defines an opportunity boundary in prevention--retention space but is not an AUROC upper bound.
 
 \begin{table}[ht]
 \centering
@@ -96,11 +120,11 @@ Scalar confidence, entropy, LOO-disagreement and JS rules fit thresholds on out-
 \resizebox{\textwidth}{!}{\input{tables/cee_simple_baselines.tex}}
 \end{table}
 
-Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one-group-out RO-PDRF-Full pass per physical group. Its $G+2$ forward passes are included in all latency and FLOP statements. CPU measurements use three warm-up calls and seven repeated complete-batch calls, excluding data loading.
+Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one-group-out RO-PDRF-Full pass per physical group. Its $G+2$ forward passes are included in all latency and FLOP statements. CPU measurements use three warm-up calls and seven repeated calls for both the complete 4,364-observation batch and batch size one, excluding data loading. The runtime is an Intel Core i5-13500H with PyTorch 2.12.1+cpu and 12 intra-op and inter-op threads.
 
 \begin{table}[ht]
 \centering
-\caption{Four-group deployment cost. State assumes 32-bit parameters; times are batch-normalized CPU measurements and not single-observation real-time latency.}
+\caption{Four-group deployment cost. State assumes 32-bit parameters. Complete-batch throughput and batch-size-one latency are reported separately; neither is a hardware-independent real-time guarantee.}
 \resizebox{0.86\textwidth}{!}{\input{tables/cee_compute_cost.tex}}
 \end{table}
 
@@ -110,7 +134,7 @@ Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one
 \resizebox{0.62\textwidth}{!}{\input{tables/cee_group_scaling.tex}}
 \end{table}
 
-The earlier assignment-defined comparisons, teacher heuristics and alternative temperature protocols are retained in the archived sections below for auditability. They are not pooled with CEE-CF10-R1 and do not replace the strict, full-stream or transfer estimands.
+The earlier assignment-defined comparisons, teacher heuristics and alternative temperature protocols are retained in the archived sections below for auditability. They are not pooled with CEE-CF10-R2 and do not replace the strict, full-stream or transfer estimands.
 
 \section{Fault-subset, batch and class results}
 
