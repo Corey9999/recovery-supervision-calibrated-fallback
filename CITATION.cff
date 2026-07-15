@@ -1,13 +1,13 @@
 cff-version: 1.2.0
 message: "If you use this software or its source data, please cite the archived release."
-title: "Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption"
+title: "Support-gated selective recovery under controlled multi-sensor corruption"
 type: software
 authors:
   - family-names: "Luo"
     given-names: "Riyang"
     affiliation: "School of Mechanical and Power Engineering, Nanjing Tech University"
     email: "lry@njtech.edu.cn"
-version: 3.1.0
+version: 4.0.0
 date-released: 2026-07-15
 license: MIT
 keywords:

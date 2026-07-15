@@ -1,8 +1,12 @@
-# Cross-fitted selective recovery for fault-tolerant multi-sensor fusion
+# Support-gated selective recovery under controlled multi-sensor corruption
 
-Public reproducibility package for **Cross-fitted selective recovery for fault-tolerant multi-sensor fusion under sensor corruption**, prepared for submission to *Computers & Electrical Engineering*. The CEE revision is isolated under [`cee_revision/`](cee_revision/); earlier Q1-upgrade materials remain available for auditability.
+Public reproducibility package for **Support-gated selective recovery under controlled multi-sensor corruption**, prepared for submission to *Computers & Electrical Engineering*. The current CEE revision is isolated under [`cee_revision/`](cee_revision/); earlier versions remain available for auditability.
 
-**Repository naming note.** The repository slug retains the earlier `calibrated-fallback` wording so that the public URL remains stable. The final manuscript calls the deployment rule **cross-fitted selective recovery (Safe-CF)**. Its conditional preference score is not claimed to be a generally calibrated reliability or device-health probability.
+## v1.4 major-router revision
+
+The current revision adds all-row and two-stage outcome routing, complete prevention-retention frontiers, calibration-matched simple controls, a gate-enforced primary policy, utility-aware thresholds at harm ratios 1/2/5/10, severity and affected-group transport, leave-one-mechanism-out calibration, a complete mechanism-by-batch matrix and engineering event-efficiency audits. The exact computational snapshot is `f8ef1a17bdfc98377334dd9aa6903702cdc789c1`; the release tag is `v1.4.0-major-router`.
+
+**Repository naming note.** The repository slug retains the earlier `calibrated-fallback` wording so that the public URL remains stable. The current manuscript uses a prospective support gate for deployment and retains the historical ungated Lite-CF result only as an auditable conditional estimate. The conditional preference score is not claimed to be a calibrated reliability or device-health probability.
 
 ## CEE-CF10-R2-LITE Strict-88 revision
 

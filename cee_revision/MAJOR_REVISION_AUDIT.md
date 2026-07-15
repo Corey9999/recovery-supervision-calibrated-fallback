@@ -36,4 +36,3 @@ Revision basis: `Q1_Reviewer_Report_Cross_fitted_Selective_Recovery.docx`
 - The hydraulic experiment is a single-rig sensitivity analysis and the AHU data provide direct diagnosis without an independent downstream recovery target.
 - Fitted-seed intervals quantify optimization variation on one fixed test realization; they are not population-level device intervals.
 - The repository has a public GitHub URL but no archived software DOI; no DOI is invented.
-- No AI-use declaration is included, at the author's request, pending journal-specific wording.

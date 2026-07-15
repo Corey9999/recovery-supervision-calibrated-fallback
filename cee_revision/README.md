@@ -1,68 +1,57 @@
-# Strict-88 revision: supported two-pass Lite-CF with severity and cost audits
+# Support-gated selective recovery under controlled multi-sensor corruption
 
-This directory contains the frozen computational snapshot for the *Computers & Electrical Engineering* manuscript **Cross-fitted selective recovery under controlled multi-sensor corruption**.
+This directory is the frozen reproducibility package for the *Computers & Electrical Engineering* manuscript **Support-gated selective recovery under controlled multi-sensor corruption**.
 
-## Primary design
+## Decision problem
 
-- Frozen endpoint run: `CEE-CF10-R2`, optimization seeds 101--110.
-- Primary subset: a controlled fault is applied to an available sensor group (`n = 1,436` per mechanism and seed).
-- Router: Lite-CF logistic selector with six temperature-scaled endpoint features and `C = 0.05`.
-- Validation: five-fold cross-fitting grouped by original observation; coefficients and threshold selection are separated.
-- Deployment: one bounded-base pass plus one recovery pass; no leave-one-group-out passes are required.
-- Primary objective: hard-decision safety (negative-transfer prevention, retained corrections and cost-weighted utility).
-- Secondary outcomes: macro-AUROC, macro-AUPRC, NLL, Brier score and ECE of the emitted probability stream.
-- Fault mechanisms: Gaussian noise, offset, drift and stuck-at corruption, applied after training-only standardization and clipping.
-- Complete-stream prevalence sensitivity: 0%, 10%, 40% and 70% imposed-fault assignment.
-- Router-feature standardization is refitted within every cross-fitting training fold and on the full informative calibration set for the final model.
-- Prospective deployment support requires sufficient events in both preference classes, repeated grouped discrimination and threshold stability; unsupported fits revert to PDRF.
-- A mild scale-1 audit reuses the scale-3 endpoints, temperatures, selector coefficients and thresholds without refitting or retuning.
+The study compares a stable PDRF base endpoint with an RO-PDRF-Lite recovery endpoint under controlled corruption of an available sensor group. A router must retain useful corrections while preventing recovery-induced harmful decision changes. Test labels and fault identity are not router inputs.
 
-The test label and fault identity are not router inputs. Fault scale 3 is treated as a severe controlled stress test, not as a natural-failure prevalence model.
+The submission reports two distinct operating regimes:
+
+- **Safety policy:** a prespecified support gate permits routing only when calibration event counts, repeated grouped discrimination and threshold stability pass. Unsupported fitted pairs revert to PDRF.
+- **Utility policy:** thresholds are selected only from out-of-fold calibration predictions for harm-to-correction ratios 1, 2, 5 and 10.
+
+Always-base and always-recovery policies are reported beside every selective policy. Chemical faults are controlled interventions, not natural field-failure annotations.
+
+## Major-review additions
+
+- All-row multinomial and two-stage outcome models use base-better, equivalent and recovery-better labels on every calibration row, addressing the selected-disagreement limitation.
+- Complete prevention-retention frontiers and calibration-matched random, entropy, confidence, uncertainty, rank, tree and logit controls are included.
+- Severity transport covers all 3 x 3 calibration/test scales; affected-group transport covers groups 1--4.
+- Leave-one-mechanism-out, Gaussian-only and calibration-mixture sensitivity analyses test mechanism transport.
+- Batch results report the complete mechanism x fitted-pair x acquisition-batch x policy matrix, plus observation-weighted, equal-batch, worst-batch, Batches 8--9 and Batch 10 views.
+- Engineering outputs report extra endpoint passes, selected observations per retained/net correction, model memory and fixed-thread residual latency.
+- Figures 3 and 4 are supplied as editable PDF/SVG, PNG and 600-dpi TIFF.
+
+## Headline audited results
+
+- Always PDRF: macro-AUROC 0.8115, 100% prevention, 0% retention.
+- Always RO-PDRF-Lite: macro-AUROC 0.8175, 0% prevention, 100% retention.
+- Frozen conditional router: macro-AUROC 0.8151, 94.7% prevention, 9.7% retention and +15.8 equal-cost utility per 10,000 strict observations.
+- Prospective support gate: only 5/10 fitted pairs pass; the gate yields 96.2% prevention, 6.6% retention and +7.5 equal-cost utility.
+- Calibration-selected all-row and two-stage policies yield +107.9 and +110.6 utility at a 1:1 harm ratio and +30.8 and +37.8 at 2:1. At ratios 5 and 10 all learned policies are negative and always PDRF is preferred.
+- Batch 10 contains 1,180/1,436 strict observations per cell, so observation-weighted summaries are dominated by Batch 10; equal-batch and worst-batch views are reported separately.
 
 ## Reproduction
 
-Create the environment using `environment.yml` or install the exact versions in `requirements-lock.txt`, then run from the repository root:
+Create the environment using `environment.yml` or install the versions in `requirements-lock.txt`. From the repository root, the major-review entry points are:
 
 ```bash
-python cee_revision/run_cee_selector_validation.py
-python cee_revision/run_cee_lite_routing_validation.py
-python cee_revision/analyse_cee_q1_scores.py
-python cee_revision/analyse_cee_lite_results.py
-python cee_revision/analyse_cee_fault_plausibility.py
-python cee_revision/run_cee_strict88_additional_audits.py
-python cee_revision/analyse_cee_strict88_revision.py
-python cee_revision/make_cee_q1_figures.py
+python cee_revision/analyse_cee_major_router_audits.py
+python cee_revision/run_cee_major_severity_transport.py
+python cee_revision/analyse_cee_major_shift_audits.py
+python cee_revision/make_cee_major_revision_figures.py
 ```
 
-`cee_cf10_r2_lite_config.json` records the frozen selector, split, threshold-grid and utility settings. Exact derived outputs are included under `source_data/`; no rerun is needed to inspect the reported values.
+The severity/group generation script retrains the same endpoint architecture only to create prediction files absent from the earlier frozen run. Its formal scale-3/group-1 output is checked against the frozen endpoint predictions before transport results are used. Derived machine-readable outputs are already included under `source_data/`, so readers can audit the reported numbers without rerunning training.
 
-## Primary audited results
+Earlier frozen-run entry points and all negative/sensitivity analyses remain in this directory for traceability.
 
-- PDRF macro-AUROC: 0.8115; unconditional recovery: 0.8175; Lite-CF: 0.8151.
-- Lite-CF prevented 94.7% of recovery-induced harmful decision changes and retained 9.7% of available corrections.
-- Equal-cost net utility: +15.8 correct decisions per 10,000 strict observations.
-- The utility changes sign when one harmful change is valued at approximately 2.9 corrections.
-- Mechanism-fixed Lite-CF AUROC effects were positive for Gaussian and stuck-at corruption; offset and drift intervals included zero.
-- Repeated grouped validation (100 fits) gave mean selector AUROC 0.720 with SD 0.138, documenting sparse-event instability.
-- Only 89.7 endpoint-correctness disagreements informed each fitted router on average; repeated thresholds ranged from 0.525 to 0.90.
-- Complete-stream equal-cost utility was negative at 0% and 10% controlled-fault prevalence and positive at 40% and 70%; pass penalties shift each value downward.
-- Only 5/10 fitted endpoint pairs passed the prospective event-count, discrimination and threshold-stability gate; the other pairs use PDRF under the support-gated policy.
-- At mild scale 1, Lite-CF macro-AUROC was 0.8357, prevention was 96.0%, retention was 5.3% and equal-cost utility was +4.00 decisions per 10,000 observations.
-- Direct CPU timing fixes intra-op threads at one and 12 in separate runs, with three warm-ups and seven timed calls for batch sizes 1 and 4,364. Lite-CF requires two endpoint passes. Energy consumption was not measured.
+## Scope and version
 
-These results establish risk control under controlled available-group corruption. They do not establish maintenance-confirmed natural sensor failure, population-level failure prevalence or device-independent field recovery.
+These results support controlled-corruption risk control on fixed future batches. They do not establish maintenance-confirmed natural sensor failure, device-independent downstream recovery or population-level failure prevalence. Fitted-seed intervals quantify optimization variation on one fixed test realization.
 
-## Contents
-
-- `manuscript_cee.*` and `supplementary_cee.*`: manuscript and supplementary sources, editable Word exports and compiled PDFs.
-- `run_cee_lite_routing_validation.py`: frozen two-pass Lite-CF evaluation.
-- `analyse_cee_q1_scores.py`, `analyse_cee_lite_results.py`: stability, comparator, interval, probability-quality and utility analyses.
-- `analyse_cee_fault_plausibility.py`: standardized- and original-unit intervention audit.
-- `run_cee_strict88_additional_audits.py`: mild-severity and fixed-thread reruns without selector retuning.
-- `analyse_cee_strict88_revision.py`: deployment-support, event-count, fitting-dispersion and severity summaries.
-- `make_cee_q1_figures.py`: Figures 3 and 4 in PDF, SVG, PNG and TIFF formats.
-- `source_data/`: machine-readable frozen inputs and derived outputs.
-- `tables/`: exact LaTeX table bodies.
-- `STRICT88_REVISION_AUDIT.md`: reviewer-comment-to-evidence completeness audit.
-
-The repository is released under the MIT License. The Strict-88 release tag is `v1.3.0-strict88`. A software DOI has not been assigned; a DOI must not be inferred from the GitHub URL.
+Computational snapshot: `f8ef1a17bdfc98377334dd9aa6903702cdc789c1`  
+Release tag: `v1.4.0-major-router`  
+License: MIT  
+Software DOI: not assigned
