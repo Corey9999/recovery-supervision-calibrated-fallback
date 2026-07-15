@@ -1,0 +1,751 @@
+method,seed,view,metric,value
+All-row multinomial (utility 1:1),101,observation_weighted_overall,accuracy,0.49860724233983283
+All-row multinomial (utility 1:1),101,equal_weight_batches,accuracy,0.5376958258314191
+All-row multinomial (utility 1:1),101,worst_batch,accuracy,0.4830508474576271
+All-row multinomial (utility 1:1),101,B8-9_pooled,accuracy,0.5703125
+All-row multinomial (utility 1:1),101,B10,accuracy,0.48305084745762705
+All-row multinomial (utility 1:1),101,observation_weighted_overall,macro_auroc,0.8292869600588901
+All-row multinomial (utility 1:1),101,equal_weight_batches,macro_auroc,0.8799804612232872
+All-row multinomial (utility 1:1),101,worst_batch,macro_auroc,0.8182938343376138
+All-row multinomial (utility 1:1),101,B8-9_pooled,macro_auroc,0.9020154197764242
+All-row multinomial (utility 1:1),101,B10,macro_auroc,0.8182938343376137
+All-row multinomial (utility 1:1),101,observation_weighted_overall,utility_per_10000,128.8300835654596
+All-row multinomial (utility 1:1),101,equal_weight_batches,utility_per_10000,241.0358003578343
+All-row multinomial (utility 1:1),101,worst_batch,utility_per_10000,84.74576271186442
+All-row multinomial (utility 1:1),101,B8-9_pooled,utility_per_10000,332.03125
+All-row multinomial (utility 1:1),101,B10,utility_per_10000,84.74576271186442
+All-row multinomial (utility 1:1),102,observation_weighted_overall,accuracy,0.5113161559888579
+All-row multinomial (utility 1:1),102,equal_weight_batches,accuracy,0.5350716138851732
+All-row multinomial (utility 1:1),102,worst_batch,accuracy,0.4917582417582418
+All-row multinomial (utility 1:1),102,B8-9_pooled,accuracy,0.5712890625
+All-row multinomial (utility 1:1),102,B10,accuracy,0.4983050847457627
+All-row multinomial (utility 1:1),102,observation_weighted_overall,macro_auroc,0.8175544728554545
+All-row multinomial (utility 1:1),102,equal_weight_batches,macro_auroc,0.8509020399389545
+All-row multinomial (utility 1:1),102,worst_batch,macro_auroc,0.8037112076756114
+All-row multinomial (utility 1:1),102,B8-9_pooled,macro_auroc,0.8691768523089967
+All-row multinomial (utility 1:1),102,B10,macro_auroc,0.8037112076756113
+All-row multinomial (utility 1:1),102,observation_weighted_overall,utility_per_10000,29.596100278551532
+All-row multinomial (utility 1:1),102,equal_weight_batches,utility_per_10000,63.42527528968207
+All-row multinomial (utility 1:1),102,worst_batch,utility_per_10000,16.949152542372882
+All-row multinomial (utility 1:1),102,B8-9_pooled,utility_per_10000,87.890625
+All-row multinomial (utility 1:1),102,B10,utility_per_10000,16.949152542372882
+All-row multinomial (utility 1:1),103,observation_weighted_overall,accuracy,0.48990250696378823
+All-row multinomial (utility 1:1),103,equal_weight_batches,accuracy,0.5309028777249116
+All-row multinomial (utility 1:1),103,worst_batch,accuracy,0.4722457627118644
+All-row multinomial (utility 1:1),103,B8-9_pooled,accuracy,0.5712890625
+All-row multinomial (utility 1:1),103,B10,accuracy,0.4722457627118644
+All-row multinomial (utility 1:1),103,observation_weighted_overall,macro_auroc,0.801065952587582
+All-row multinomial (utility 1:1),103,equal_weight_batches,macro_auroc,0.8440537531805999
+All-row multinomial (utility 1:1),103,worst_batch,macro_auroc,0.7880918382786573
+All-row multinomial (utility 1:1),103,B8-9_pooled,macro_auroc,0.8585831089305633
+All-row multinomial (utility 1:1),103,B10,macro_auroc,0.7880918382786573
+All-row multinomial (utility 1:1),103,observation_weighted_overall,utility_per_10000,200.20891364902508
+All-row multinomial (utility 1:1),103,equal_weight_batches,utility_per_10000,396.7600196413755
+All-row multinomial (utility 1:1),103,worst_batch,utility_per_10000,139.83050847457628
+All-row multinomial (utility 1:1),103,B8-9_pooled,utility_per_10000,478.515625
+All-row multinomial (utility 1:1),103,B10,utility_per_10000,139.83050847457628
+All-row multinomial (utility 1:1),104,observation_weighted_overall,accuracy,0.4937325905292479
+All-row multinomial (utility 1:1),104,equal_weight_batches,accuracy,0.5394859142740499
+All-row multinomial (utility 1:1),104,worst_batch,accuracy,0.4764830508474576
+All-row multinomial (utility 1:1),104,B8-9_pooled,accuracy,0.5732421875
+All-row multinomial (utility 1:1),104,B10,accuracy,0.4764830508474577
+All-row multinomial (utility 1:1),104,observation_weighted_overall,macro_auroc,0.8078960203922884
+All-row multinomial (utility 1:1),104,equal_weight_batches,macro_auroc,0.8597079265049059
+All-row multinomial (utility 1:1),104,worst_batch,macro_auroc,0.7931824722379581
+All-row multinomial (utility 1:1),104,B8-9_pooled,macro_auroc,0.8822135540940552
+All-row multinomial (utility 1:1),104,B10,macro_auroc,0.793182472237958
+All-row multinomial (utility 1:1),104,observation_weighted_overall,utility_per_10000,34.81894150417828
+All-row multinomial (utility 1:1),104,equal_weight_batches,utility_per_10000,-80.26366289078153
+All-row multinomial (utility 1:1),104,worst_batch,utility_per_10000,-181.8181818181818
+All-row multinomial (utility 1:1),104,B8-9_pooled,utility_per_10000,-166.015625
+All-row multinomial (utility 1:1),104,B10,utility_per_10000,78.38983050847457
+All-row multinomial (utility 1:1),105,observation_weighted_overall,accuracy,0.49860724233983283
+All-row multinomial (utility 1:1),105,equal_weight_batches,accuracy,0.5497174670903485
+All-row multinomial (utility 1:1),105,worst_batch,accuracy,0.47838983050847456
+All-row multinomial (utility 1:1),105,B8-9_pooled,accuracy,0.591796875
+All-row multinomial (utility 1:1),105,B10,accuracy,0.4783898305084745
+All-row multinomial (utility 1:1),105,observation_weighted_overall,macro_auroc,0.8247170763520587
+All-row multinomial (utility 1:1),105,equal_weight_batches,macro_auroc,0.8565233470421486
+All-row multinomial (utility 1:1),105,worst_batch,macro_auroc,0.8111678564677429
+All-row multinomial (utility 1:1),105,B8-9_pooled,macro_auroc,0.8691467795667219
+All-row multinomial (utility 1:1),105,B10,macro_auroc,0.811167856467743
+All-row multinomial (utility 1:1),105,observation_weighted_overall,utility_per_10000,109.67966573816156
+All-row multinomial (utility 1:1),105,equal_weight_batches,utility_per_10000,191.24825268893065
+All-row multinomial (utility 1:1),105,worst_batch,utility_per_10000,69.91525423728814
+All-row multinomial (utility 1:1),105,B8-9_pooled,utility_per_10000,292.96875
+All-row multinomial (utility 1:1),105,B10,utility_per_10000,69.91525423728814
+All-row multinomial (utility 1:1),106,observation_weighted_overall,accuracy,0.5055710306406686
+All-row multinomial (utility 1:1),106,equal_weight_batches,accuracy,0.5474788629449646
+All-row multinomial (utility 1:1),106,worst_batch,accuracy,0.4917372881355932
+All-row multinomial (utility 1:1),106,B8-9_pooled,accuracy,0.5693359375
+All-row multinomial (utility 1:1),106,B10,accuracy,0.49173728813559325
+All-row multinomial (utility 1:1),106,observation_weighted_overall,macro_auroc,0.82418788413551
+All-row multinomial (utility 1:1),106,equal_weight_batches,macro_auroc,0.8540341186969052
+All-row multinomial (utility 1:1),106,worst_batch,macro_auroc,0.8137726524253905
+All-row multinomial (utility 1:1),106,B8-9_pooled,macro_auroc,0.8646214048918324
+All-row multinomial (utility 1:1),106,B10,macro_auroc,0.8137726524253905
+All-row multinomial (utility 1:1),106,observation_weighted_overall,utility_per_10000,50.48746518105849
+All-row multinomial (utility 1:1),106,equal_weight_batches,utility_per_10000,80.58843228334753
+All-row multinomial (utility 1:1),106,worst_batch,utility_per_10000,38.13559322033898
+All-row multinomial (utility 1:1),106,B8-9_pooled,utility_per_10000,107.421875
+All-row multinomial (utility 1:1),106,B10,utility_per_10000,38.13559322033898
+All-row multinomial (utility 1:1),107,observation_weighted_overall,accuracy,0.4937325905292479
+All-row multinomial (utility 1:1),107,equal_weight_batches,accuracy,0.5024261755193958
+All-row multinomial (utility 1:1),107,worst_batch,accuracy,0.47802197802197804
+All-row multinomial (utility 1:1),107,B8-9_pooled,accuracy,0.5185546875
+All-row multinomial (utility 1:1),107,B10,accuracy,0.4883474576271186
+All-row multinomial (utility 1:1),107,observation_weighted_overall,macro_auroc,0.8224307556843802
+All-row multinomial (utility 1:1),107,equal_weight_batches,macro_auroc,0.8543849937802089
+All-row multinomial (utility 1:1),107,worst_batch,macro_auroc,0.810815040128314
+All-row multinomial (utility 1:1),107,B8-9_pooled,macro_auroc,0.8654126796026814
+All-row multinomial (utility 1:1),107,B10,macro_auroc,0.810815040128314
+All-row multinomial (utility 1:1),107,observation_weighted_overall,utility_per_10000,268.1058495821727
+All-row multinomial (utility 1:1),107,equal_weight_batches,utility_per_10000,450.84270719863935
+All-row multinomial (utility 1:1),107,worst_batch,utility_per_10000,205.50847457627117
+All-row multinomial (utility 1:1),107,B8-9_pooled,utility_per_10000,556.640625
+All-row multinomial (utility 1:1),107,B10,utility_per_10000,205.50847457627117
+All-row multinomial (utility 1:1),108,observation_weighted_overall,accuracy,0.4827646239554318
+All-row multinomial (utility 1:1),108,equal_weight_batches,accuracy,0.5337572032487287
+All-row multinomial (utility 1:1),108,worst_batch,accuracy,0.4635593220338983
+All-row multinomial (utility 1:1),108,B8-9_pooled,accuracy,0.5712890625
+All-row multinomial (utility 1:1),108,B10,accuracy,0.4635593220338983
+All-row multinomial (utility 1:1),108,observation_weighted_overall,macro_auroc,0.8056163006557483
+All-row multinomial (utility 1:1),108,equal_weight_batches,macro_auroc,0.863131283028256
+All-row multinomial (utility 1:1),108,worst_batch,macro_auroc,0.7922002870260181
+All-row multinomial (utility 1:1),108,B8-9_pooled,macro_auroc,0.8878348295701772
+All-row multinomial (utility 1:1),108,B10,macro_auroc,0.792200287026018
+All-row multinomial (utility 1:1),108,observation_weighted_overall,utility_per_10000,19.15041782729805
+All-row multinomial (utility 1:1),108,equal_weight_batches,utility_per_10000,85.25372932152594
+All-row multinomial (utility 1:1),108,worst_batch,utility_per_10000,-8.474576271186441
+All-row multinomial (utility 1:1),108,B8-9_pooled,utility_per_10000,146.484375
+All-row multinomial (utility 1:1),108,B10,utility_per_10000,-8.474576271186441
+All-row multinomial (utility 1:1),109,observation_weighted_overall,accuracy,0.4963440111420612
+All-row multinomial (utility 1:1),109,equal_weight_batches,accuracy,0.5264700929955167
+All-row multinomial (utility 1:1),109,worst_batch,accuracy,0.4843220338983051
+All-row multinomial (utility 1:1),109,B8-9_pooled,accuracy,0.5517578125
+All-row multinomial (utility 1:1),109,B10,accuracy,0.484322033898305
+All-row multinomial (utility 1:1),109,observation_weighted_overall,macro_auroc,0.8247147432191578
+All-row multinomial (utility 1:1),109,equal_weight_batches,macro_auroc,0.8605985138256625
+All-row multinomial (utility 1:1),109,worst_batch,macro_auroc,0.8137302743112867
+All-row multinomial (utility 1:1),109,B8-9_pooled,macro_auroc,0.8718019019306557
+All-row multinomial (utility 1:1),109,B10,macro_auroc,0.8137302743112867
+All-row multinomial (utility 1:1),109,observation_weighted_overall,utility_per_10000,134.05292479108635
+All-row multinomial (utility 1:1),109,equal_weight_batches,utility_per_10000,234.46586370315185
+All-row multinomial (utility 1:1),109,worst_batch,utility_per_10000,95.33898305084746
+All-row multinomial (utility 1:1),109,B8-9_pooled,utility_per_10000,312.5
+All-row multinomial (utility 1:1),109,B10,utility_per_10000,95.33898305084746
+All-row multinomial (utility 1:1),110,observation_weighted_overall,accuracy,0.5067896935933147
+All-row multinomial (utility 1:1),110,equal_weight_batches,accuracy,0.559166139886479
+All-row multinomial (utility 1:1),110,worst_batch,accuracy,0.4849576271186441
+All-row multinomial (utility 1:1),110,B8-9_pooled,accuracy,0.607421875
+All-row multinomial (utility 1:1),110,B10,accuracy,0.4849576271186441
+All-row multinomial (utility 1:1),110,observation_weighted_overall,macro_auroc,0.8025733990980721
+All-row multinomial (utility 1:1),110,equal_weight_batches,macro_auroc,0.867839046223132
+All-row multinomial (utility 1:1),110,worst_batch,macro_auroc,0.7838996517611359
+All-row multinomial (utility 1:1),110,B8-9_pooled,macro_auroc,0.9004970038283673
+All-row multinomial (utility 1:1),110,B10,macro_auroc,0.7838996517611359
+All-row multinomial (utility 1:1),110,observation_weighted_overall,utility_per_10000,104.45682451253481
+All-row multinomial (utility 1:1),110,equal_weight_batches,utility_per_10000,128.78411607225166
+All-row multinomial (utility 1:1),110,worst_batch,utility_per_10000,54.94505494505494
+All-row multinomial (utility 1:1),110,B8-9_pooled,utility_per_10000,175.78125
+All-row multinomial (utility 1:1),110,B10,utility_per_10000,88.98305084745763
+Always PDRF,101,observation_weighted_overall,accuracy,0.4857242339832869
+Always PDRF,101,equal_weight_batches,accuracy,0.5135922457956357
+Always PDRF,101,worst_batch,accuracy,0.4745762711864407
+Always PDRF,101,B8-9_pooled,accuracy,0.537109375
+Always PDRF,101,B10,accuracy,0.4745762711864407
+Always PDRF,101,observation_weighted_overall,macro_auroc,0.8243229706556878
+Always PDRF,101,equal_weight_batches,macro_auroc,0.8692076596490305
+Always PDRF,101,worst_batch,macro_auroc,0.8155938717508983
+Always PDRF,101,B8-9_pooled,macro_auroc,0.884137066339844
+Always PDRF,101,B10,macro_auroc,0.8155938717508983
+Always PDRF,101,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,101,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,101,worst_batch,utility_per_10000,0.0
+Always PDRF,101,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,101,B10,utility_per_10000,0.0
+Always PDRF,102,observation_weighted_overall,accuracy,0.5083565459610028
+Always PDRF,102,equal_weight_batches,accuracy,0.528729086356205
+Always PDRF,102,worst_batch,accuracy,0.4835164835164835
+Always PDRF,102,B8-9_pooled,accuracy,0.5625
+Always PDRF,102,B10,accuracy,0.4966101694915254
+Always PDRF,102,observation_weighted_overall,macro_auroc,0.8171444369234849
+Always PDRF,102,equal_weight_batches,macro_auroc,0.8503805300083501
+Always PDRF,102,worst_batch,macro_auroc,0.8033344990553071
+Always PDRF,102,B8-9_pooled,macro_auroc,0.868164998833433
+Always PDRF,102,B10,macro_auroc,0.803334499055307
+Always PDRF,102,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,102,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,102,worst_batch,utility_per_10000,0.0
+Always PDRF,102,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,102,B10,utility_per_10000,0.0
+Always PDRF,103,observation_weighted_overall,accuracy,0.46988161559888575
+Always PDRF,103,equal_weight_batches,accuracy,0.4912268757607741
+Always PDRF,103,worst_batch,accuracy,0.45329670329670335
+Always PDRF,103,B8-9_pooled,accuracy,0.5234375
+Always PDRF,103,B10,accuracy,0.45826271186440676
+Always PDRF,103,observation_weighted_overall,macro_auroc,0.7920516172143531
+Always PDRF,103,equal_weight_batches,macro_auroc,0.829727749804969
+Always PDRF,103,worst_batch,macro_auroc,0.7809664908497018
+Always PDRF,103,B8-9_pooled,macro_auroc,0.8394339974885855
+Always PDRF,103,B10,macro_auroc,0.7809664908497018
+Always PDRF,103,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,103,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,103,worst_batch,utility_per_10000,0.0
+Always PDRF,103,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,103,B10,utility_per_10000,0.0
+Always PDRF,104,observation_weighted_overall,accuracy,0.4902506963788301
+Always PDRF,104,equal_weight_batches,accuracy,0.547512280563128
+Always PDRF,104,worst_batch,accuracy,0.46864406779661016
+Always PDRF,104,B8-9_pooled,accuracy,0.58984375
+Always PDRF,104,B10,accuracy,0.4686440677966102
+Always PDRF,104,observation_weighted_overall,macro_auroc,0.8066296030785541
+Always PDRF,104,equal_weight_batches,macro_auroc,0.8598969667667885
+Always PDRF,104,worst_batch,macro_auroc,0.7915809570964697
+Always PDRF,104,B8-9_pooled,macro_auroc,0.8838682222233935
+Always PDRF,104,B10,macro_auroc,0.7915809570964697
+Always PDRF,104,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,104,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,104,worst_batch,utility_per_10000,0.0
+Always PDRF,104,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,104,B10,utility_per_10000,0.0
+Always PDRF,105,observation_weighted_overall,accuracy,0.48763927576601673
+Always PDRF,105,equal_weight_batches,accuracy,0.5305926418214554
+Always PDRF,105,worst_batch,accuracy,0.4713983050847458
+Always PDRF,105,B8-9_pooled,accuracy,0.5625
+Always PDRF,105,B10,accuracy,0.47139830508474573
+Always PDRF,105,observation_weighted_overall,macro_auroc,0.8215752222776992
+Always PDRF,105,equal_weight_batches,macro_auroc,0.8536800621619943
+Always PDRF,105,worst_batch,macro_auroc,0.808091039579745
+Always PDRF,105,B8-9_pooled,macro_auroc,0.8672288539051777
+Always PDRF,105,B10,macro_auroc,0.808091039579745
+Always PDRF,105,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,105,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,105,worst_batch,utility_per_10000,0.0
+Always PDRF,105,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,105,B10,utility_per_10000,0.0
+Always PDRF,106,observation_weighted_overall,accuracy,0.5005222841225627
+Always PDRF,106,equal_weight_batches,accuracy,0.53942001971663
+Always PDRF,106,worst_batch,accuracy,0.48792372881355933
+Always PDRF,106,B8-9_pooled,accuracy,0.55859375
+Always PDRF,106,B10,accuracy,0.4879237288135594
+Always PDRF,106,observation_weighted_overall,macro_auroc,0.8243728001352415
+Always PDRF,106,equal_weight_batches,macro_auroc,0.8520077530074969
+Always PDRF,106,worst_batch,macro_auroc,0.8145413522484061
+Always PDRF,106,B8-9_pooled,macro_auroc,0.8592320687244273
+Always PDRF,106,B10,macro_auroc,0.814541352248406
+Always PDRF,106,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,106,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,106,worst_batch,utility_per_10000,0.0
+Always PDRF,106,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,106,B10,utility_per_10000,0.0
+Always PDRF,107,observation_weighted_overall,accuracy,0.46692200557103064
+Always PDRF,107,equal_weight_batches,accuracy,0.4573419047995319
+Always PDRF,107,worst_batch,accuracy,0.4148351648351648
+Always PDRF,107,B8-9_pooled,accuracy,0.462890625
+Always PDRF,107,B10,accuracy,0.4677966101694915
+Always PDRF,107,observation_weighted_overall,macro_auroc,0.8121051037923077
+Always PDRF,107,equal_weight_batches,macro_auroc,0.8409672379936296
+Always PDRF,107,worst_batch,macro_auroc,0.8019091721480662
+Always PDRF,107,B8-9_pooled,macro_auroc,0.8515892758631327
+Always PDRF,107,B10,macro_auroc,0.8019091721480662
+Always PDRF,107,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,107,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,107,worst_batch,utility_per_10000,0.0
+Always PDRF,107,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,107,B10,utility_per_10000,0.0
+Always PDRF,108,observation_weighted_overall,accuracy,0.4808495821727019
+Always PDRF,108,equal_weight_batches,accuracy,0.525231830316576
+Always PDRF,108,worst_batch,accuracy,0.46440677966101696
+Always PDRF,108,B8-9_pooled,accuracy,0.556640625
+Always PDRF,108,B10,accuracy,0.46440677966101696
+Always PDRF,108,observation_weighted_overall,macro_auroc,0.8045955631593164
+Always PDRF,108,equal_weight_batches,macro_auroc,0.8611806117515722
+Always PDRF,108,worst_batch,macro_auroc,0.7912646978035964
+Always PDRF,108,B8-9_pooled,macro_auroc,0.8853822128687304
+Always PDRF,108,B10,macro_auroc,0.7912646978035964
+Always PDRF,108,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,108,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,108,worst_batch,utility_per_10000,0.0
+Always PDRF,108,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,108,B10,utility_per_10000,0.0
+Always PDRF,109,observation_weighted_overall,accuracy,0.4829387186629527
+Always PDRF,109,equal_weight_batches,accuracy,0.5030235066252016
+Always PDRF,109,worst_batch,accuracy,0.47478813559322036
+Always PDRF,109,B8-9_pooled,accuracy,0.5205078125
+Always PDRF,109,B10,accuracy,0.4747881355932203
+Always PDRF,109,observation_weighted_overall,macro_auroc,0.8163511582439315
+Always PDRF,109,equal_weight_batches,macro_auroc,0.8535204383696754
+Always PDRF,109,worst_batch,macro_auroc,0.8054070160465694
+Always PDRF,109,B8-9_pooled,macro_auroc,0.8625338111736269
+Always PDRF,109,B10,macro_auroc,0.8054070160465694
+Always PDRF,109,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,109,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,109,worst_batch,utility_per_10000,0.0
+Always PDRF,109,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,109,B10,utility_per_10000,0.0
+Always PDRF,110,observation_weighted_overall,accuracy,0.4963440111420613
+Always PDRF,110,equal_weight_batches,accuracy,0.5462877282792538
+Always PDRF,110,worst_batch,accuracy,0.47605932203389834
+Always PDRF,110,B8-9_pooled,accuracy,0.58984375
+Always PDRF,110,B10,accuracy,0.47605932203389834
+Always PDRF,110,observation_weighted_overall,macro_auroc,0.7958211485811875
+Always PDRF,110,equal_weight_batches,macro_auroc,0.8570039492561997
+Always PDRF,110,worst_batch,macro_auroc,0.7776950008005586
+Always PDRF,110,B8-9_pooled,macro_auroc,0.8874414971127038
+Always PDRF,110,B10,macro_auroc,0.7776950008005586
+Always PDRF,110,observation_weighted_overall,utility_per_10000,0.0
+Always PDRF,110,equal_weight_batches,utility_per_10000,0.0
+Always PDRF,110,worst_batch,utility_per_10000,0.0
+Always PDRF,110,B8-9_pooled,utility_per_10000,0.0
+Always PDRF,110,B10,utility_per_10000,0.0
+Always RO-PDRF-Lite,101,observation_weighted_overall,accuracy,0.4993036211699164
+Always RO-PDRF-Lite,101,equal_weight_batches,accuracy,0.5400318137606273
+Always RO-PDRF-Lite,101,worst_batch,accuracy,0.48389830508474574
+Always RO-PDRF-Lite,101,B8-9_pooled,accuracy,0.5703125
+Always RO-PDRF-Lite,101,B10,accuracy,0.4838983050847458
+Always RO-PDRF-Lite,101,observation_weighted_overall,macro_auroc,0.82852660707593
+Always RO-PDRF-Lite,101,equal_weight_batches,macro_auroc,0.8787460761720132
+Always RO-PDRF-Lite,101,worst_batch,macro_auroc,0.8172826355133651
+Always RO-PDRF-Lite,101,B8-9_pooled,macro_auroc,0.9000322807553471
+Always RO-PDRF-Lite,101,B10,macro_auroc,0.8172826355133651
+Always RO-PDRF-Lite,101,observation_weighted_overall,utility_per_10000,135.79387186629526
+Always RO-PDRF-Lite,101,equal_weight_batches,utility_per_10000,264.39567964991693
+Always RO-PDRF-Lite,101,worst_batch,utility_per_10000,93.22033898305085
+Always RO-PDRF-Lite,101,B8-9_pooled,utility_per_10000,332.03125
+Always RO-PDRF-Lite,101,B10,utility_per_10000,93.22033898305085
+Always RO-PDRF-Lite,102,observation_weighted_overall,accuracy,0.5154944289693594
+Always RO-PDRF-Lite,102,equal_weight_batches,accuracy,0.5426587066417575
+Always RO-PDRF-Lite,102,worst_batch,accuracy,0.5021186440677967
+Always RO-PDRF-Lite,102,B8-9_pooled,accuracy,0.5771484375
+Always RO-PDRF-Lite,102,B10,accuracy,0.5021186440677967
+Always RO-PDRF-Lite,102,observation_weighted_overall,macro_auroc,0.8257034267188974
+Always RO-PDRF-Lite,102,equal_weight_batches,macro_auroc,0.8589439072622197
+Always RO-PDRF-Lite,102,worst_batch,macro_auroc,0.8117202342047505
+Always RO-PDRF-Lite,102,B8-9_pooled,macro_auroc,0.8751688800651598
+Always RO-PDRF-Lite,102,B10,macro_auroc,0.8117202342047505
+Always RO-PDRF-Lite,102,observation_weighted_overall,utility_per_10000,71.37883008356546
+Always RO-PDRF-Lite,102,equal_weight_batches,utility_per_10000,139.2962028555249
+Always RO-PDRF-Lite,102,worst_batch,utility_per_10000,55.08474576271186
+Always RO-PDRF-Lite,102,B8-9_pooled,utility_per_10000,146.484375
+Always RO-PDRF-Lite,102,B10,utility_per_10000,55.08474576271187
+Always RO-PDRF-Lite,103,observation_weighted_overall,accuracy,0.49042479108635095
+Always RO-PDRF-Lite,103,equal_weight_batches,accuracy,0.529787726397896
+Always RO-PDRF-Lite,103,worst_batch,accuracy,0.47372881355932206
+Always RO-PDRF-Lite,103,B8-9_pooled,accuracy,0.5673828125
+Always RO-PDRF-Lite,103,B10,accuracy,0.47372881355932206
+Always RO-PDRF-Lite,103,observation_weighted_overall,macro_auroc,0.8009576812436483
+Always RO-PDRF-Lite,103,equal_weight_batches,macro_auroc,0.8440150633849726
+Always RO-PDRF-Lite,103,worst_batch,macro_auroc,0.7881077839395878
+Always RO-PDRF-Lite,103,B8-9_pooled,macro_auroc,0.8578293213497983
+Always RO-PDRF-Lite,103,B10,macro_auroc,0.7881077839395879
+Always RO-PDRF-Lite,103,observation_weighted_overall,utility_per_10000,205.4317548746518
+Always RO-PDRF-Lite,103,equal_weight_batches,utility_per_10000,385.60850637121825
+Always RO-PDRF-Lite,103,worst_batch,utility_per_10000,154.66101694915253
+Always RO-PDRF-Lite,103,B8-9_pooled,utility_per_10000,439.453125
+Always RO-PDRF-Lite,103,B10,utility_per_10000,154.66101694915253
+Always RO-PDRF-Lite,104,observation_weighted_overall,accuracy,0.49808495821727017
+Always RO-PDRF-Lite,104,equal_weight_batches,accuracy,0.5417096086587612
+Always RO-PDRF-Lite,104,worst_batch,accuracy,0.48135593220338985
+Always RO-PDRF-Lite,104,B8-9_pooled,accuracy,0.5751953125
+Always RO-PDRF-Lite,104,B10,accuracy,0.48135593220338985
+Always RO-PDRF-Lite,104,observation_weighted_overall,macro_auroc,0.8098610727247472
+Always RO-PDRF-Lite,104,equal_weight_batches,macro_auroc,0.860473581289004
+Always RO-PDRF-Lite,104,worst_batch,macro_auroc,0.7964724192058604
+Always RO-PDRF-Lite,104,B8-9_pooled,macro_auroc,0.8784891771782656
+Always RO-PDRF-Lite,104,B10,macro_auroc,0.7964724192058604
+Always RO-PDRF-Lite,104,observation_weighted_overall,utility_per_10000,78.3426183844011
+Always RO-PDRF-Lite,104,equal_weight_batches,utility_per_10000,-58.0267190436682
+Always RO-PDRF-Lite,104,worst_batch,utility_per_10000,-164.83516483516485
+Always RO-PDRF-Lite,104,B8-9_pooled,utility_per_10000,-146.484375
+Always RO-PDRF-Lite,104,B10,utility_per_10000,127.11864406779661
+Always RO-PDRF-Lite,105,observation_weighted_overall,accuracy,0.5001740947075208
+Always RO-PDRF-Lite,105,equal_weight_batches,accuracy,0.5499186312745635
+Always RO-PDRF-Lite,105,worst_batch,accuracy,0.48050847457627116
+Always RO-PDRF-Lite,105,B8-9_pooled,accuracy,0.5908203125
+Always RO-PDRF-Lite,105,B10,accuracy,0.4805084745762712
+Always RO-PDRF-Lite,105,observation_weighted_overall,macro_auroc,0.8247870224167929
+Always RO-PDRF-Lite,105,equal_weight_batches,macro_auroc,0.8564984669273089
+Always RO-PDRF-Lite,105,worst_batch,macro_auroc,0.8112889788083298
+Always RO-PDRF-Lite,105,B8-9_pooled,macro_auroc,0.8690079261681359
+Always RO-PDRF-Lite,105,B10,macro_auroc,0.8112889788083298
+Always RO-PDRF-Lite,105,observation_weighted_overall,utility_per_10000,125.34818941504179
+Always RO-PDRF-Lite,105,equal_weight_batches,utility_per_10000,193.25989453108096
+Always RO-PDRF-Lite,105,worst_batch,utility_per_10000,91.10169491525424
+Always RO-PDRF-Lite,105,B8-9_pooled,utility_per_10000,283.203125
+Always RO-PDRF-Lite,105,B10,utility_per_10000,91.10169491525424
+Always RO-PDRF-Lite,106,observation_weighted_overall,accuracy,0.5071378830083566
+Always RO-PDRF-Lite,106,equal_weight_batches,accuracy,0.5489833142375516
+Always RO-PDRF-Lite,106,worst_batch,accuracy,0.49322033898305084
+Always RO-PDRF-Lite,106,B8-9_pooled,accuracy,0.5712890625
+Always RO-PDRF-Lite,106,B10,accuracy,0.49322033898305084
+Always RO-PDRF-Lite,106,observation_weighted_overall,macro_auroc,0.8252479952425584
+Always RO-PDRF-Lite,106,equal_weight_batches,macro_auroc,0.8565977091250044
+Always RO-PDRF-Lite,106,worst_batch,macro_auroc,0.8142828161186432
+Always RO-PDRF-Lite,106,B8-9_pooled,macro_auroc,0.8675779800777874
+Always RO-PDRF-Lite,106,B10,macro_auroc,0.8142828161186432
+Always RO-PDRF-Lite,106,observation_weighted_overall,utility_per_10000,66.15598885793872
+Always RO-PDRF-Lite,106,equal_weight_batches,utility_per_10000,95.6329452092164
+Always RO-PDRF-Lite,106,worst_batch,utility_per_10000,52.96610169491525
+Always RO-PDRF-Lite,106,B8-9_pooled,utility_per_10000,126.953125
+Always RO-PDRF-Lite,106,B10,utility_per_10000,52.96610169491525
+Always RO-PDRF-Lite,107,observation_weighted_overall,accuracy,0.4937325905292479
+Always RO-PDRF-Lite,107,equal_weight_batches,accuracy,0.5024261755193958
+Always RO-PDRF-Lite,107,worst_batch,accuracy,0.47802197802197804
+Always RO-PDRF-Lite,107,B8-9_pooled,accuracy,0.5185546875
+Always RO-PDRF-Lite,107,B10,accuracy,0.4883474576271186
+Always RO-PDRF-Lite,107,observation_weighted_overall,macro_auroc,0.8224693151905457
+Always RO-PDRF-Lite,107,equal_weight_batches,macro_auroc,0.8544017212886725
+Always RO-PDRF-Lite,107,worst_batch,macro_auroc,0.8108652226537046
+Always RO-PDRF-Lite,107,B8-9_pooled,macro_auroc,0.8654126796026814
+Always RO-PDRF-Lite,107,B10,macro_auroc,0.8108652226537048
+Always RO-PDRF-Lite,107,observation_weighted_overall,utility_per_10000,268.1058495821727
+Always RO-PDRF-Lite,107,equal_weight_batches,utility_per_10000,450.84270719863935
+Always RO-PDRF-Lite,107,worst_batch,utility_per_10000,205.50847457627117
+Always RO-PDRF-Lite,107,B8-9_pooled,utility_per_10000,556.640625
+Always RO-PDRF-Lite,107,B10,utility_per_10000,205.50847457627117
+Always RO-PDRF-Lite,108,observation_weighted_overall,accuracy,0.487116991643454
+Always RO-PDRF-Lite,108,equal_weight_batches,accuracy,0.536367869418717
+Always RO-PDRF-Lite,108,worst_batch,accuracy,0.46864406779661016
+Always RO-PDRF-Lite,108,B8-9_pooled,accuracy,0.572265625
+Always RO-PDRF-Lite,108,B10,accuracy,0.46864406779661016
+Always RO-PDRF-Lite,108,observation_weighted_overall,macro_auroc,0.8099446820662817
+Always RO-PDRF-Lite,108,equal_weight_batches,macro_auroc,0.8681966106928062
+Always RO-PDRF-Lite,108,worst_batch,macro_auroc,0.7964528698846121
+Always RO-PDRF-Lite,108,B8-9_pooled,macro_auroc,0.8934552301726847
+Always RO-PDRF-Lite,108,B10,macro_auroc,0.7964528698846121
+Always RO-PDRF-Lite,108,observation_weighted_overall,utility_per_10000,62.674094707520894
+Always RO-PDRF-Lite,108,equal_weight_batches,utility_per_10000,111.36039102140796
+Always RO-PDRF-Lite,108,worst_batch,utility_per_10000,42.3728813559322
+Always RO-PDRF-Lite,108,B8-9_pooled,utility_per_10000,156.25
+Always RO-PDRF-Lite,108,B10,utility_per_10000,42.37288135593219
+Always RO-PDRF-Lite,109,observation_weighted_overall,accuracy,0.49947771587743733
+Always RO-PDRF-Lite,109,equal_weight_batches,accuracy,0.5324488129572875
+Always RO-PDRF-Lite,109,worst_batch,accuracy,0.4864406779661017
+Always RO-PDRF-Lite,109,B8-9_pooled,accuracy,0.5595703125
+Always RO-PDRF-Lite,109,B10,accuracy,0.4864406779661017
+Always RO-PDRF-Lite,109,observation_weighted_overall,macro_auroc,0.8250222954606412
+Always RO-PDRF-Lite,109,equal_weight_batches,macro_auroc,0.8607455582393279
+Always RO-PDRF-Lite,109,worst_batch,macro_auroc,0.8139938203906014
+Always RO-PDRF-Lite,109,B8-9_pooled,macro_auroc,0.8721099574096035
+Always RO-PDRF-Lite,109,B10,macro_auroc,0.8139938203906014
+Always RO-PDRF-Lite,109,observation_weighted_overall,utility_per_10000,165.3899721448468
+Always RO-PDRF-Lite,109,equal_weight_batches,utility_per_10000,294.2530633208599
+Always RO-PDRF-Lite,109,worst_batch,utility_per_10000,116.52542372881356
+Always RO-PDRF-Lite,109,B8-9_pooled,utility_per_10000,390.625
+Always RO-PDRF-Lite,109,B10,utility_per_10000,116.52542372881356
+Always RO-PDRF-Lite,110,observation_weighted_overall,accuracy,0.5106197771587744
+Always RO-PDRF-Lite,110,equal_weight_batches,accuracy,0.5633263864196066
+Always RO-PDRF-Lite,110,worst_batch,accuracy,0.4883474576271186
+Always RO-PDRF-Lite,110,B8-9_pooled,accuracy,0.61328125
+Always RO-PDRF-Lite,110,B10,accuracy,0.4883474576271186
+Always RO-PDRF-Lite,110,observation_weighted_overall,macro_auroc,0.8026959762315292
+Always RO-PDRF-Lite,110,equal_weight_batches,macro_auroc,0.86825460676114
+Always RO-PDRF-Lite,110,worst_batch,macro_auroc,0.7839509890717942
+Always RO-PDRF-Lite,110,B8-9_pooled,macro_auroc,0.9012201174394204
+Always RO-PDRF-Lite,110,B10,macro_auroc,0.7839509890717943
+Always RO-PDRF-Lite,110,observation_weighted_overall,utility_per_10000,142.75766016713092
+Always RO-PDRF-Lite,110,equal_weight_batches,utility_per_10000,170.38658140353056
+Always RO-PDRF-Lite,110,worst_batch,utility_per_10000,54.94505494505494
+Always RO-PDRF-Lite,110,B8-9_pooled,utility_per_10000,234.375
+Always RO-PDRF-Lite,110,B10,utility_per_10000,122.88135593220338
+Frozen Lite-CF (ungated),101,observation_weighted_overall,accuracy,0.4860724233983287
+Frozen Lite-CF (ungated),101,equal_weight_batches,accuracy,0.5162926056993854
+Frozen Lite-CF (ungated),101,worst_batch,accuracy,0.47415254237288135
+Frozen Lite-CF (ungated),101,B8-9_pooled,accuracy,0.541015625
+Frozen Lite-CF (ungated),101,B10,accuracy,0.47415254237288135
+Frozen Lite-CF (ungated),101,observation_weighted_overall,macro_auroc,0.8291507301637688
+Frozen Lite-CF (ungated),101,equal_weight_batches,macro_auroc,0.8796179095205128
+Frozen Lite-CF (ungated),101,worst_batch,macro_auroc,0.8185426053481114
+Frozen Lite-CF (ungated),101,B8-9_pooled,macro_auroc,0.902023256213431
+Frozen Lite-CF (ungated),101,B10,macro_auroc,0.8185426053481114
+Frozen Lite-CF (ungated),101,observation_weighted_overall,utility_per_10000,3.4818941504178262
+Frozen Lite-CF (ungated),101,equal_weight_batches,utility_per_10000,27.00359903749734
+Frozen Lite-CF (ungated),101,worst_batch,utility_per_10000,-4.2372881355932215
+Frozen Lite-CF (ungated),101,B8-9_pooled,utility_per_10000,39.0625
+Frozen Lite-CF (ungated),101,B10,utility_per_10000,-4.2372881355932215
+Frozen Lite-CF (ungated),102,observation_weighted_overall,accuracy,0.5094011142061281
+Frozen Lite-CF (ungated),102,equal_weight_batches,accuracy,0.5308668026888367
+Frozen Lite-CF (ungated),102,worst_batch,accuracy,0.48626373626373626
+Frozen Lite-CF (ungated),102,B8-9_pooled,accuracy,0.5654296875
+Frozen Lite-CF (ungated),102,B10,accuracy,0.4972457627118644
+Frozen Lite-CF (ungated),102,observation_weighted_overall,macro_auroc,0.8237227770666732
+Frozen Lite-CF (ungated),102,equal_weight_batches,macro_auroc,0.8553576366568979
+Frozen Lite-CF (ungated),102,worst_batch,macro_auroc,0.8099262201371442
+Frozen Lite-CF (ungated),102,B8-9_pooled,macro_auroc,0.8721956615871488
+Frozen Lite-CF (ungated),102,B10,macro_auroc,0.8099262201371441
+Frozen Lite-CF (ungated),102,observation_weighted_overall,utility_per_10000,10.44568245125348
+Frozen Lite-CF (ungated),102,equal_weight_batches,utility_per_10000,21.377163326315866
+Frozen Lite-CF (ungated),102,worst_batch,utility_per_10000,6.3559322033898304
+Frozen Lite-CF (ungated),102,B8-9_pooled,utility_per_10000,29.296875
+Frozen Lite-CF (ungated),102,B10,utility_per_10000,6.3559322033898304
+Frozen Lite-CF (ungated),103,observation_weighted_overall,accuracy,0.46988161559888575
+Frozen Lite-CF (ungated),103,equal_weight_batches,accuracy,0.4912268757607741
+Frozen Lite-CF (ungated),103,worst_batch,accuracy,0.45329670329670335
+Frozen Lite-CF (ungated),103,B8-9_pooled,accuracy,0.5234375
+Frozen Lite-CF (ungated),103,B10,accuracy,0.45826271186440676
+Frozen Lite-CF (ungated),103,observation_weighted_overall,macro_auroc,0.7995026517423804
+Frozen Lite-CF (ungated),103,equal_weight_batches,macro_auroc,0.8393724341877498
+Frozen Lite-CF (ungated),103,worst_batch,macro_auroc,0.786855947648405
+Frozen Lite-CF (ungated),103,B8-9_pooled,macro_auroc,0.8514345726094542
+Frozen Lite-CF (ungated),103,B10,macro_auroc,0.786855947648405
+Frozen Lite-CF (ungated),103,observation_weighted_overall,utility_per_10000,0.0
+Frozen Lite-CF (ungated),103,equal_weight_batches,utility_per_10000,0.0
+Frozen Lite-CF (ungated),103,worst_batch,utility_per_10000,0.0
+Frozen Lite-CF (ungated),103,B8-9_pooled,utility_per_10000,0.0
+Frozen Lite-CF (ungated),103,B10,utility_per_10000,0.0
+Frozen Lite-CF (ungated),104,observation_weighted_overall,accuracy,0.4895543175487465
+Frozen Lite-CF (ungated),104,equal_weight_batches,accuracy,0.545539535793773
+Frozen Lite-CF (ungated),104,worst_batch,accuracy,0.4682203389830508
+Frozen Lite-CF (ungated),104,B8-9_pooled,accuracy,0.587890625
+Frozen Lite-CF (ungated),104,B10,accuracy,0.4682203389830509
+Frozen Lite-CF (ungated),104,observation_weighted_overall,macro_auroc,0.8092271375725835
+Frozen Lite-CF (ungated),104,equal_weight_batches,macro_auroc,0.8604258353283919
+Frozen Lite-CF (ungated),104,worst_batch,macro_auroc,0.7951825496754749
+Frozen Lite-CF (ungated),104,B8-9_pooled,macro_auroc,0.8822286458234067
+Frozen Lite-CF (ungated),104,B10,macro_auroc,0.7951825496754749
+Frozen Lite-CF (ungated),104,observation_weighted_overall,utility_per_10000,-6.963788300835654
+Frozen Lite-CF (ungated),104,equal_weight_batches,utility_per_10000,-19.727447693549387
+Frozen Lite-CF (ungated),104,worst_batch,utility_per_10000,-54.94505494505494
+Frozen Lite-CF (ungated),104,B8-9_pooled,utility_per_10000,-19.53125
+Frozen Lite-CF (ungated),104,B10,utility_per_10000,-4.237288135593221
+Frozen Lite-CF (ungated),105,observation_weighted_overall,accuracy,0.4899025069637883
+Frozen Lite-CF (ungated),105,equal_weight_batches,accuracy,0.5340935665088208
+Frozen Lite-CF (ungated),105,worst_batch,accuracy,0.47309322033898304
+Frozen Lite-CF (ungated),105,B8-9_pooled,accuracy,0.5673828125
+Frozen Lite-CF (ungated),105,B10,accuracy,0.47309322033898304
+Frozen Lite-CF (ungated),105,observation_weighted_overall,macro_auroc,0.8247254711318701
+Frozen Lite-CF (ungated),105,equal_weight_batches,macro_auroc,0.8564236585815236
+Frozen Lite-CF (ungated),105,worst_batch,macro_auroc,0.8113133320112765
+Frozen Lite-CF (ungated),105,B8-9_pooled,macro_auroc,0.8702913568168454
+Frozen Lite-CF (ungated),105,B10,macro_auroc,0.8113133320112765
+Frozen Lite-CF (ungated),105,observation_weighted_overall,utility_per_10000,22.63231197771588
+Frozen Lite-CF (ungated),105,equal_weight_batches,utility_per_10000,35.00924687365366
+Frozen Lite-CF (ungated),105,worst_batch,utility_per_10000,16.949152542372882
+Frozen Lite-CF (ungated),105,B8-9_pooled,utility_per_10000,48.828125
+Frozen Lite-CF (ungated),105,B10,utility_per_10000,16.949152542372882
+Frozen Lite-CF (ungated),106,observation_weighted_overall,accuracy,0.5041782729805014
+Frozen Lite-CF (ungated),106,equal_weight_batches,accuracy,0.5434859161554076
+Frozen Lite-CF (ungated),106,worst_batch,accuracy,0.4913135593220339
+Frozen Lite-CF (ungated),106,B8-9_pooled,accuracy,0.5634765625
+Frozen Lite-CF (ungated),106,B10,accuracy,0.4913135593220339
+Frozen Lite-CF (ungated),106,observation_weighted_overall,macro_auroc,0.8257920470973302
+Frozen Lite-CF (ungated),106,equal_weight_batches,macro_auroc,0.8564361298527133
+Frozen Lite-CF (ungated),106,worst_batch,macro_auroc,0.8150512150406442
+Frozen Lite-CF (ungated),106,B8-9_pooled,macro_auroc,0.867219619348848
+Frozen Lite-CF (ungated),106,B10,macro_auroc,0.8150512150406442
+Frozen Lite-CF (ungated),106,observation_weighted_overall,utility_per_10000,36.559888579387184
+Frozen Lite-CF (ungated),106,equal_weight_batches,utility_per_10000,40.65896438777795
+Frozen Lite-CF (ungated),106,worst_batch,utility_per_10000,27.47252747252747
+Frozen Lite-CF (ungated),106,B8-9_pooled,utility_per_10000,48.828125
+Frozen Lite-CF (ungated),106,B10,utility_per_10000,33.898305084745765
+Frozen Lite-CF (ungated),107,observation_weighted_overall,accuracy,0.47318941504178275
+Frozen Lite-CF (ungated),107,equal_weight_batches,accuracy,0.4731380201719184
+Frozen Lite-CF (ungated),107,worst_batch,accuracy,0.43956043956043955
+Frozen Lite-CF (ungated),107,B8-9_pooled,accuracy,0.484375
+Frozen Lite-CF (ungated),107,B10,accuracy,0.47076271186440677
+Frozen Lite-CF (ungated),107,observation_weighted_overall,macro_auroc,0.8205342084457291
+Frozen Lite-CF (ungated),107,equal_weight_batches,macro_auroc,0.8518972435326396
+Frozen Lite-CF (ungated),107,worst_batch,macro_auroc,0.8094136585093397
+Frozen Lite-CF (ungated),107,B8-9_pooled,macro_auroc,0.8626007750685927
+Frozen Lite-CF (ungated),107,B10,macro_auroc,0.8094136585093397
+Frozen Lite-CF (ungated),107,observation_weighted_overall,utility_per_10000,62.674094707520894
+Frozen Lite-CF (ungated),107,equal_weight_batches,utility_per_10000,157.96115372386558
+Frozen Lite-CF (ungated),107,worst_batch,utility_per_10000,29.661016949152543
+Frozen Lite-CF (ungated),107,B8-9_pooled,utility_per_10000,214.84375
+Frozen Lite-CF (ungated),107,B10,utility_per_10000,29.661016949152543
+Frozen Lite-CF (ungated),108,observation_weighted_overall,accuracy,0.4806754874651811
+Frozen Lite-CF (ungated),108,equal_weight_batches,accuracy,0.5251612088476495
+Frozen Lite-CF (ungated),108,worst_batch,accuracy,0.4641949152542373
+Frozen Lite-CF (ungated),108,B8-9_pooled,accuracy,0.556640625
+Frozen Lite-CF (ungated),108,B10,accuracy,0.46419491525423734
+Frozen Lite-CF (ungated),108,observation_weighted_overall,macro_auroc,0.8045919444291003
+Frozen Lite-CF (ungated),108,equal_weight_batches,macro_auroc,0.8611810794910352
+Frozen Lite-CF (ungated),108,worst_batch,macro_auroc,0.791266101021985
+Frozen Lite-CF (ungated),108,B8-9_pooled,macro_auroc,0.8853822128687304
+Frozen Lite-CF (ungated),108,B10,macro_auroc,0.791266101021985
+Frozen Lite-CF (ungated),108,observation_weighted_overall,utility_per_10000,-1.7409470752089136
+Frozen Lite-CF (ungated),108,equal_weight_batches,utility_per_10000,-0.7062146892655368
+Frozen Lite-CF (ungated),108,worst_batch,utility_per_10000,-2.1186440677966103
+Frozen Lite-CF (ungated),108,B8-9_pooled,utility_per_10000,0.0
+Frozen Lite-CF (ungated),108,B10,utility_per_10000,-2.1186440677966103
+Frozen Lite-CF (ungated),109,observation_weighted_overall,accuracy,0.4829387186629527
+Frozen Lite-CF (ungated),109,equal_weight_batches,accuracy,0.5030235066252016
+Frozen Lite-CF (ungated),109,worst_batch,accuracy,0.47478813559322036
+Frozen Lite-CF (ungated),109,B8-9_pooled,accuracy,0.5205078125
+Frozen Lite-CF (ungated),109,B10,accuracy,0.4747881355932203
+Frozen Lite-CF (ungated),109,observation_weighted_overall,macro_auroc,0.8163511582439315
+Frozen Lite-CF (ungated),109,equal_weight_batches,macro_auroc,0.8535204383696754
+Frozen Lite-CF (ungated),109,worst_batch,macro_auroc,0.8054070160465694
+Frozen Lite-CF (ungated),109,B8-9_pooled,macro_auroc,0.8625338111736269
+Frozen Lite-CF (ungated),109,B10,macro_auroc,0.8054070160465694
+Frozen Lite-CF (ungated),109,observation_weighted_overall,utility_per_10000,0.0
+Frozen Lite-CF (ungated),109,equal_weight_batches,utility_per_10000,0.0
+Frozen Lite-CF (ungated),109,worst_batch,utility_per_10000,0.0
+Frozen Lite-CF (ungated),109,B8-9_pooled,utility_per_10000,0.0
+Frozen Lite-CF (ungated),109,B10,utility_per_10000,0.0
+Frozen Lite-CF (ungated),110,observation_weighted_overall,accuracy,0.4994777158774373
+Frozen Lite-CF (ungated),110,equal_weight_batches,accuracy,0.5488622018283036
+Frozen Lite-CF (ungated),110,worst_batch,accuracy,0.4792372881355932
+Frozen Lite-CF (ungated),110,B8-9_pooled,accuracy,0.5927734375
+Frozen Lite-CF (ungated),110,B10,accuracy,0.4792372881355932
+Frozen Lite-CF (ungated),110,observation_weighted_overall,macro_auroc,0.7972198882245399
+Frozen Lite-CF (ungated),110,equal_weight_batches,macro_auroc,0.8592900537106587
+Frozen Lite-CF (ungated),110,worst_batch,macro_auroc,0.7787369036392698
+Frozen Lite-CF (ungated),110,B8-9_pooled,macro_auroc,0.8912106383889185
+Frozen Lite-CF (ungated),110,B10,macro_auroc,0.7787369036392698
+Frozen Lite-CF (ungated),110,observation_weighted_overall,utility_per_10000,31.337047353760443
+Frozen Lite-CF (ungated),110,equal_weight_batches,utility_per_10000,25.744735490498204
+Frozen Lite-CF (ungated),110,worst_batch,utility_per_10000,0.0
+Frozen Lite-CF (ungated),110,B8-9_pooled,utility_per_10000,29.296875
+Frozen Lite-CF (ungated),110,B10,utility_per_10000,31.779661016949156
+Prospective gate Lite-CF,101,observation_weighted_overall,accuracy,0.4860724233983287
+Prospective gate Lite-CF,101,equal_weight_batches,accuracy,0.5162926056993854
+Prospective gate Lite-CF,101,worst_batch,accuracy,0.47415254237288135
+Prospective gate Lite-CF,101,B8-9_pooled,accuracy,0.541015625
+Prospective gate Lite-CF,101,B10,accuracy,0.47415254237288135
+Prospective gate Lite-CF,101,observation_weighted_overall,macro_auroc,0.8291507301637688
+Prospective gate Lite-CF,101,equal_weight_batches,macro_auroc,0.8796179095205128
+Prospective gate Lite-CF,101,worst_batch,macro_auroc,0.8185426053481114
+Prospective gate Lite-CF,101,B8-9_pooled,macro_auroc,0.902023256213431
+Prospective gate Lite-CF,101,B10,macro_auroc,0.8185426053481114
+Prospective gate Lite-CF,101,observation_weighted_overall,utility_per_10000,3.4818941504178262
+Prospective gate Lite-CF,101,equal_weight_batches,utility_per_10000,27.00359903749734
+Prospective gate Lite-CF,101,worst_batch,utility_per_10000,-4.2372881355932215
+Prospective gate Lite-CF,101,B8-9_pooled,utility_per_10000,39.0625
+Prospective gate Lite-CF,101,B10,utility_per_10000,-4.2372881355932215
+Prospective gate Lite-CF,102,observation_weighted_overall,accuracy,0.5094011142061281
+Prospective gate Lite-CF,102,equal_weight_batches,accuracy,0.5308668026888367
+Prospective gate Lite-CF,102,worst_batch,accuracy,0.48626373626373626
+Prospective gate Lite-CF,102,B8-9_pooled,accuracy,0.5654296875
+Prospective gate Lite-CF,102,B10,accuracy,0.4972457627118644
+Prospective gate Lite-CF,102,observation_weighted_overall,macro_auroc,0.8237227770666732
+Prospective gate Lite-CF,102,equal_weight_batches,macro_auroc,0.8553576366568979
+Prospective gate Lite-CF,102,worst_batch,macro_auroc,0.8099262201371442
+Prospective gate Lite-CF,102,B8-9_pooled,macro_auroc,0.8721956615871488
+Prospective gate Lite-CF,102,B10,macro_auroc,0.8099262201371441
+Prospective gate Lite-CF,102,observation_weighted_overall,utility_per_10000,10.44568245125348
+Prospective gate Lite-CF,102,equal_weight_batches,utility_per_10000,21.377163326315866
+Prospective gate Lite-CF,102,worst_batch,utility_per_10000,6.3559322033898304
+Prospective gate Lite-CF,102,B8-9_pooled,utility_per_10000,29.296875
+Prospective gate Lite-CF,102,B10,utility_per_10000,6.3559322033898304
+Prospective gate Lite-CF,103,observation_weighted_overall,accuracy,0.46988161559888575
+Prospective gate Lite-CF,103,equal_weight_batches,accuracy,0.4912268757607741
+Prospective gate Lite-CF,103,worst_batch,accuracy,0.45329670329670335
+Prospective gate Lite-CF,103,B8-9_pooled,accuracy,0.5234375
+Prospective gate Lite-CF,103,B10,accuracy,0.45826271186440676
+Prospective gate Lite-CF,103,observation_weighted_overall,macro_auroc,0.7920516172143531
+Prospective gate Lite-CF,103,equal_weight_batches,macro_auroc,0.829727749804969
+Prospective gate Lite-CF,103,worst_batch,macro_auroc,0.7809664908497018
+Prospective gate Lite-CF,103,B8-9_pooled,macro_auroc,0.8394339974885855
+Prospective gate Lite-CF,103,B10,macro_auroc,0.7809664908497018
+Prospective gate Lite-CF,103,observation_weighted_overall,utility_per_10000,0.0
+Prospective gate Lite-CF,103,equal_weight_batches,utility_per_10000,0.0
+Prospective gate Lite-CF,103,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,103,B8-9_pooled,utility_per_10000,0.0
+Prospective gate Lite-CF,103,B10,utility_per_10000,0.0
+Prospective gate Lite-CF,104,observation_weighted_overall,accuracy,0.4895543175487465
+Prospective gate Lite-CF,104,equal_weight_batches,accuracy,0.545539535793773
+Prospective gate Lite-CF,104,worst_batch,accuracy,0.4682203389830508
+Prospective gate Lite-CF,104,B8-9_pooled,accuracy,0.587890625
+Prospective gate Lite-CF,104,B10,accuracy,0.4682203389830509
+Prospective gate Lite-CF,104,observation_weighted_overall,macro_auroc,0.8092271375725835
+Prospective gate Lite-CF,104,equal_weight_batches,macro_auroc,0.8604258353283919
+Prospective gate Lite-CF,104,worst_batch,macro_auroc,0.7951825496754749
+Prospective gate Lite-CF,104,B8-9_pooled,macro_auroc,0.8822286458234067
+Prospective gate Lite-CF,104,B10,macro_auroc,0.7951825496754749
+Prospective gate Lite-CF,104,observation_weighted_overall,utility_per_10000,-6.963788300835654
+Prospective gate Lite-CF,104,equal_weight_batches,utility_per_10000,-19.727447693549387
+Prospective gate Lite-CF,104,worst_batch,utility_per_10000,-54.94505494505494
+Prospective gate Lite-CF,104,B8-9_pooled,utility_per_10000,-19.53125
+Prospective gate Lite-CF,104,B10,utility_per_10000,-4.237288135593221
+Prospective gate Lite-CF,105,observation_weighted_overall,accuracy,0.48763927576601673
+Prospective gate Lite-CF,105,equal_weight_batches,accuracy,0.5305926418214554
+Prospective gate Lite-CF,105,worst_batch,accuracy,0.4713983050847458
+Prospective gate Lite-CF,105,B8-9_pooled,accuracy,0.5625
+Prospective gate Lite-CF,105,B10,accuracy,0.47139830508474573
+Prospective gate Lite-CF,105,observation_weighted_overall,macro_auroc,0.8215752222776992
+Prospective gate Lite-CF,105,equal_weight_batches,macro_auroc,0.8536800621619943
+Prospective gate Lite-CF,105,worst_batch,macro_auroc,0.808091039579745
+Prospective gate Lite-CF,105,B8-9_pooled,macro_auroc,0.8672288539051777
+Prospective gate Lite-CF,105,B10,macro_auroc,0.808091039579745
+Prospective gate Lite-CF,105,observation_weighted_overall,utility_per_10000,0.0
+Prospective gate Lite-CF,105,equal_weight_batches,utility_per_10000,0.0
+Prospective gate Lite-CF,105,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,105,B8-9_pooled,utility_per_10000,0.0
+Prospective gate Lite-CF,105,B10,utility_per_10000,0.0
+Prospective gate Lite-CF,106,observation_weighted_overall,accuracy,0.5041782729805014
+Prospective gate Lite-CF,106,equal_weight_batches,accuracy,0.5434859161554076
+Prospective gate Lite-CF,106,worst_batch,accuracy,0.4913135593220339
+Prospective gate Lite-CF,106,B8-9_pooled,accuracy,0.5634765625
+Prospective gate Lite-CF,106,B10,accuracy,0.4913135593220339
+Prospective gate Lite-CF,106,observation_weighted_overall,macro_auroc,0.8257920470973302
+Prospective gate Lite-CF,106,equal_weight_batches,macro_auroc,0.8564361298527133
+Prospective gate Lite-CF,106,worst_batch,macro_auroc,0.8150512150406442
+Prospective gate Lite-CF,106,B8-9_pooled,macro_auroc,0.867219619348848
+Prospective gate Lite-CF,106,B10,macro_auroc,0.8150512150406442
+Prospective gate Lite-CF,106,observation_weighted_overall,utility_per_10000,36.559888579387184
+Prospective gate Lite-CF,106,equal_weight_batches,utility_per_10000,40.65896438777795
+Prospective gate Lite-CF,106,worst_batch,utility_per_10000,27.47252747252747
+Prospective gate Lite-CF,106,B8-9_pooled,utility_per_10000,48.828125
+Prospective gate Lite-CF,106,B10,utility_per_10000,33.898305084745765
+Prospective gate Lite-CF,107,observation_weighted_overall,accuracy,0.46692200557103064
+Prospective gate Lite-CF,107,equal_weight_batches,accuracy,0.4573419047995319
+Prospective gate Lite-CF,107,worst_batch,accuracy,0.4148351648351648
+Prospective gate Lite-CF,107,B8-9_pooled,accuracy,0.462890625
+Prospective gate Lite-CF,107,B10,accuracy,0.4677966101694915
+Prospective gate Lite-CF,107,observation_weighted_overall,macro_auroc,0.8121051037923077
+Prospective gate Lite-CF,107,equal_weight_batches,macro_auroc,0.8409672379936296
+Prospective gate Lite-CF,107,worst_batch,macro_auroc,0.8019091721480662
+Prospective gate Lite-CF,107,B8-9_pooled,macro_auroc,0.8515892758631327
+Prospective gate Lite-CF,107,B10,macro_auroc,0.8019091721480662
+Prospective gate Lite-CF,107,observation_weighted_overall,utility_per_10000,0.0
+Prospective gate Lite-CF,107,equal_weight_batches,utility_per_10000,0.0
+Prospective gate Lite-CF,107,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,107,B8-9_pooled,utility_per_10000,0.0
+Prospective gate Lite-CF,107,B10,utility_per_10000,0.0
+Prospective gate Lite-CF,108,observation_weighted_overall,accuracy,0.4808495821727019
+Prospective gate Lite-CF,108,equal_weight_batches,accuracy,0.525231830316576
+Prospective gate Lite-CF,108,worst_batch,accuracy,0.46440677966101696
+Prospective gate Lite-CF,108,B8-9_pooled,accuracy,0.556640625
+Prospective gate Lite-CF,108,B10,accuracy,0.46440677966101696
+Prospective gate Lite-CF,108,observation_weighted_overall,macro_auroc,0.8045955631593164
+Prospective gate Lite-CF,108,equal_weight_batches,macro_auroc,0.8611806117515722
+Prospective gate Lite-CF,108,worst_batch,macro_auroc,0.7912646978035964
+Prospective gate Lite-CF,108,B8-9_pooled,macro_auroc,0.8853822128687304
+Prospective gate Lite-CF,108,B10,macro_auroc,0.7912646978035964
+Prospective gate Lite-CF,108,observation_weighted_overall,utility_per_10000,0.0
+Prospective gate Lite-CF,108,equal_weight_batches,utility_per_10000,0.0
+Prospective gate Lite-CF,108,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,108,B8-9_pooled,utility_per_10000,0.0
+Prospective gate Lite-CF,108,B10,utility_per_10000,0.0
+Prospective gate Lite-CF,109,observation_weighted_overall,accuracy,0.4829387186629527
+Prospective gate Lite-CF,109,equal_weight_batches,accuracy,0.5030235066252016
+Prospective gate Lite-CF,109,worst_batch,accuracy,0.47478813559322036
+Prospective gate Lite-CF,109,B8-9_pooled,accuracy,0.5205078125
+Prospective gate Lite-CF,109,B10,accuracy,0.4747881355932203
+Prospective gate Lite-CF,109,observation_weighted_overall,macro_auroc,0.8163511582439315
+Prospective gate Lite-CF,109,equal_weight_batches,macro_auroc,0.8535204383696754
+Prospective gate Lite-CF,109,worst_batch,macro_auroc,0.8054070160465694
+Prospective gate Lite-CF,109,B8-9_pooled,macro_auroc,0.8625338111736269
+Prospective gate Lite-CF,109,B10,macro_auroc,0.8054070160465694
+Prospective gate Lite-CF,109,observation_weighted_overall,utility_per_10000,0.0
+Prospective gate Lite-CF,109,equal_weight_batches,utility_per_10000,0.0
+Prospective gate Lite-CF,109,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,109,B8-9_pooled,utility_per_10000,0.0
+Prospective gate Lite-CF,109,B10,utility_per_10000,0.0
+Prospective gate Lite-CF,110,observation_weighted_overall,accuracy,0.4994777158774373
+Prospective gate Lite-CF,110,equal_weight_batches,accuracy,0.5488622018283036
+Prospective gate Lite-CF,110,worst_batch,accuracy,0.4792372881355932
+Prospective gate Lite-CF,110,B8-9_pooled,accuracy,0.5927734375
+Prospective gate Lite-CF,110,B10,accuracy,0.4792372881355932
+Prospective gate Lite-CF,110,observation_weighted_overall,macro_auroc,0.7972198882245399
+Prospective gate Lite-CF,110,equal_weight_batches,macro_auroc,0.8592900537106587
+Prospective gate Lite-CF,110,worst_batch,macro_auroc,0.7787369036392698
+Prospective gate Lite-CF,110,B8-9_pooled,macro_auroc,0.8912106383889185
+Prospective gate Lite-CF,110,B10,macro_auroc,0.7787369036392698
+Prospective gate Lite-CF,110,observation_weighted_overall,utility_per_10000,31.337047353760443
+Prospective gate Lite-CF,110,equal_weight_batches,utility_per_10000,25.744735490498204
+Prospective gate Lite-CF,110,worst_batch,utility_per_10000,0.0
+Prospective gate Lite-CF,110,B8-9_pooled,utility_per_10000,29.296875
+Prospective gate Lite-CF,110,B10,utility_per_10000,31.779661016949156

@@ -1,0 +1,45 @@
+{
+  "run": "CEE-CF10-R2-LITE-SHIFT",
+  "source_protocol": "CEE-CF10-R2-LITE",
+  "optimization_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "fault_mechanisms": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "selector_calibration_severities": [
+    1.0,
+    2.0,
+    3.0
+  ],
+  "test_severities": [
+    1.0,
+    2.0,
+    3.0
+  ],
+  "formal_severity": 3.0,
+  "selector_calibration_group": 1,
+  "test_fault_groups_at_formal_severity": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "fault_prevalence": 0.4,
+  "test_realization": 70001,
+  "strict_subset": "fault assigned and affected group available",
+  "test_labels_used_for_fitting": false,
+  "elapsed_seconds": 259.3810089000035
+}

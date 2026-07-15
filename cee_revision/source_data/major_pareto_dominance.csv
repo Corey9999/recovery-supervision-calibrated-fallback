@@ -1,0 +1,9 @@
+comparator,dominates_frozen_operating_point,selection_fraction,prevention,retention
+All-row multinomial,False,,,
+Conditional Lite-CF,False,,,
+Confidence difference,False,,,
+Entropy difference,False,,,
+Logit-margin difference,False,,,
+Random,False,,,
+Shallow tree,False,,,
+Two-stage,False,,,

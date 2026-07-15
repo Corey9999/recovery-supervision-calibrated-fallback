@@ -1,0 +1,21 @@
+{
+  "run": "CEE-CF10-R2-LITE-MAJOR-ROUTER-AUDIT",
+  "endpoint_predictions": "frozen; no endpoint refitting",
+  "selector_partition": "Batch-7 second chronological half",
+  "test_partition": "Batches 8--10 unchanged",
+  "fault_mechanisms": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "utility_harm_to_correction_ratios": [
+    1.0,
+    2.0,
+    5.0,
+    10.0
+  ],
+  "curve_status": "descriptive fixed-test curves; no test-selected operating point",
+  "interval_interpretation": "fitted-pair/fitting variation on one fixed test set",
+  "primary_deployment_policy": "prospective support gate; unsupported fits revert to PDRF"
+}

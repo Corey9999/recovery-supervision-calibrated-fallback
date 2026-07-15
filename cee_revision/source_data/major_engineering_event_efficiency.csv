@@ -1,0 +1,241 @@
+seed,fault_type,method,extra_passes,extra_passes_per_retained_correction,extra_passes_per_net_correction,number_needed_to_route_per_retained_correction,number_needed_to_route_per_net_correction
+101,drift,Always PDRF,0.0,inf,inf,inf,inf
+101,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,35.9,130.54545454545453
+101,drift,Frozen Lite-CF (ungated),1436.0,718.0,inf,571.0,inf
+101,drift,Prospective gate Lite-CF,1436.0,718.0,inf,571.0,inf
+101,drift,All-row multinomial (safety),1436.0,287.2,478.6666666666667,24.4,40.666666666666664
+101,drift,All-row multinomial (utility 1:1),1436.0,38.810810810810814,89.75,37.21621621621622,86.0625
+101,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+101,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,20.514285714285716,37.78947368421053
+101,gaussian,Frozen Lite-CF (ungated),1436.0,130.54545454545453,179.5,98.36363636363636,135.25
+101,gaussian,Prospective gate Lite-CF,1436.0,130.54545454545453,179.5,98.36363636363636,135.25
+101,gaussian,All-row multinomial (safety),1436.0,287.2,359.0,22.799999999999997,28.499999999999996
+101,gaussian,All-row multinomial (utility 1:1),1436.0,35.9,62.43478260869565,32.875,57.17391304347826
+101,offset,Always PDRF,0.0,inf,inf,inf,inf
+101,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,30.5531914893617,143.6
+101,offset,Frozen Lite-CF (ungated),1436.0,159.55555555555554,inf,127.88888888888889,inf
+101,offset,Prospective gate Lite-CF,1436.0,159.55555555555554,inf,127.88888888888889,inf
+101,offset,All-row multinomial (safety),1436.0,110.46153846153847,287.2,13.23076923076923,34.4
+101,offset,All-row multinomial (utility 1:1),1436.0,35.02439024390244,119.66666666666667,33.51219512195122,114.5
+101,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+101,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,28.72,75.57894736842105
+101,stuck_at,Frozen Lite-CF (ungated),1436.0,179.5,359.0,136.375,272.75
+101,stuck_at,Prospective gate Lite-CF,1436.0,179.5,359.0,136.375,272.75
+101,stuck_at,All-row multinomial (safety),1436.0,179.5,239.33333333333334,17.375,23.166666666666668
+101,stuck_at,All-row multinomial (utility 1:1),1436.0,34.19047619047619,62.43478260869565,32.285714285714285,58.95652173913044
+102,drift,Always PDRF,0.0,inf,inf,inf,inf
+102,drift,Always RO-PDRF-Lite,0.0,0.0,inf,287.2,inf
+102,drift,Frozen Lite-CF (ungated),1436.0,718.0,718.0,598.0,598.0
+102,drift,Prospective gate Lite-CF,1436.0,718.0,718.0,598.0,598.0
+102,drift,All-row multinomial (safety),1436.0,478.6666666666667,478.6666666666667,16.333333333333332,16.333333333333332
+102,drift,All-row multinomial (utility 1:1),1436.0,478.6666666666667,478.6666666666667,15.333333333333334,15.333333333333334
+102,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+102,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,38.810810810810814,68.38095238095238
+102,gaussian,Frozen Lite-CF (ungated),1436.0,718.0,718.0,520.5,520.5
+102,gaussian,Prospective gate Lite-CF,1436.0,718.0,718.0,520.5,520.5
+102,gaussian,All-row multinomial (safety),1436.0,205.14285714285714,359.0,13.571428571428571,23.75
+102,gaussian,All-row multinomial (utility 1:1),1436.0,239.33333333333334,478.6666666666667,14.833333333333334,29.666666666666668
+102,offset,Always PDRF,0.0,inf,inf,inf,inf
+102,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,143.6,205.14285714285714
+102,offset,Frozen Lite-CF (ungated),1436.0,1436.0,1436.0,1216.0,1216.0
+102,offset,Prospective gate Lite-CF,1436.0,1436.0,1436.0,1216.0,1216.0
+102,offset,All-row multinomial (safety),1436.0,478.6666666666667,478.6666666666667,16.666666666666668,16.666666666666668
+102,offset,All-row multinomial (utility 1:1),1436.0,478.6666666666667,478.6666666666667,15.0,15.0
+102,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+102,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,89.75,102.57142857142857
+102,stuck_at,Frozen Lite-CF (ungated),1436.0,1436.0,1436.0,1028.0,1028.0
+102,stuck_at,Prospective gate Lite-CF,1436.0,1436.0,1436.0,1028.0,1028.0
+102,stuck_at,All-row multinomial (safety),1436.0,159.55555555555554,159.55555555555554,7.444444444444445,7.444444444444445
+102,stuck_at,All-row multinomial (utility 1:1),1436.0,179.5,179.5,7.0,7.0
+103,drift,Always PDRF,0.0,inf,inf,inf,inf
+103,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,51.285714285714285,62.43478260869565
+103,drift,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+103,drift,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+103,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+103,drift,All-row multinomial (utility 1:1),1436.0,53.18518518518518,65.27272727272727,52.77777777777778,64.77272727272727
+103,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+103,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,29.306122448979593,42.23529411764706
+103,gaussian,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+103,gaussian,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+103,gaussian,All-row multinomial (safety),1436.0,478.6666666666667,478.6666666666667,6.333333333333333,6.333333333333333
+103,gaussian,All-row multinomial (utility 1:1),1436.0,32.63636363636363,46.32258064516129,32.13636363636363,45.61290322580645
+103,offset,Always PDRF,0.0,inf,inf,inf,inf
+103,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,34.19047619047619,36.82051282051282
+103,offset,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+103,offset,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+103,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+103,offset,All-row multinomial (utility 1:1),1436.0,35.9,37.78947368421053,35.725,37.60526315789474
+103,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+103,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,41.02857142857143,65.27272727272727
+103,stuck_at,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+103,stuck_at,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+103,stuck_at,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+103,stuck_at,All-row multinomial (utility 1:1),1436.0,44.875,59.833333333333336,44.3125,59.083333333333336
+104,drift,Always PDRF,0.0,inf,inf,inf,inf
+104,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,59.833333333333336,239.33333333333334
+104,drift,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+104,drift,Prospective gate Lite-CF,1436.0,inf,inf,inf,inf
+104,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+104,drift,All-row multinomial (utility 1:1),1436.0,119.66666666666667,205.14285714285714,31.25,53.57142857142857
+104,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+104,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,33.395348837209305,55.23076923076923
+104,gaussian,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+104,gaussian,Prospective gate Lite-CF,1436.0,inf,inf,inf,inf
+104,gaussian,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+104,gaussian,All-row multinomial (utility 1:1),1436.0,68.38095238095238,130.54545454545453,20.000000000000004,38.18181818181819
+104,offset,Always PDRF,0.0,inf,inf,inf,inf
+104,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,35.02439024390244,179.5
+104,offset,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+104,offset,Prospective gate Lite-CF,1436.0,inf,inf,inf,inf
+104,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+104,offset,All-row multinomial (utility 1:1),1436.0,62.43478260869565,478.6666666666667,17.956521739130434,137.66666666666666
+104,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+104,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,35.02439024390244,287.2
+104,stuck_at,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+104,stuck_at,Prospective gate Lite-CF,1436.0,inf,inf,inf,inf
+104,stuck_at,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+104,stuck_at,All-row multinomial (utility 1:1),1436.0,59.833333333333336,inf,19.083333333333332,inf
+105,drift,Always PDRF,0.0,inf,inf,inf,inf
+105,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,71.8,359.0
+105,drift,Frozen Lite-CF (ungated),1436.0,1436.0,1436.0,1050.0,1050.0
+105,drift,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+105,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+105,drift,All-row multinomial (utility 1:1),1436.0,95.73333333333333,1436.0,94.13333333333334,1412.0
+105,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+105,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,39.888888888888886,65.27272727272727
+105,gaussian,Frozen Lite-CF (ungated),1436.0,205.14285714285714,287.2,148.28571428571428,207.6
+105,gaussian,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+105,gaussian,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+105,gaussian,All-row multinomial (utility 1:1),1436.0,44.875,75.57894736842105,44.09375,74.26315789473684
+105,offset,Always PDRF,0.0,inf,inf,inf,inf
+105,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,42.23529411764706,119.66666666666667
+105,offset,Frozen Lite-CF (ungated),1436.0,239.33333333333334,239.33333333333334,173.0,173.0
+105,offset,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+105,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+105,offset,All-row multinomial (utility 1:1),1436.0,46.32258064516129,119.66666666666667,45.54838709677419,117.66666666666667
+105,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+105,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,31.91111111111111,42.23529411764706
+105,stuck_at,Frozen Lite-CF (ungated),1436.0,1436.0,1436.0,1035.0,1035.0
+105,stuck_at,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+105,stuck_at,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+105,stuck_at,All-row multinomial (utility 1:1),1436.0,37.78947368421053,46.32258064516129,37.026315789473685,45.38709677419355
+106,drift,Always PDRF,0.0,inf,inf,inf,inf
+106,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,68.38095238095238,239.33333333333334
+106,drift,Frozen Lite-CF (ungated),1436.0,205.14285714285714,239.33333333333334,177.57142857142858,207.16666666666666
+106,drift,Prospective gate Lite-CF,1436.0,205.14285714285714,239.33333333333334,177.57142857142858,207.16666666666666
+106,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+106,drift,All-row multinomial (utility 1:1),1436.0,119.66666666666667,287.2,42.916666666666664,103.0
+106,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+106,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,37.78947368421053,57.44
+106,gaussian,Frozen Lite-CF (ungated),1436.0,102.57142857142857,102.57142857142857,86.57142857142857,86.57142857142857
+106,gaussian,Prospective gate Lite-CF,1436.0,102.57142857142857,102.57142857142857,86.57142857142857,86.57142857142857
+106,gaussian,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+106,gaussian,All-row multinomial (utility 1:1),1436.0,62.43478260869565,71.8,22.130434782608692,25.449999999999996
+106,offset,Always PDRF,0.0,inf,inf,inf,inf
+106,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,65.27272727272727,119.66666666666667
+106,offset,Frozen Lite-CF (ungated),1436.0,718.0,1436.0,622.0,1244.0
+106,offset,Prospective gate Lite-CF,1436.0,718.0,1436.0,622.0,1244.0
+106,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+106,offset,All-row multinomial (utility 1:1),1436.0,159.55555555555554,359.0,59.77777777777778,134.5
+106,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+106,stuck_at,Always RO-PDRF-Lite,0.0,0.0,inf,68.38095238095238,inf
+106,stuck_at,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+106,stuck_at,Prospective gate Lite-CF,1436.0,inf,inf,inf,inf
+106,stuck_at,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+106,stuck_at,All-row multinomial (utility 1:1),1436.0,478.6666666666667,inf,192.66666666666666,inf
+107,drift,Always PDRF,0.0,inf,inf,inf,inf
+107,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,44.875,65.27272727272727
+107,drift,Frozen Lite-CF (ungated),1436.0,287.2,287.2,240.6,240.6
+107,drift,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+107,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+107,drift,All-row multinomial (utility 1:1),1436.0,44.875,65.27272727272727,44.875,65.27272727272727
+107,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+107,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,25.642857142857142,34.19047619047619
+107,gaussian,Frozen Lite-CF (ungated),1436.0,89.75,119.66666666666667,74.8125,99.75
+107,gaussian,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+107,gaussian,All-row multinomial (safety),1436.0,718.0,inf,55.5,inf
+107,gaussian,All-row multinomial (utility 1:1),1436.0,25.642857142857142,34.19047619047619,25.625,34.166666666666664
+107,offset,Always PDRF,0.0,inf,inf,inf,inf
+107,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,37.78947368421053,71.8
+107,offset,Frozen Lite-CF (ungated),1436.0,239.33333333333334,239.33333333333334,202.16666666666666,202.16666666666666
+107,offset,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+107,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+107,offset,All-row multinomial (utility 1:1),1436.0,37.78947368421053,71.8,37.76315789473684,71.75
+107,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+107,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,16.697674418604652,20.514285714285716
+107,stuck_at,Frozen Lite-CF (ungated),1436.0,95.73333333333333,110.46153846153847,72.53333333333333,83.6923076923077
+107,stuck_at,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+107,stuck_at,All-row multinomial (safety),1436.0,718.0,1436.0,73.5,147.0
+107,stuck_at,All-row multinomial (utility 1:1),1436.0,16.697674418604652,20.514285714285716,16.697674418604652,20.514285714285716
+108,drift,Always PDRF,0.0,inf,inf,inf,inf
+108,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,84.47058823529412,239.33333333333334
+108,drift,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+108,drift,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+108,drift,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+108,drift,All-row multinomial (utility 1:1),1436.0,130.54545454545453,1436.0,18.181818181818183,200.0
+108,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+108,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,36.82051282051282,95.73333333333333
+108,gaussian,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+108,gaussian,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+108,gaussian,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+108,gaussian,All-row multinomial (utility 1:1),1436.0,84.47058823529412,1436.0,11.705882352941174,198.99999999999997
+108,offset,Always PDRF,0.0,inf,inf,inf,inf
+108,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,68.38095238095238,205.14285714285714
+108,offset,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+108,offset,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+108,offset,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+108,offset,All-row multinomial (utility 1:1),1436.0,95.73333333333333,359.0,14.866666666666665,55.74999999999999
+108,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+108,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,57.44,179.5
+108,stuck_at,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+108,stuck_at,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+108,stuck_at,All-row multinomial (safety),1436.0,inf,inf,inf,inf
+108,stuck_at,All-row multinomial (utility 1:1),1436.0,68.38095238095238,287.2,10.333333333333334,43.4
+109,drift,Always PDRF,0.0,inf,inf,inf,inf
+109,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,33.395348837209305,68.38095238095238
+109,drift,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+109,drift,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+109,drift,All-row multinomial (safety),1436.0,718.0,1436.0,40.0,80.0
+109,drift,All-row multinomial (utility 1:1),1436.0,51.285714285714285,110.46153846153847,49.285714285714285,106.15384615384616
+109,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+109,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,29.306122448979593,65.27272727272727
+109,gaussian,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+109,gaussian,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+109,gaussian,All-row multinomial (safety),1436.0,179.5,287.2,15.875,25.4
+109,gaussian,All-row multinomial (utility 1:1),1436.0,31.91111111111111,51.285714285714285,30.955555555555556,49.75
+109,offset,Always PDRF,0.0,inf,inf,inf,inf
+109,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,29.306122448979593,49.51724137931034
+109,offset,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+109,offset,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+109,offset,All-row multinomial (safety),1436.0,718.0,718.0,29.0,29.0
+109,offset,All-row multinomial (utility 1:1),1436.0,46.32258064516129,89.75,44.25806451612903,85.75
+109,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+109,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,39.888888888888886,62.43478260869565
+109,stuck_at,Frozen Lite-CF (ungated),1436.0,inf,inf,inf,inf
+109,stuck_at,Prospective gate Lite-CF,0.0,inf,inf,inf,inf
+109,stuck_at,All-row multinomial (safety),1436.0,1436.0,1436.0,64.0,64.0
+109,stuck_at,All-row multinomial (utility 1:1),1436.0,55.23076923076923,71.8,52.30769230769231,68.0
+110,drift,Always PDRF,0.0,inf,inf,inf,inf
+110,drift,Always RO-PDRF-Lite,0.0,0.0,0.0,84.47058823529412,110.46153846153847
+110,drift,Frozen Lite-CF (ungated),1436.0,718.0,718.0,106.0,106.0
+110,drift,Prospective gate Lite-CF,1436.0,718.0,718.0,106.0,106.0
+110,drift,All-row multinomial (safety),1436.0,1436.0,1436.0,14.0,14.0
+110,drift,All-row multinomial (utility 1:1),1436.0,130.54545454545453,159.55555555555554,125.36363636363636,153.22222222222223
+110,gaussian,Always PDRF,0.0,inf,inf,inf,inf
+110,gaussian,Always RO-PDRF-Lite,0.0,0.0,0.0,34.19047619047619,57.44
+110,gaussian,Frozen Lite-CF (ungated),1436.0,119.66666666666667,179.5,28.583333333333332,42.875
+110,gaussian,Prospective gate Lite-CF,1436.0,119.66666666666667,179.5,28.583333333333332,42.875
+110,gaussian,All-row multinomial (safety),1436.0,287.2,359.0,14.2,17.75
+110,gaussian,All-row multinomial (utility 1:1),1436.0,46.32258064516129,79.77777777777777,43.58064516129032,75.05555555555556
+110,offset,Always PDRF,0.0,inf,inf,inf,inf
+110,offset,Always RO-PDRF-Lite,0.0,0.0,0.0,44.875,62.43478260869565
+110,offset,Frozen Lite-CF (ungated),1436.0,478.6666666666667,478.6666666666667,72.0,72.0
+110,offset,Prospective gate Lite-CF,1436.0,478.6666666666667,478.6666666666667,72.0,72.0
+110,offset,All-row multinomial (safety),1436.0,1436.0,1436.0,13.0,13.0
+110,offset,All-row multinomial (utility 1:1),1436.0,79.77777777777777,95.73333333333333,75.61111111111111,90.73333333333333
+110,stuck_at,Always PDRF,0.0,inf,inf,inf,inf
+110,stuck_at,Always RO-PDRF-Lite,0.0,0.0,0.0,44.875,68.38095238095238
+110,stuck_at,Frozen Lite-CF (ungated),1436.0,239.33333333333334,287.2,39.5,47.4
+110,stuck_at,Prospective gate Lite-CF,1436.0,239.33333333333334,287.2,39.5,47.4
+110,stuck_at,All-row multinomial (safety),1436.0,1436.0,inf,22.0,inf
+110,stuck_at,All-row multinomial (utility 1:1),1436.0,53.18518518518518,79.77777777777777,50.925925925925924,76.38888888888889
