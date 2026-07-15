@@ -1,14 +1,12 @@
 """Create the optional CEE graphical abstract from the frozen fact ledger."""
 
 from pathlib import Path
-import json
 
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 
 ROOT = Path(__file__).resolve().parent
-FACTS = json.loads((ROOT / "source_data" / "cee_manuscript_facts.json").read_text(encoding="utf-8"))
 OUT = ROOT / "figures" / "graphical_abstract_cee"
 
 plt.rcParams.update(
@@ -66,10 +64,10 @@ def main():
     ax.set_ylim(0, 1)
     ax.axis("off")
 
-    ax.text(0.02, 0.93, "Cross-fitted selective recovery for corrupted sensor streams", fontsize=18, fontweight="bold", color="#15191F", va="top")
-    ax.text(0.02, 0.855, "One frozen endpoint pair per seed; no test label or fault type enters selection", fontsize=10.5, color=GRAY, va="top")
+    ax.text(0.02, 0.93, "Support-gated selective recovery under controlled sensor corruption", fontsize=18, fontweight="bold", color="#15191F", va="top")
+    ax.text(0.02, 0.855, "Endpoints and routing thresholds are fitted before fixed future-batch evaluation", fontsize=10.5, color=GRAY, va="top")
 
-    box(ax, 0.02, 0.40, 0.145, 0.25, "Available but\ncorrupted\nsensor groups", BLUE, LIGHT_BLUE, size=12, weight="bold")
+    box(ax, 0.02, 0.40, 0.145, 0.25, "Controlled fault\nreaches an available\nsensor group", BLUE, LIGHT_BLUE, size=11.5, weight="bold")
     arrow(ax, 0.17, 0.525, 0.215, 0.525)
 
     box(ax, 0.22, 0.57, 0.13, 0.15, "Base model", GRAY, "#F2F3F5", size=12, weight="bold")
@@ -77,21 +75,18 @@ def main():
     arrow(ax, 0.165, 0.525, 0.215, 0.645, BLUE)
     arrow(ax, 0.165, 0.525, 0.215, 0.395, ORANGE)
 
-    box(ax, 0.405, 0.39, 0.16, 0.27, "Five-fold\nout-of-fold\npreference selector\n+ frozen threshold", TEAL, LIGHT_TEAL, size=12, weight="bold")
+    box(ax, 0.405, 0.39, 0.16, 0.27, "Cross-fitted\nconditional selector\n+ prospective\nsupport gate", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
     arrow(ax, 0.35, 0.645, 0.40, 0.585, BLUE)
     arrow(ax, 0.35, 0.395, 0.40, 0.465, ORANGE)
     arrow(ax, 0.57, 0.525, 0.615, 0.525, TEAL)
 
-    box(ax, 0.62, 0.40, 0.13, 0.25, "Select the safer\nendpoint for each\nobservation", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
+    box(ax, 0.62, 0.40, 0.13, 0.25, "Route only when\ncalibration support\npasses", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
 
-    prevention = FACTS["crossed_intervals"]["negative_transfer_prevention"]
-    retention = FACTS["crossed_intervals"]["recovery_retention"]
-    unseen = FACTS["unseen"]
     cards = [
-        (0.775, 0.63, f"{100*prevention['bootstrap_mean']:.1f}%", "Full-model harm\nprevented", TEAL, LIGHT_TEAL),
-        (0.775, 0.40, f"{100*retention['bootstrap_mean']:.1f}%", "recovery\nretained", ORANGE, LIGHT_ORANGE),
-        (0.890, 0.63, "86.8%", "unseen-mechanism\nprevention", BLUE, LIGHT_BLUE),
-        (0.890, 0.40, "6 passes", "four-group\ndeployment cost", GRAY, "#F2F3F5"),
+        (0.775, 0.63, "96.2%", "harmful transfers\nprevented", TEAL, LIGHT_TEAL),
+        (0.775, 0.40, "6.6%", "available corrections\nretained", ORANGE, LIGHT_ORANGE),
+        (0.890, 0.63, "5/10", "fitted pairs\nsupported", BLUE, LIGHT_BLUE),
+        (0.890, 0.40, "2 passes", "supported-pair\nendpoint cost", GRAY, "#F2F3F5"),
     ]
     for x, y, value, label, edge, face in cards:
         metric_card(ax, x, y, value, label, edge, face)
@@ -99,16 +94,16 @@ def main():
     ax.text(
         0.02,
         0.18,
-        f"Conditional crossed 95% intervals: prevention {100*prevention['ci_2.5']:.1f}--{100*prevention['ci_97.5']:.1f}%  |  "
-        f"retention {100*retention['ci_2.5']:.1f}--{100*retention['ci_97.5']:.1f}%",
-        fontsize=10.5,
+        "Calibration-selected all-row / two-stage utility at 1:1: +107.9 / +110.6 per 10,000; at harm ratios 5 and 10, the base endpoint dominates.",
+        fontsize=9.7,
         color="#353B44",
     )
     ax.text(
         0.02,
         0.09,
-        "Outcome: conservative protection under controlled corruption; natural-failure and device transfer remain unproven.",
-        fontsize=12,
+        "Outcome: reproducible risk control for controlled corruption; natural-failure recovery\n"
+        "and device-independent transfer remain unproven.",
+        fontsize=10.8,
         fontweight="bold",
         color="#20242A",
     )
