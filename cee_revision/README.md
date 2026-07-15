@@ -51,7 +51,7 @@ Earlier frozen-run entry points and all negative/sensitivity analyses remain in 
 
 These results support controlled-corruption risk control on fixed future batches. They do not establish maintenance-confirmed natural sensor failure, device-independent downstream recovery or population-level failure prevalence. Fitted-seed intervals quantify optimization variation on one fixed test realization.
 
-Computational snapshot: `f8ef1a17bdfc98377334dd9aa6903702cdc789c1`  
-Release tag: `v1.4.0-major-router`  
-License: MIT  
-Software DOI: not assigned
+- Computational snapshot: `f8ef1a17bdfc98377334dd9aa6903702cdc789c1`
+- Release tag: `v1.4.0-major-router`
+- License: MIT
+- Software DOI: not assigned
