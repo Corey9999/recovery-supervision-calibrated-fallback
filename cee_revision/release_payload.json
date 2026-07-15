@@ -1,8 +1,8 @@
 {
-  "tag_name": "v1.4.0-major-router",
+  "tag_name": "v1.5.0-round2-support-audit",
   "target_commitish": "main",
   "name": "CEE major-router revision",
-  "body": "Frozen Computers & Electrical Engineering major-router revision with all-row and two-stage outcome routing, full prevention-retention frontiers, support-gated primary deployment, utility-aware thresholds, severity/group/mechanism/batch transport, engineering cost audits, exact environments, prediction-level source data, editable figures, and manuscript sources.\n\nComputational snapshot: f8ef1a17bdfc98377334dd9aa6903702cdc789c1\nSoftware DOI: not assigned.",
+  "body": "Frozen Computers & Electrical Engineering round-two revision with a retrospectively audited support gate, 27-configuration gate sensitivity, fitted-pair utility dispersion, explicit fallback hierarchy, all-row and two-stage analytical controls, severity/group/mechanism/batch transport, exact environments, prediction-level source data, editable figures, and manuscript sources.\n\nComputational snapshot: 59be82fc18aaf48b819c3c71a9482425f8baac45\nSoftware DOI: not assigned.",
   "draft": false,
   "prerelease": false,
   "generate_release_notes": false
