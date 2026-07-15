@@ -29,6 +29,7 @@ Always-base and always-recovery policies are reported beside every selective pol
 - Fitted-pair utility files report means, Student-t intervals, medians, interquartile ranges, positive-pair counts, decision rates, calibration utility and test-minus-calibration change over all 10 fitted endpoint pairs.
 - The deployment hierarchy is explicit: only conditional Lite-CF has a retrospectively evaluated gate; failure reverts directly to PDRF. All-row and two-stage remain analytical controls without model-specific support gates.
 - The 0.720 mean-of-repeats AUROC and 0.562 pooled-row AUROC are stored and described as distinct estimands.
+- Earlier frozen CSV files retain `Prospective gate Lite-CF` as a historical machine key for backward compatibility; it denotes the same post hoc rule now described as the retrospectively audited support gate and is not evidence of a prospective experiment.
 
 ## Headline audited results
 

@@ -968,7 +968,7 @@ def main() -> None:
         "utility_harm_to_correction_ratios": list(RATIOS),
         "curve_status": "descriptive fixed-test curves; no test-selected operating point",
         "interval_interpretation": "fitted-pair/fitting variation on one fixed test set",
-        "primary_deployment_policy": "prospective support gate; unsupported fits revert to PDRF",
+        "primary_deployment_policy": "post hoc support gate audited retrospectively; prospective use would freeze the rule and unsupported fits would revert to PDRF",
     }
     (DATA / "major_router_audit_design.json").write_text(json.dumps(design, indent=2), encoding="utf-8")
     print(primary_wide.round(4).to_string(index=False))

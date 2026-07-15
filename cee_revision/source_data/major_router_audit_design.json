@@ -17,5 +17,5 @@
   ],
   "curve_status": "descriptive fixed-test curves; no test-selected operating point",
   "interval_interpretation": "fitted-pair/fitting variation on one fixed test set",
-  "primary_deployment_policy": "prospective support gate; unsupported fits revert to PDRF"
+  "primary_deployment_policy": "post hoc support gate audited retrospectively; prospective use would freeze the rule and unsupported fits would revert to PDRF"
 }

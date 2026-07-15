@@ -378,7 +378,6 @@ Do not upload the folder Internal_QA_Not_For_Upload.
     }
     write_text(internal_dir / "QA_SUMMARY.json", json.dumps(qa_summary, indent=2))
 
-    (ROOT / "submission_package_path.txt").write_text(str(DEST), encoding="utf-8")
     print(DEST)
 
 
