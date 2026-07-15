@@ -213,6 +213,194 @@ def main():
         DATA / "q1_lite_decision_utility.csv", index=False
     )
 
+    # Prevalence--pass-cost sensitivity on complete deployment streams.  The
+    # harm/correction value ratio is fixed at one in the compact manuscript
+    # table; the full crossed grid remains machine-readable.
+    prevalence_streams = {
+        "clean_no_imposed_fault": 0.00,
+        "full_mixed_10pct": 0.10,
+        "full_mixed_stream": 0.40,
+        "full_mixed_70pct": 0.70,
+    }
+    prevalence_rows = []
+    for _, row in safety[safety.stream.isin(prevalence_streams)].iterrows():
+        corrections = 10000.0 * row.corrections_retained / row.n
+        harms = 10000.0 * row.harms_realized / row.n
+        for harm_cost in (1.0, 2.0, 5.0):
+            for pass_penalty in (0.0, 0.5, 2.0):
+                prevalence_rows.append(
+                    {
+                        "seed": int(row.seed),
+                        "fault_type": row.fault_type,
+                        "stream": row.stream,
+                        "fault_prevalence": prevalence_streams[row.stream],
+                        "harm_to_correction_cost_ratio": harm_cost,
+                        "pass_penalty_equivalent_corrections_per_10000": pass_penalty,
+                        "corrections_retained_per_10000": corrections,
+                        "harms_realized_per_10000": harms,
+                        "net_utility_per_10000": corrections
+                        - harm_cost * harms
+                        - pass_penalty * (row.mean_forward_passes - 1.0),
+                    }
+                )
+    prevalence_utility = pd.DataFrame(prevalence_rows)
+    prevalence_utility.to_csv(
+        DATA / "q1_lite_prevalence_pass_utility.csv", index=False
+    )
+    compact = prevalence_utility[
+        prevalence_utility.harm_to_correction_cost_ratio == 1.0
+    ]
+    events = (
+        compact[compact.pass_penalty_equivalent_corrections_per_10000 == 0.0]
+        .groupby("fault_prevalence")[[
+            "corrections_retained_per_10000",
+            "harms_realized_per_10000",
+        ]]
+        .mean()
+    )
+    utility_pivot = compact.pivot_table(
+        index="fault_prevalence",
+        columns="pass_penalty_equivalent_corrections_per_10000",
+        values="net_utility_per_10000",
+        aggfunc="mean",
+    ).rename(columns={0.0: "U_lambda_0", 0.5: "U_lambda_0_5", 2.0: "U_lambda_2"})
+    compact_table = events.join(utility_pivot).reset_index()
+    compact_table.to_csv(
+        DATA / "q1_lite_utility_sensitivity_summary.csv", index=False
+    )
+    utility_display = compact_table.copy()
+    utility_display["fault_prevalence"] = utility_display.fault_prevalence.map(
+        lambda value: f"{100 * value:.0f}\\%"
+    )
+    utility_display.columns = [
+        "Fault prevalence",
+        "Corrections/10,000",
+        "Harms/10,000",
+        "$U(\\lambda=0)$",
+        "$U(\\lambda=0.5)$",
+        "$U(\\lambda=2)$",
+    ]
+    (TABLES / "q1_lite_utility_sensitivity.tex").write_text(
+        utility_display.to_latex(
+            index=False,
+            escape=False,
+            float_format=lambda value: f"{value:.2f}",
+        ),
+        encoding="utf-8",
+    )
+
+    # Seed-level dispersion is computed after averaging the four fixed
+    # mechanisms within each fitted pair; observations are not treated as
+    # independent replications.
+    probability_columns_summary = [
+        "macro_auroc",
+        "macro_auprc",
+        "nll",
+        "brier",
+        "ece15_equal_width",
+    ]
+    seed_probability = (
+        metrics[metrics.stream == "strict_fault_applied_available"]
+        .groupby(["seed", "method"])[probability_columns_summary]
+        .mean()
+        .reset_index()
+    )
+    seed_probability.to_csv(
+        DATA / "q1_lite_probability_by_seed.csv", index=False
+    )
+    dispersion_rows = []
+    for method, frame in seed_probability.groupby("method"):
+        result = {"method": method, "n_fitted_pairs": len(frame)}
+        for metric in probability_columns_summary:
+            result[f"{metric}_mean"] = frame[metric].mean()
+            result[f"{metric}_sd"] = frame[metric].std(ddof=1)
+        dispersion_rows.append(result)
+    dispersion = pd.DataFrame(dispersion_rows)
+    dispersion.to_csv(
+        DATA / "q1_lite_probability_dispersion.csv", index=False
+    )
+    dispersion_display = pd.DataFrame(
+        {
+            "Method": dispersion.method.replace({"Lite-CF-6": "Lite-CF"}),
+            "Macro-AUROC": [
+                f"{m:.4f} $\\pm$ {s:.4f}"
+                for m, s in zip(dispersion.macro_auroc_mean, dispersion.macro_auroc_sd)
+            ],
+            "Macro-AUPRC": [
+                f"{m:.4f} $\\pm$ {s:.4f}"
+                for m, s in zip(dispersion.macro_auprc_mean, dispersion.macro_auprc_sd)
+            ],
+            "NLL": [
+                f"{m:.3f} $\\pm$ {s:.3f}"
+                for m, s in zip(dispersion.nll_mean, dispersion.nll_sd)
+            ],
+            "Brier": [
+                f"{m:.3f} $\\pm$ {s:.3f}"
+                for m, s in zip(dispersion.brier_mean, dispersion.brier_sd)
+            ],
+            "ECE": [
+                f"{m:.3f} $\\pm$ {s:.3f}"
+                for m, s in zip(
+                    dispersion.ece15_equal_width_mean,
+                    dispersion.ece15_equal_width_sd,
+                )
+            ],
+        }
+    )
+    (TABLES / "q1_lite_probability_dispersion.tex").write_text(
+        dispersion_display.to_latex(index=False, escape=False), encoding="utf-8"
+    )
+
+    latency = pd.read_csv(DATA / "q1_lite_cpu_latency.csv")
+    latency_summary = (
+        latency.groupby("method")[[
+            "latency_batch1_ms_median",
+            "latency_batch_ms_median",
+            "throughput_observations_per_second",
+        ]]
+        .agg(["mean", "std"])
+        .reset_index()
+    )
+    latency_summary.columns = [
+        "method",
+        "batch1_ms_mean",
+        "batch1_ms_sd",
+        "full_batch_ms_mean",
+        "full_batch_ms_sd",
+        "throughput_mean",
+        "throughput_sd",
+    ]
+    latency_summary.to_csv(DATA / "q1_lite_cpu_latency_summary.csv", index=False)
+    latency_display = pd.DataFrame(
+        {
+            "Method": latency_summary.method.replace({"Lite-CF-6": "Lite-CF"}),
+            "Batch 1 latency (ms)": [
+                f"{m:.3f} $\\pm$ {s:.3f}"
+                for m, s in zip(
+                    latency_summary.batch1_ms_mean,
+                    latency_summary.batch1_ms_sd,
+                )
+            ],
+            "Batch 4,364 latency (ms)": [
+                f"{m:.2f} $\\pm$ {s:.2f}"
+                for m, s in zip(
+                    latency_summary.full_batch_ms_mean,
+                    latency_summary.full_batch_ms_sd,
+                )
+            ],
+            "Throughput (obs/s)": [
+                f"{m:.0f} $\\pm$ {s:.0f}"
+                for m, s in zip(
+                    latency_summary.throughput_mean,
+                    latency_summary.throughput_sd,
+                )
+            ],
+        }
+    )
+    (TABLES / "q1_lite_cpu_latency.tex").write_text(
+        latency_display.to_latex(index=False, escape=False), encoding="utf-8"
+    )
+
     calibration = pd.read_csv(DATA / "q1_lite_selector_calibration.csv.gz")
     repeated_rows = []
     coefficient_rows = []

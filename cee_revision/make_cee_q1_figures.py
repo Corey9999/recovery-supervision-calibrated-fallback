@@ -19,12 +19,12 @@ mpl.rcParams.update(
     {
         "font.family": "sans-serif",
         "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans", "sans-serif"],
-        "font.size": 7.2,
-        "axes.titlesize": 8.2,
-        "axes.labelsize": 7.4,
-        "xtick.labelsize": 6.7,
-        "ytick.labelsize": 6.7,
-        "legend.fontsize": 6.5,
+        "font.size": 8.2,
+        "axes.titlesize": 9.0,
+        "axes.labelsize": 8.3,
+        "xtick.labelsize": 7.4,
+        "ytick.labelsize": 7.4,
+        "legend.fontsize": 7.2,
         "axes.spines.top": False,
         "axes.spines.right": False,
         "axes.linewidth": 0.75,
@@ -75,7 +75,7 @@ def panel_label(ax, label):
         label,
         transform=ax.transAxes,
         fontweight="bold",
-        fontsize=9,
+        fontsize=10,
         va="top",
     )
 
@@ -86,34 +86,34 @@ def t_error(values):
 
 
 def tradeoff_figure():
-    learned = pd.read_csv(DATA / "q1_learned_routing_comparison.csv")
-    learned = learned[
-        (learned.analysis_set == "strict")
-        & (learned.prevalence == 0.40)
-    ]
     lite_safety = pd.read_csv(DATA / "q1_lite_routing_safety.csv")
     lite_safety = lite_safety[
         lite_safety.stream == "strict_fault_applied_available"
     ].copy()
-    lite_safety["method"] = "Lite-CF"
-    common = [
-        "method",
-        "negative_transfer_prevention",
-        "recovery_retention",
-        "mean_forward_passes",
-    ]
-    points = pd.concat([learned[common], lite_safety[common]], ignore_index=True)
-    summary = points.groupby("method")[common[1:]].mean().reset_index()
-    order = [
-        "Lite-CF",
-        "Cascade-25",
-        "Safe-CF-12",
-        "Three-outcome-6",
-        "Tree-6",
-        "Always PDRF",
-        "Always RO-PDRF-Full",
-    ]
-    summary = summary[summary.method.isin(order)]
+    lite_mean = lite_safety[
+        [
+            "negative_transfer_prevention",
+            "recovery_retention",
+            "mean_forward_passes",
+        ]
+    ].mean()
+    summary = pd.DataFrame(
+        [
+            {
+                "method": "PDRF",
+                "negative_transfer_prevention": 1.0,
+                "recovery_retention": 0.0,
+                "mean_forward_passes": 1.0,
+            },
+            {
+                "method": "RO-PDRF-Lite",
+                "negative_transfer_prevention": 0.0,
+                "recovery_retention": 1.0,
+                "mean_forward_passes": 1.0,
+            },
+            {"method": "Lite-CF", **lite_mean.to_dict()},
+        ]
+    )
 
     intervals = pd.read_csv(DATA / "q1_lite_mechanism_fixed_intervals.csv")
     intervals = intervals[
@@ -126,17 +126,32 @@ def tradeoff_figure():
     )
     intervals = intervals.sort_values("fault_type")
 
-    utility = pd.read_csv(DATA / "q1_decision_utility.csv")
-    utility = utility[
-        (utility.stream == "strict_fault_applied_available")
-        & (utility.pass_penalty_equivalent_corrections_per_10000 == 0.5)
-        & utility.method.isin(["Always PDRF", "Always RO-PDRF-Full", "Safe-CF-12", "Cascade-25"])
-    ]
     lite_utility = pd.read_csv(DATA / "q1_lite_decision_utility.csv")
     lite_utility = lite_utility[
         lite_utility.pass_penalty_equivalent_corrections_per_10000 == 0.5
     ].copy()
-    utility = pd.concat([utility, lite_utility], ignore_index=True)
+    endpoint_utility_rows = []
+    for _, row in lite_safety.iterrows():
+        corrections = 10000.0 * row.correction_opportunities / row.n
+        harms = 10000.0 * row.harm_opportunities / row.n
+        for ratio in (1.0, 2.0, 5.0, 10.0):
+            endpoint_utility_rows.extend(
+                [
+                    {
+                        "method": "PDRF",
+                        "harm_to_correction_cost_ratio": ratio,
+                        "net_utility_per_10000": 0.0,
+                    },
+                    {
+                        "method": "RO-PDRF-Lite",
+                        "harm_to_correction_cost_ratio": ratio,
+                        "net_utility_per_10000": corrections - ratio * harms,
+                    },
+                ]
+            )
+    utility = pd.concat(
+        [pd.DataFrame(endpoint_utility_rows), lite_utility], ignore_index=True
+    )
     utility_summary = (
         utility.groupby(["method", "harm_to_correction_cost_ratio"])
         .net_utility_per_10000.mean()
@@ -157,40 +172,60 @@ def tradeoff_figure():
         .reset_index()
     )
 
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.55))
-    fig.subplots_adjust(left=0.09, right=0.97, bottom=0.10, top=0.94, wspace=0.34, hspace=0.42)
+    fig, axes = plt.subplots(2, 2, figsize=(7.6, 6.05))
+    fig.subplots_adjust(
+        left=0.095,
+        right=0.96,
+        bottom=0.10,
+        top=0.94,
+        wspace=0.38,
+        hspace=0.46,
+    )
 
     ax = axes[0, 0]
-    handles = []
-    labels = []
     for _, row in summary.iterrows():
         size = 30 + 22 * row.mean_forward_passes
-        handle = ax.scatter(
+        color = {
+            "PDRF": GRAY,
+            "RO-PDRF-Lite": ORANGE,
+            "Lite-CF": GREEN,
+        }[row.method]
+        ax.scatter(
             row.recovery_retention,
             row.negative_transfer_prevention,
             s=size,
-            color=METHOD_COLORS.get(row.method, GRAY),
+            color=color,
             edgecolor="white",
             linewidth=0.8,
             zorder=3,
         )
-        handles.append(handle)
-        labels.append(row.method)
+        offset = {
+            "PDRF": (7, -3),
+            "RO-PDRF-Lite": (-58, 8),
+            "Lite-CF": (8, -15),
+        }[row.method]
+        ax.annotate(
+            row.method,
+            (row.recovery_retention, row.negative_transfer_prevention),
+            xytext=offset,
+            textcoords="offset points",
+            color=color,
+            fontsize=7.5,
+            fontweight="bold" if row.method == "Lite-CF" else "normal",
+        )
     ax.set_xlim(-0.04, 1.05)
     ax.set_ylim(-0.04, 1.05)
     ax.set_xlabel("Recovery retention")
     ax.set_ylabel("Negative-transfer prevention")
     ax.set_title("Hard-decision safety and compute")
     ax.grid(color="#E8E8E8", linewidth=0.6, zorder=0)
-    ax.text(0.02, 0.03, "Marker area scales with forward passes", transform=ax.transAxes, color=GRAY, fontsize=6.1)
-    ax.legend(
-        handles,
-        labels,
-        loc="center",
-        bbox_to_anchor=(0.55, 0.52),
-        ncol=2,
-        handletextpad=0.3,
-        columnspacing=0.8,
+    ax.text(
+        0.04,
+        0.05,
+        "Marker area: forward passes",
+        transform=ax.transAxes,
+        color=GRAY,
+        fontsize=7.0,
     )
     panel_label(ax, "a")
 
@@ -212,13 +247,13 @@ def tradeoff_figure():
     ax.axvline(0, color="#555555", linewidth=0.8, linestyle="--")
     ax.set_yticks(y_positions, [value.replace("_", " ").title() for value in intervals.fault_type.astype(str)])
     ax.invert_yaxis()
-    ax.set_xlabel("Lite-CF − PDRF macro-AUROC")
+    ax.set_xlabel("Lite-CF minus PDRF macro-AUROC")
     ax.set_title("Mechanism-fixed fitted-pair intervals")
     ax.grid(axis="x", color="#E8E8E8", linewidth=0.6)
     panel_label(ax, "b")
 
     ax = axes[1, 0]
-    for method in ["Always PDRF", "Always RO-PDRF-Full", "Safe-CF-12", "Cascade-25", "Lite-CF"]:
+    for method in ["PDRF", "RO-PDRF-Lite", "Lite-CF"]:
         group = utility_summary[utility_summary.method == method]
         if group.empty:
             continue
@@ -228,15 +263,19 @@ def tradeoff_figure():
             marker="o",
             markersize=3.5,
             label=method,
-            color=METHOD_COLORS[method],
+            color={
+                "PDRF": GRAY,
+                "RO-PDRF-Lite": ORANGE,
+                "Lite-CF": GREEN,
+            }[method],
         )
     ax.axhline(0, color="#555555", linewidth=0.8, linestyle="--")
     ax.set_xscale("log")
     ax.set_xticks([1, 2, 5, 10], ["1", "2", "5", "10"])
     ax.set_xlabel("Harm cost / correction value")
     ax.set_ylabel("Net utility per 10,000")
-    ax.set_title("Decision utility with a pass-cost proxy")
-    ax.legend(ncol=2, loc="lower left", handlelength=1.4, columnspacing=0.8)
+    ax.set_title("Decision utility ($\\lambda=0.5$ per extra pass)")
+    ax.legend(ncol=1, loc="lower left", handlelength=1.4)
     ax.grid(color="#E8E8E8", linewidth=0.6)
     panel_label(ax, "c")
 
@@ -277,11 +316,29 @@ def tradeoff_figure():
     secondary.set_ylim(0.78, 0.83)
     secondary.set_ylabel("Macro-AUROC", color=GRAY)
     secondary.spines["right"].set_visible(True)
-    ax.legend(
-        [prevention_handle, retention_handle, auroc_handle],
-        ["Prevention", "Retention", "Macro-AUROC"],
-        loc="lower right",
-        ncol=1,
+    ax.annotate(
+        "Prevention",
+        (x.iloc[-1], size_summary.prevention.iloc[-1]),
+        xytext=(-55, 7),
+        textcoords="offset points",
+        color=GREEN,
+        fontsize=7.2,
+    )
+    ax.annotate(
+        "Retention",
+        (x.iloc[-1], size_summary.retention.iloc[-1]),
+        xytext=(-50, 8),
+        textcoords="offset points",
+        color=ORANGE,
+        fontsize=7.2,
+    )
+    secondary.annotate(
+        "Macro-AUROC",
+        (x.iloc[-1], size_summary.auroc.iloc[-1]),
+        xytext=(-68, -17),
+        textcoords="offset points",
+        color=GRAY,
+        fontsize=7.2,
     )
     ax.set_title("Calibration-set-size sensitivity")
     ax.grid(color="#E8E8E8", linewidth=0.6)
@@ -339,36 +396,65 @@ def stability_calibration_figure():
         "Lite-CF": GREEN,
     }
 
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.55))
-    fig.subplots_adjust(left=0.09, right=0.97, bottom=0.10, top=0.94, wspace=0.36, hspace=0.42)
-
-    ax = axes[0, 0]
-    scatter = ax.scatter(
-        repeated.threshold,
-        repeated.auroc,
-        c=repeated.seed,
-        cmap="viridis",
-        s=17,
-        alpha=0.78,
-        edgecolor="white",
-        linewidth=0.25,
+    fig = plt.figure(figsize=(7.6, 6.05))
+    outer = fig.add_gridspec(
+        2,
+        2,
+        left=0.095,
+        right=0.96,
+        bottom=0.10,
+        top=0.94,
+        wspace=0.40,
+        hspace=0.46,
     )
-    ax.axvline(repeated.threshold.median(), color=GRAY, linestyle="--", linewidth=0.8)
-    ax.set_xlabel("Selected threshold")
-    ax.set_ylabel("Out-of-fold AUROC")
-    ax.set_title("Repeated grouped calibration splits")
-    ax.grid(color="#E8E8E8", linewidth=0.6)
-    ax.text(
-        0.02,
-        0.03,
-        "Color identifies the fitted-pair seed",
-        transform=ax.transAxes,
-        color=GRAY,
-        fontsize=6.0,
-    )
-    panel_label(ax, "a")
+    panel_a = outer[0, 0].subgridspec(1, 2, wspace=0.42)
+    ax_auc = fig.add_subplot(panel_a[0, 0])
+    ax_threshold = fig.add_subplot(panel_a[0, 1])
+    ax_coefficient = fig.add_subplot(outer[0, 1])
+    ax_reliability = fig.add_subplot(outer[1, 0])
+    ax_probability = fig.add_subplot(outer[1, 1])
 
-    ax = axes[0, 1]
+    pair_seeds = sorted(repeated.seed.unique())
+    rng = np.random.default_rng(2718)
+    for axis, metric, ylabel, title, color in (
+        (ax_auc, "auroc", "OOF AUROC", "Preference AUROC", BLUE),
+        (ax_threshold, "threshold", "Threshold", "Frozen threshold", GREEN),
+    ):
+        values = [
+            repeated.loc[repeated.seed == seed, metric].to_numpy()
+            for seed in pair_seeds
+        ]
+        axis.boxplot(
+            values,
+            positions=np.arange(1, len(pair_seeds) + 1),
+            widths=0.55,
+            patch_artist=True,
+            showfliers=False,
+            medianprops={"color": "#333333", "linewidth": 0.9},
+            boxprops={"facecolor": color, "alpha": 0.22, "edgecolor": color},
+            whiskerprops={"color": color},
+            capprops={"color": color},
+        )
+        for position, seed_values in enumerate(values, start=1):
+            jitter = rng.uniform(-0.13, 0.13, size=len(seed_values))
+            axis.scatter(
+                position + jitter,
+                seed_values,
+                s=8,
+                color=color,
+                alpha=0.55,
+                edgecolor="none",
+                zorder=3,
+            )
+        axis.set_xlim(0.4, 10.6)
+        axis.set_xticks([1, 3, 5, 7, 9], ["1", "3", "5", "7", "9"])
+        axis.set_xlabel("Fitted pair")
+        axis.set_ylabel(ylabel)
+        axis.set_title(title)
+        axis.grid(axis="y", color="#E8E8E8", linewidth=0.6)
+    panel_label(ax_auc, "a")
+
+    ax = ax_coefficient
     display = {
         "base_confidence": "Base confidence",
         "recovery_confidence": "Lite confidence",
@@ -406,12 +492,12 @@ def stability_calibration_figure():
             va="center",
             ha="right",
             color=GRAY,
-            fontsize=6.1,
+            fontsize=7.0,
         )
     ax.grid(axis="x", color="#E8E8E8", linewidth=0.6)
     panel_label(ax, "b")
 
-    ax = axes[1, 0]
+    ax = ax_reliability
     ax.plot([0, 1], [0, 1], color="#555555", linestyle="--", linewidth=0.8, label="Ideal")
     for method, rows in reliability.items():
         summary = rows.groupby("bin").agg(
@@ -438,7 +524,7 @@ def stability_calibration_figure():
     ax.grid(color="#E8E8E8", linewidth=0.6)
     panel_label(ax, "c")
 
-    ax = axes[1, 1]
+    ax = ax_probability
     plotted = agreement[
         agreement.method.isin(["PDRF", "RO-PDRF-Lite", "Lite-CF"])
     ]
@@ -452,13 +538,26 @@ def stability_calibration_figure():
     width = 0.35
     agree_nll = [aggregate[(aggregate.method == method) & (aggregate.subset == "endpoint_class_agreement")].nll.iloc[0] for method in methods]
     disagree_nll = [aggregate[(aggregate.method == method) & (aggregate.subset == "endpoint_class_disagreement")].nll.iloc[0] for method in methods]
-    ax.bar(x - width / 2, agree_nll, width, color=LIGHT, edgecolor="#666666", label="Class agreement")
-    ax.bar(x + width / 2, disagree_nll, width, color="#AFC9DC", edgecolor="#666666", label="Class disagreement")
+    agree_bar = ax.bar(
+        x - width / 2,
+        agree_nll,
+        width,
+        color=LIGHT,
+        edgecolor="#666666",
+        label="Class agreement",
+    )
+    disagree_bar = ax.bar(
+        x + width / 2,
+        disagree_nll,
+        width,
+        color="#AFC9DC",
+        edgecolor="#666666",
+        label="Class disagreement",
+    )
     ax.set_xticks(x, ["PDRF", "Lite", "Lite-CF"])
     ax.set_ylabel("Negative log-likelihood")
     ax.set_title("Probability quality by endpoint agreement")
     ax.set_ylim(0, 3.35)
-    nll_legend = ax.legend(loc="upper left")
     ax.grid(axis="y", color="#E8E8E8", linewidth=0.6)
     agree_ece = [aggregate[(aggregate.method == method) & (aggregate.subset == "endpoint_class_agreement")].ece15_equal_width.iloc[0] for method in methods]
     disagree_ece = [aggregate[(aggregate.method == method) & (aggregate.subset == "endpoint_class_disagreement")].ece15_equal_width.iloc[0] for method in methods]
@@ -472,12 +571,21 @@ def stability_calibration_figure():
     secondary.set_ylim(0.18, 0.43)
     secondary.set_ylabel("Expected calibration error")
     secondary.spines["right"].set_visible(True)
-    secondary.legend(
-        [agree_ece_handle, disagree_ece_handle],
-        ["ECE: agreement", "ECE: disagreement"],
-        loc="lower right",
+    ax.legend(
+        [agree_bar, disagree_bar, agree_ece_handle, disagree_ece_handle],
+        [
+            "NLL: agreement",
+            "NLL: disagreement",
+            "ECE: agreement",
+            "ECE: disagreement",
+        ],
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.22),
+        ncol=2,
+        frameon=False,
+        columnspacing=1.0,
+        handletextpad=0.5,
     )
-    ax.add_artist(nll_legend)
     panel_label(ax, "d")
 
     save_figure(fig, "figure_cee_q1_stability_calibration")

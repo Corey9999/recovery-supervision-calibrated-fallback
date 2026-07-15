@@ -18,6 +18,7 @@
     "quality_values": 1.0,
     "n_applied_and_available": 1436
   },
+  "complete_stream_fault_prevalence_sensitivity": [0.0, 0.1, 0.4, 0.7],
   "endpoints": {
     "base": "PDRF",
     "recovery": "RO-PDRF-Lite",
@@ -35,6 +36,7 @@
       "entropy_delta"
     ],
     "model": "standardized L2 logistic regression",
+    "feature_standardization": "refitted on informative training rows inside each cross-fitting fold, then refitted on all informative calibration rows",
     "C": 0.05,
     "class_weight": "balanced",
     "cross_fitting": "five-fold stratified group",
@@ -47,5 +49,12 @@
     ]
   },
   "post_routing_recalibration": false,
+  "probability_mixture": false,
+  "cpu_timing": {
+    "warmups": 3,
+    "timed_calls": 7,
+    "batch_sizes": [1, 4364],
+    "data_loading_included": false
+  },
   "energy_measured": false
 }

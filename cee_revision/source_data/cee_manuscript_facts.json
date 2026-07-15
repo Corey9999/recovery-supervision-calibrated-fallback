@@ -66,7 +66,7 @@
     "oof_brier_mean": 0.13329599571760217
   },
   "clean": {
-    "false_switch_rate_mean": 0.41423006416131986,
+    "no_fault_recovery_selection_rate_mean": 0.41423006416131986,
     "harmful_switch_rate_mean": 0.00142071494042157
   },
   "lofo": {
@@ -98,7 +98,7 @@
       "flops_per_sample": 38528,
       "forward_passes": 1
     },
-    "SR-PDRF-Safe-CF": {
+    "Safe-CF": {
       "latency_ms_per_observation_median": 0.0118649518786883,
       "batch1_latency_ms_median": 6.809599988628179,
       "throughput_observations_per_second_median": 84288.1336178601,

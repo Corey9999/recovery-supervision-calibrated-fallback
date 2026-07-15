@@ -55,7 +55,7 @@ All models use AdamW, learning rate $2\times10^{-3}$, weight decay $10^{-4}$, ba
 
 \section{Q1 selector-stability, utility and probability audit}
 
-The Q1 revision adds frozen run CEE-CF10-R2-LITE. It reuses the chemical split, fixed test realization, optimization seeds 101--110 and training-only preprocessing of CEE-CF10-R2, but routes between PDRF and RO-PDRF-Lite. Six confidence/entropy features are calculated from temperature-scaled endpoint probabilities. The router emits the selected temperature-scaled probability vector, and no post-routing recalibration is performed. The primary selector uses $L_2$-regularized logistic regression with $C=0.05$ and requires two endpoint passes.
+The Q1 revision adds frozen run CEE-CF10-R2-LITE. It reuses the chemical split, fixed test realization, optimization seeds 101--110 and training-only preprocessing of CEE-CF10-R2, but routes between PDRF and RO-PDRF-Lite. Six confidence/entropy features are calculated from temperature-scaled endpoint probabilities. The router emits one selected endpoint vector rather than a probability mixture, and no post-routing recalibration is performed. The primary selector uses $L_2$-regularized logistic regression with $C=0.05$ and requires two endpoint passes. Its feature scaler is refitted on the informative training rows inside every cross-fitting fold and then refitted on all informative calibration rows for the final model.
 
 \begin{table}[ht]
 \centering
@@ -74,6 +74,12 @@ The Q1 revision adds frozen run CEE-CF10-R2-LITE. It reuses the chemical split, 
 \centering
 \caption{Probability quality split by endpoint-class agreement on the strict subset. This audit tests the selected-sample concern directly: agreement rows are not automatically harmless in probability space.}
 \resizebox{0.82\textwidth}{!}{\input{tables/q1_lite_agreement_quality.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Seed-level dispersion of strict-subset routed-output metrics. Each fitted-pair value first averages the four fixed mechanisms; entries are mean $\pm$ standard deviation over 10 fitted endpoint pairs. They quantify fitting variation on the present test observations, not independent devices.}
+\resizebox{0.94\textwidth}{!}{\input{tables/q1_lite_probability_dispersion.tex}}
 \end{table}
 
 Repeated grouped cross-fitting uses 10 split seeds for each of 10 fitted endpoint pairs. All corruption realizations derived from one calibration observation remain in one fold. Across the resulting 100 fits, conditional preference AUROC was $0.720\pm0.138$ and ranged from 0.327 to 0.954. Thresholds ranged from 0.525 to 0.90. The mean primary-objective tie count was 1.78 and the maximum was 9. The formal once-per-pair fit had 1.5 tied thresholds on average (range 1--4). Ties are broken by the highest threshold after realized harms, selected accuracy and retained corrections are equal.
@@ -103,6 +109,12 @@ Repeated grouped cross-fitting uses 10 split seeds for each of 10 fitted endpoin
 \end{table}
 
 The decision analysis computes $U=V_C N_C-C_H N_H-\lambda(P-1)$ per 10,000 observations. Harm-to-correction ratios are 1, 2, 5 and 10; pass penalties are 0, 0.5 and 2 correction equivalents per 10,000. The complete source file preserves seed- and mechanism-level values. Energy was not measured. Consequently, neither the pass penalty nor counted FLOPs are presented as electrical-energy estimates.
+
+\begin{table}[ht]
+\centering
+\caption{Learned routing and compute controls moved from the main article. Full-endpoint rows route between PDRF and RO-PDRF-Full; Lite-CF routes between PDRF and RO-PDRF-Lite. Prevention and retention are hard-decision outcomes, whereas AUROC and NLL evaluate the emitted probability vector.}
+\resizebox{\textwidth}{!}{\input{tables/q1_lite_safety.tex}}
+\end{table}
 
 The all-row three-outcome comparator uses the same six features and calibration rows, including endpoint-equivalent cases. A multinomial logistic model predicts base better, equivalent or recovery better; its routing score is $p(\text{recovery better})-p(\text{base better})$. The shallow-tree control uses depth 2 and a minimum leaf size of 35. The staged Full-endpoint cascade computes the 12-feature leave-one-group-out selector only for the 25\% of out-of-fold six-feature scores nearest the cheap threshold. All thresholds use the same grouped cross-fitting and lexicographic hard-decision objective.
 
@@ -198,6 +210,12 @@ Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one
 
 \begin{table}[ht]
 \centering
+\caption{Direct CPU timing for the primary Lite-CF endpoint chain. Each entry is the mean $\pm$ standard deviation of the per-seed median over 10 fitted endpoint pairs. Every median follows three warm-up and seven timed calls; loading is excluded. These workstation measurements are not embedded or real-time guarantees.}
+\resizebox{0.92\textwidth}{!}{\input{tables/q1_lite_cpu_latency.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
 \caption{Four-group deployment cost. State assumes 32-bit parameters. Complete-batch throughput and batch-size-one latency are reported separately; neither is a hardware-independent real-time guarantee.}
 \label{tab:supp-cee-cost}
 \resizebox{0.86\textwidth}{!}{\input{tables/cee_compute_cost.tex}}
@@ -237,7 +255,7 @@ Standardization means and standard deviations are fitted on batches 1--6 only. B
 
 \begin{table}[ht]
 \centering
-\caption{Severity audit against the empirical training distribution. Percentile shifts are absolute changes in empirical cumulative probability. The formal scale-3 setting is a severe stress test.}
+\caption{Severity audit against the empirical training distribution at scales 1, 3 and 5. Percentile shifts are absolute changes in empirical cumulative probability. ``Within training range'' means the empirical minimum--maximum after training-only standardization and clipping, not a physical sensor limit. The formal scale-3 setting is a severe stress test.}
 \resizebox{0.88\textwidth}{!}{\input{tables/q1_fault_severity.tex}}
 \end{table}
 
@@ -325,7 +343,7 @@ The main values $B=3$, $\beta=0.25$ and ranking coefficient 0.15 were fixed befo
 
 Larger bounds reduced relative boundary occupancy without materially changing AUROC over $B=3$--5. Larger $\beta$ increased AUROC in the three-seed grid but also increased saturation. These patterns require an independently selected tuning study before changing the prespecified method.
 
-\section{Independent hydraulic validation}
+\section{Independent hydraulic single-rig sensitivity analysis}
 
 The test-rig repository contains 1,449 cycles marked stable. For each component task, the same fixed proportions are used for training, checkpoint selection, calibration and testing. The class-condition values and counts are listed below.
 
@@ -513,7 +531,7 @@ The principal hydraulic representation linearly resamples each physical-group su
 \resizebox{0.82\textwidth}{!}{\input{tables/q1_hydraulic_extension_table.tex}}
 \end{table}
 
-\section{Real-operational AHU sensor-fault validation}
+\section{Real-operational AHU direct-diagnosis boundary analysis}
 
 The external field audit uses one year of hourly operational records from each of three buildings and only the repository's expert annotations for normal operation, return-air temperature sensor fault and supply-air temperature sensor fault. No test fault is synthesized. Table~\ref{tab:supp-ahu-splits} reports the chronological partitions after exclusion of conflicting duplicate AHU--time keys and collapse of same-label repeats. The complete test periods are retained without class subsampling.
 

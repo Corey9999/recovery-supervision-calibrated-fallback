@@ -19,6 +19,11 @@
     "drift",
     "stuck_at"
   ],
+  "fault_prevalences": [
+    0.1,
+    0.4,
+    0.7
+  ],
   "test_realization": 70001,
   "selector_features": [
     "base_confidence",
@@ -32,5 +37,5 @@
   "selector_training": "correctness disagreements in Batch-7 selector half; grouped OOF threshold",
   "temperature": "one scalar per endpoint and seed fitted on the disjoint first half of Batch 7",
   "post_routing_recalibration": false,
-  "elapsed_seconds": 362.9444749999675
+  "elapsed_seconds": 350.560879800003
 }

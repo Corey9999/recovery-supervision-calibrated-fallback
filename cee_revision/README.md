@@ -1,4 +1,4 @@
-# CEE Q1-scores revision: two-pass Lite-CF
+# CEE6 revision: two-pass Lite-CF with cost and stability audits
 
 This directory contains the frozen computational snapshot for the *Computers & Electrical Engineering* manuscript **Cross-fitted selective recovery under controlled multi-sensor corruption**.
 
@@ -12,6 +12,8 @@ This directory contains the frozen computational snapshot for the *Computers & E
 - Primary objective: hard-decision safety (negative-transfer prevention, retained corrections and cost-weighted utility).
 - Secondary outcomes: macro-AUROC, macro-AUPRC, NLL, Brier score and ECE of the emitted probability stream.
 - Fault mechanisms: Gaussian noise, offset, drift and stuck-at corruption, applied after training-only standardization and clipping.
+- Complete-stream prevalence sensitivity: 0%, 10%, 40% and 70% imposed-fault assignment.
+- Router-feature standardization is refitted within every cross-fitting training fold and on the full informative calibration set for the final model.
 
 The test label and fault identity are not router inputs. Fault scale 3 is treated as a severe controlled stress test, not as a natural-failure prevalence model.
 
@@ -38,7 +40,9 @@ python cee_revision/make_cee_q1_figures.py
 - The utility changes sign when one harmful change is valued at approximately 2.9 corrections.
 - Mechanism-fixed Lite-CF AUROC effects were positive for Gaussian and stuck-at corruption; offset and drift intervals included zero.
 - Repeated grouped validation (100 fits) gave mean selector AUROC 0.720 with SD 0.138, documenting sparse-event instability.
-- Lite-CF requires two endpoint passes. Energy consumption was not measured.
+- Only 89.7 endpoint-correctness disagreements informed each fitted router on average; repeated thresholds ranged from 0.525 to 0.90.
+- Complete-stream equal-cost utility was negative at 0% and 10% controlled-fault prevalence and positive at 40% and 70%; pass penalties shift each value downward.
+- Direct CPU timing uses three warm-ups and seven timed calls for batch sizes 1 and 4,364. Lite-CF requires two endpoint passes. Energy consumption was not measured.
 
 These results establish risk control under controlled available-group corruption. They do not establish maintenance-confirmed natural sensor failure, population-level failure prevalence or device-independent field recovery.
 
@@ -51,5 +55,6 @@ These results establish risk control under controlled available-group corruption
 - `make_cee_q1_figures.py`: Figures 3 and 4 in PDF, SVG, PNG and TIFF formats.
 - `source_data/`: machine-readable frozen inputs and derived outputs.
 - `tables/`: exact LaTeX table bodies.
+- `CEE6_REVISION_AUDIT.md`: reviewer-comment-to-evidence completeness audit.
 
-The repository is released under the MIT License. The versioned Git tag is `v1.1.0-cee-q1`. A software DOI has not been assigned.
+The repository is released under the MIT License. The CEE6 release tag is `v1.2.0-cee6`. A software DOI has not been assigned; a DOI must not be inferred from the GitHub URL.
