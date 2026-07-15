@@ -272,6 +272,10 @@ def main() -> None:
         "cee_cf10_r2_lite_config.json",
     ):
         shutil.copy2(ROOT / name, code_dir / name)
+    code_tables = code_dir / "tables"
+    code_tables.mkdir()
+    for path in sorted((ROOT / "tables").glob("round2_*.tex")):
+        shutil.copy2(path, code_tables / path.name)
     output_data = code_dir / "source_data"
     output_data.mkdir()
     for path in sorted((ROOT / "source_data").glob("q1_*")):
