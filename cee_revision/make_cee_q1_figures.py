@@ -277,6 +277,30 @@ def tradeoff_figure():
     ax.set_title("Decision utility ($\\lambda=0.5$ per extra pass)")
     ax.legend(ncol=1, loc="lower left", handlelength=1.4)
     ax.grid(color="#E8E8E8", linewidth=0.6)
+
+    # The unconditional-recovery curve occupies the full utility range at
+    # high harm cost.  A fixed-range inset preserves the smaller PDRF versus
+    # Lite-CF differences without changing the scale of the main axis.
+    inset = ax.inset_axes([0.48, 0.52, 0.49, 0.40])
+    for method in ["PDRF", "Lite-CF"]:
+        group = utility_summary[utility_summary.method == method]
+        inset.plot(
+            group.harm_to_correction_cost_ratio,
+            group.net_utility_per_10000,
+            marker="o",
+            markersize=2.5,
+            color={"PDRF": GRAY, "Lite-CF": GREEN}[method],
+        )
+    inset.axhline(0, color="#555555", linewidth=0.6, linestyle="--")
+    inset.set_xscale("log")
+    inset.set_xticks([1, 2, 5, 10], ["1", "2", "5", "10"])
+    inset.set_ylim(-70, 25)
+    inset.set_yticks([-60, -30, 0])
+    inset.tick_params(labelsize=5.6, length=2)
+    inset.set_title("Zoom: PDRF and Lite-CF", fontsize=6.1, pad=2)
+    inset.grid(color="#ECECEC", linewidth=0.45)
+    inset.set_facecolor("white")
+    inset.patch.set_alpha(0.96)
     panel_label(ax, "c")
 
     ax = axes[1, 1]

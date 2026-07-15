@@ -117,13 +117,21 @@ def route_probability(
     lite_temperature,
     selector,
     threshold,
+    return_identity=False,
 ):
     pb = predict(base_model, x, mask, quality, base_temperature)
     pl = predict(lite_model, x, mask, quality, lite_temperature)
     score = selector.predict_proba(
         pd.DataFrame(features6(pb, pl), columns=FEATURES_6)
     )[:, 1]
-    return np.where((score >= threshold)[:, None], pl, pb)
+    choose_recovery = score >= threshold
+    selected = np.where(choose_recovery[:, None], pl, pb)
+    if return_identity:
+        endpoint_identity = np.where(
+            choose_recovery, "RO-PDRF-Lite", "PDRF"
+        )
+        return selected, endpoint_identity, score
+    return selected
 
 
 def calibration_frame(

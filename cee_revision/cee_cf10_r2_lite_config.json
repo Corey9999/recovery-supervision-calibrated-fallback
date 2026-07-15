@@ -48,12 +48,38 @@
       "choose highest threshold"
     ]
   },
+  "prospective_deployment_support_gate": {
+    "status": "specified after frozen experiment in response to review; not used to replace the headline estimand",
+    "minimum_base_better_events": 25,
+    "minimum_recovery_better_events": 25,
+    "both_preference_classes_required_in_every_fold": true,
+    "minimum_median_repeated_grouped_oof_auroc": 0.65,
+    "minimum_single_repeat_oof_auroc": 0.60,
+    "maximum_repeated_threshold_range": 0.10,
+    "failure_action": "emit PDRF and collect additional local calibration evidence"
+  },
+  "mild_severity_audit": {
+    "fault_scale": 1,
+    "test_realization": 70001,
+    "selector_source_scale": 3,
+    "endpoint_refit": false,
+    "temperature_refit": false,
+    "selector_refit": false,
+    "threshold_retuned": false
+  },
+  "routing_api": {
+    "default_return": "selected endpoint probability vector",
+    "optional_return": ["selected endpoint identity", "conditional preference score"],
+    "score_semantics": "conditional on endpoint correctness disagreement; not a globally calibrated reliability probability"
+  },
   "post_routing_recalibration": false,
   "probability_mixture": false,
   "cpu_timing": {
     "warmups": 3,
     "timed_calls": 7,
     "batch_sizes": [1, 4364],
+    "controlled_intra_op_thread_counts": [1, 12],
+    "inter_op_configuration": "unchanged between controlled runs",
     "data_loading_included": false
   },
   "energy_measured": false

@@ -1,0 +1,51 @@
+{
+  "deployment_support": {
+    "minimum_events_per_preference_class": 25,
+    "minimum_median_repeated_oof_auroc": 0.65,
+    "minimum_each_repeat_oof_auroc": 0.6,
+    "maximum_threshold_range": 0.1,
+    "supported_pairs": 5,
+    "total_pairs": 10,
+    "supported_seeds": [
+      101,
+      102,
+      104,
+      106,
+      110
+    ]
+  },
+  "mild_scale1": {
+    "fault_scale": 1.0,
+    "pdrf_accuracy": 0.5301183844011141,
+    "pdrf_macro_auroc": 0.834354338411471,
+    "ro_pdrf_lite_accuracy": 0.5378133704735376,
+    "ro_pdrf_lite_macro_auroc": 0.8367877460167528,
+    "lite_cf_6_accuracy": 0.5305188022284122,
+    "lite_cf_6_macro_auroc": 0.8357364721684821,
+    "recovery_selection_rate": 0.509940807799443,
+    "negative_transfer_prevention": 0.9595090680799367,
+    "recovery_retention": 0.053198351144725375,
+    "utility_per_10000": 4.004178272980501
+  },
+  "scale3": {
+    "fault_scale": 3.0,
+    "pdrf_accuracy": 0.4869428969359332,
+    "pdrf_macro_auroc": 0.8114969624061764,
+    "ro_pdrf_lite_accuracy": 0.5001566852367688,
+    "ro_pdrf_lite_macro_auroc": 0.8175216074371571,
+    "lite_cf_6_accuracy": 0.48852715877437325,
+    "lite_cf_6_macro_auroc": 0.8150818014117907,
+    "recovery_selection_rate": 0.5217618384401114,
+    "negative_transfer_prevention": 0.9467198197538383,
+    "recovery_retention": 0.09674689941050929,
+    "utility_per_10000": 15.842618384401112
+  },
+  "files": {
+    "support_rows": 10,
+    "opportunity_rows": 4,
+    "endpoint_dispersion_rows": 3,
+    "support_gated_policy_rows": 1,
+    "mechanism_effect_rows": 4,
+    "cpu_summary_rows": 6
+  }
+}

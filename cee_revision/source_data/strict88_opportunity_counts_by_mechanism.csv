@@ -1,0 +1,5 @@
+fault_type,n,correction_opportunities_mean,correction_opportunities_min,correction_opportunities_max,harm_opportunities_mean,harm_opportunities_min,harm_opportunities_max,corrections_retained_mean,corrections_retained_min,corrections_retained_max,harms_realized_mean,harms_realized_min,harms_realized_max,recovery_selection_rate,negative_transfer_prevention,recovery_retention
+gaussian,1436,45.9,36,70,18.9,13,32,6.2,0,16,1.5,0,4,0.5194289693593316,0.9124737394957982,0.1345490979701506
+offset,1436,33.6,10,49,16.9,3,37,2.7,0,9,1.9,0,15,0.5410863509749303,0.9362559962559963,0.08105137776886177
+drift,1436,24.7,5,43,13.6,4,29,1.9,0,7,0.7,0,6,0.5393454038997214,0.9726436781609195,0.11072303921568627
+stuck_at,1436,38.7,16,86,17.6,2,36,3.1,0,15,0.7,0,4,0.4871866295264624,0.9655058651026394,0.06066408268733849

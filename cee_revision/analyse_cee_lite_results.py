@@ -274,11 +274,11 @@ def main():
     )
     utility_display.columns = [
         "Fault prevalence",
-        "Corrections/10,000",
-        "Harms/10,000",
-        "$U(\\lambda=0)$",
-        "$U(\\lambda=0.5)$",
-        "$U(\\lambda=2)$",
+        "Corrections/$10^4$",
+        "Harms/$10^4$",
+        "$U/10^4$ ($\\lambda=0$)",
+        "$U/10^4$ ($\\lambda=0.5$)",
+        "$U/10^4$ ($\\lambda=2$)",
     ]
     (TABLES / "q1_lite_utility_sensitivity.tex").write_text(
         utility_display.to_latex(

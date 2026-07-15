@@ -7,8 +7,8 @@ authors:
     given-names: "Riyang"
     affiliation: "School of Mechanical and Power Engineering, Nanjing Tech University"
     email: "lry@njtech.edu.cn"
-version: 3.0.0
-date-released: 2026-07-14
+version: 3.1.0
+date-released: 2026-07-15
 license: MIT
 keywords:
   - multi-sensor fusion

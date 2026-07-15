@@ -64,6 +64,24 @@ The Q1 revision adds frozen run CEE-CF10-R2-LITE. It reuses the chemical split, 
 \resizebox{\textwidth}{!}{\input{tables/q1_result_manifest.tex}}
 \end{table}
 
+The prospective support gate was introduced in response to review and was not used to select or replace the frozen headline result. A fitted pair is operationally supported only if its calibration data contain at least 25 base-better and 25 recovery-better events, every grouped fitting fold contains both preference classes, the median out-of-fold AUROC across 10 repeated grouped splits is at least 0.65, no repeated AUROC is below 0.60 and the repeated threshold range is at most 0.10. All conditions must pass. A deployment that fails the gate must emit PDRF and continue collecting calibration evidence; coefficients and thresholds are not transported from another pair or site.
+
+\begin{table}[ht]
+\centering
+\caption{Prospective deployment-support gate applied retrospectively to the 10 frozen endpoint pairs. Event counts use informative Batch~7 calibration rows. AUROC and threshold summaries use 10 repeated grouped cross-fitting splits. The gate was added after review and is reported as an operational boundary, not as a replacement estimand.}
+\label{tab:supp-deployment-support}
+\resizebox{\textwidth}{!}{\input{tables/strict88_deployment_support.tex}}
+\end{table}
+
+Only five of the 10 fitted pairs passed every support condition. Enforcing the fallback rule retrospectively reduced recovery endpoint selection and correction retention while increasing prevention (Table~\ref{tab:supp-support-policy}). This result is descriptive because the gate was not fixed before the frozen test evaluation.
+
+\begin{table}[ht]
+\centering
+\caption{Descriptive consequence of the prospective support gate on the frozen strict test set. Unsupported endpoint pairs emit PDRF on every observation; supported pairs retain their previously frozen Lite-CF selector.}
+\label{tab:supp-support-policy}
+\resizebox{0.88\textwidth}{!}{\input{tables/strict88_support_gated_policy.tex}}
+\end{table}
+
 \begin{table}[ht]
 \centering
 \caption{Endpoint and final routed-output quality on strict, complete 40\%-prevalence and no-imposed-fault streams. Values are equal-weight means over the relevant fixed mechanism--seed cells. ECE uses 15 equal-width bins.}
@@ -108,7 +126,7 @@ Repeated grouped cross-fitting uses 10 split seeds for each of 10 fitted endpoin
 \resizebox{\textwidth}{!}{\input{tables/q1_lite_batch_intervals.tex}}
 \end{table}
 
-The decision analysis computes $U=V_C N_C-C_H N_H-\lambda(P-1)$ per 10,000 observations. Harm-to-correction ratios are 1, 2, 5 and 10; pass penalties are 0, 0.5 and 2 correction equivalents per 10,000. The complete source file preserves seed- and mechanism-level values. Energy was not measured. Consequently, neither the pass penalty nor counted FLOPs are presented as electrical-energy estimates.
+The decision analysis computes $U=V_C n_C-C_H n_H-\lambda(P-1)$ per 10,000 observations, where $n_C$ is the number of retained corrections and $n_H$ the number of realized harms. Harm-to-correction ratios are 1, 2, 5 and 10; pass penalties are 0, 0.5 and 2 correction equivalents per 10,000. The complete source file preserves seed- and mechanism-level values. Energy was not measured. Consequently, neither the pass penalty nor counted FLOPs are presented as electrical-energy estimates.
 
 \begin{table}[ht]
 \centering
@@ -206,12 +224,19 @@ Scalar confidence, entropy, LOO-disagreement and JS rules fit thresholds on out-
 \resizebox{\textwidth}{!}{\input{tables/cee_simple_baselines.tex}}
 \end{table}
 
-Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one-group-out RO-PDRF-Full pass per physical group. Its $G+2$ forward passes are included in all latency and FLOP statements. CPU measurements use three warm-up calls and seven repeated calls for both the complete 4,364-observation batch and batch size one, excluding data loading. The runtime is an Intel Core i5-13500H with PyTorch 2.12.1+cpu and 12 intra-op and inter-op threads.
+Safe-CF performs one PDRF pass, one ordinary RO-PDRF-Full pass and one leave-one-group-out RO-PDRF-Full pass per physical group. Its $G+2$ forward passes are included in all latency and FLOP statements. CPU measurements use three warm-up calls and seven repeated calls for both the complete 4,364-observation batch and batch size one, excluding data loading. The runtime is an Intel Core i5-13500H with PyTorch 2.12.1+cpu. The primary Lite-CF timing audit fixes PyTorch intra-op threads first at one and then at 12; inter-op configuration and all other settings remain unchanged.
 
 \begin{table}[ht]
 \centering
 \caption{Direct CPU timing for the primary Lite-CF endpoint chain. Each entry is the mean $\pm$ standard deviation of the per-seed median over 10 fitted endpoint pairs. Every median follows three warm-up and seven timed calls; loading is excluded. These workstation measurements are not embedded or real-time guarantees.}
 \resizebox{0.92\textwidth}{!}{\input{tables/q1_lite_cpu_latency.tex}}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Fixed-thread CPU sensitivity for the primary endpoint chain. Values are means $\pm$ standard deviations of the per-seed medians across 10 fitted pairs. Every median uses three warm-up and seven timed calls. The one-thread and 12-thread rows are separate controlled runs and are not combined.}
+\label{tab:supp-thread-sensitivity}
+\resizebox{0.86\textwidth}{!}{\input{tables/strict88_cpu_thread_summary.tex}}
 \end{table}
 
 \begin{table}[ht]
@@ -322,6 +347,15 @@ The leave-one-group-out experiment assigns zero training degradation probability
 Absolute AUROC declined for both methods. PDRF retained a higher mean than CAGF for all four held-out groups, but the result remains within one 16-sensor device and does not establish new-device generalization.
 
 \section{Fault prevalence, severity and location}
+
+The formal scale-3 corruption is deliberately severe. To test whether the safety finding depends on that severity, we repeated the strict test realization at scale 1 while retaining the scale-3-fitted endpoints, temperature scalars, selector coefficients and thresholds. No endpoint or selector was refitted, and no threshold was retuned on scale-1 outcomes. The mild intervention improved the absolute performance of all endpoints but reduced the number of useful recovery opportunities. Lite-CF retained positive equal-cost utility, although its utility and correction retention were smaller than at scale 3.
+
+\begin{table}[ht]
+\centering
+\caption{Mild-versus-formal severity audit on the strict subset. Values are equal-weight means over four controlled mechanisms and 10 fitted endpoint pairs. $U/10^4$ uses equal correction and harm values and no pass penalty.}
+\label{tab:supp-severity-comparison}
+\resizebox{0.94\textwidth}{!}{\input{tables/strict88_severity_comparison.tex}}
+\end{table}
 
 PDRF and CAGF were evaluated at prevalences 0.10, 0.40 and 0.70; standardized scales 1, 3 and 5; and fault groups 1--4. Each grid point stores affected, unaffected and mixed-set macro-AUROC for 10 matched seeds in \path{source_data/major_fault_grid.csv}. The principal setting was not selected from this grid. The earlier gain, offset, linear drift, stuck-at, clipping and correlated dual-group tests remain available in the Q2 source files. Training uses one degraded group per pair, whereas the dual-group test evaluates multiple simultaneous faults.
 
@@ -852,7 +886,7 @@ We searched for an external dataset that simultaneously provides (i) naturally o
 
 \section{Reproducibility and scope}
 
-The Q1 entry points are \path{run_cee_lite_routing_validation.py}, \path{analyse_cee_lite_results.py}, \path{analyse_cee_q1_scores.py}, \path{analyse_cee_fault_plausibility.py} and \path{make_cee_q1_figures.py}. The machine-readable frozen design is \path{cee_cf10_r2_lite_config.json}. Exact local package versions are recorded in \path{requirements-lock.txt} and \path{environment.yml}. Prediction-level outputs, selector thresholds, safety accounting, model costs, probability metrics and fixed-mechanism/batch intervals are stored under \path{source_data/q1_*}. Figures use Python/matplotlib exclusively. Editable SVG/PDF figures and 600-dpi TIFFs are included. The versioned release archive contains a SHA-256 manifest, and the public repository URL and exact commit are reported in the main article.
+The Q1 entry points are \path{run_cee_lite_routing_validation.py}, \path{analyse_cee_lite_results.py}, \path{analyse_cee_q1_scores.py}, \path{analyse_cee_fault_plausibility.py}, \path{run_cee_strict88_additional_audits.py}, \path{analyse_cee_strict88_revision.py} and \path{make_cee_q1_figures.py}. The machine-readable frozen design is \path{cee_cf10_r2_lite_config.json}; the added audit design is \path{source_data/strict88_additional_audits_design.json}. Exact local package versions are recorded in \path{requirements-lock.txt} and \path{environment.yml}. Prediction-level outputs, selector thresholds, safety accounting, model costs, probability metrics, fixed-mechanism/batch intervals, deployment-support decisions, mild-severity results and fixed-thread timings are stored under \path{source_data/q1_*} and \path{source_data/strict88_*}. The routing API emits the selected probability vector by default and, when requested, also returns endpoint identity and the conditional preference score. Figures use Python/matplotlib exclusively. Editable SVG/PDF figures and 600-dpi TIFFs are included. The submitted Supplementary Information retains all legacy selector baselines, fault-severity grids, calibration-size analyses, fitted coefficients and the script-to-result manifest so that negative and superseded analyses remain auditable. The versioned release archive contains a SHA-256 manifest, and the public repository URL and exact commit are reported in the main article.
 
 The chemical-array experiment uses real longitudinal measurements with controlled feature-level sensor faults. The hydraulic experiment uses native test-rig component-condition labels with controlled sensor faults. The AHU audit adds naturally observed operational records with expert-annotated sensor-fault classes from 41 installed AHUs across three buildings. Those labels were assigned from engineering rules and expert review rather than maintenance-confirmed sensor replacement records. The evidence supports a controlled-corruption risk-control protocol and a field-operational direct-diagnosis boundary, not hardware-failure prognosis, downstream field recovery or zero-shot building transfer.
 

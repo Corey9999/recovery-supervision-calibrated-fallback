@@ -1,12 +1,12 @@
-\begin{tabular}{lll}
+\begin{tabular}{llll}
 \toprule
-Quantity & Event definition & Reported rate \\
+Quantity & Event definition & Denominator symbol & Reported rate \\
 \midrule
-Correction & $\neg b_i\wedge r_i$ & retained corrections / corrections \\
-Negative transfer & $b_i\wedge\neg r_i$ & prevented harms / harm opportunities \\
-Residual harm & $b_i\wedge\neg r_i\wedge s_i$ & residual harms / observations \\
-Recovery selection & $s_i$ & selected recovery outputs / observations \\
-Harmful switch & $b_i\wedge\neg r_i\wedge s_i$ & harmful switches / observations \\
-Net correct change & corrections retained $-$ harms realized & events per 10,000 \\
+Correction opportunity & $\neg b_i\wedge r_i$ & $N_C=\sum_i\mathbb{1}(\neg b_i\wedge r_i)$ & $n_C/N_C$ \\
+Retained correction & $\neg b_i\wedge r_i\wedge s_i$ & $n_C=\sum_i\mathbb{1}(\neg b_i\wedge r_i\wedge s_i)$ & events / observations \\
+Harm opportunity & $b_i\wedge\neg r_i$ & $N_H=\sum_i\mathbb{1}(b_i\wedge\neg r_i)$ & $1-n_H/N_H$ \\
+Realized harm & $b_i\wedge\neg r_i\wedge s_i$ & $n_H=\sum_i\mathbb{1}(b_i\wedge\neg r_i\wedge s_i)$ & events / observations \\
+Recovery endpoint selection & $s_i$ & $N=\sum_i1$ & $\sum_i s_i/N$ \\
+Net correct change & $n_C-n_H$ & $N$ & events per 10,000 \\
 \bottomrule
 \end{tabular}

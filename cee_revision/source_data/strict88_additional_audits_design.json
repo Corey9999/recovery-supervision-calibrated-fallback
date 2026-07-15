@@ -1,0 +1,35 @@
+{
+  "source_run": "CEE-CF10-R2-LITE",
+  "optimization_seeds": [
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "fault_mechanisms": [
+    "gaussian",
+    "offset",
+    "drift",
+    "stuck_at"
+  ],
+  "mild_severity": 1.0,
+  "fault_prevalence": 0.4,
+  "test_realization": 70001,
+  "strict_subset": "fault assigned and affected group available",
+  "selector_calibration_severity": 3.0,
+  "selector_refit_or_retuned_on_scale1": false,
+  "thread_settings": [
+    1,
+    12
+  ],
+  "timing_warmups": 3,
+  "timing_repetitions": 7,
+  "data_loading_included": false,
+  "elapsed_seconds": 236.99297720001778
+}

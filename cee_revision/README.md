@@ -1,4 +1,4 @@
-# CEE6 revision: two-pass Lite-CF with cost and stability audits
+# Strict-88 revision: supported two-pass Lite-CF with severity and cost audits
 
 This directory contains the frozen computational snapshot for the *Computers & Electrical Engineering* manuscript **Cross-fitted selective recovery under controlled multi-sensor corruption**.
 
@@ -14,6 +14,8 @@ This directory contains the frozen computational snapshot for the *Computers & E
 - Fault mechanisms: Gaussian noise, offset, drift and stuck-at corruption, applied after training-only standardization and clipping.
 - Complete-stream prevalence sensitivity: 0%, 10%, 40% and 70% imposed-fault assignment.
 - Router-feature standardization is refitted within every cross-fitting training fold and on the full informative calibration set for the final model.
+- Prospective deployment support requires sufficient events in both preference classes, repeated grouped discrimination and threshold stability; unsupported fits revert to PDRF.
+- A mild scale-1 audit reuses the scale-3 endpoints, temperatures, selector coefficients and thresholds without refitting or retuning.
 
 The test label and fault identity are not router inputs. Fault scale 3 is treated as a severe controlled stress test, not as a natural-failure prevalence model.
 
@@ -27,6 +29,8 @@ python cee_revision/run_cee_lite_routing_validation.py
 python cee_revision/analyse_cee_q1_scores.py
 python cee_revision/analyse_cee_lite_results.py
 python cee_revision/analyse_cee_fault_plausibility.py
+python cee_revision/run_cee_strict88_additional_audits.py
+python cee_revision/analyse_cee_strict88_revision.py
 python cee_revision/make_cee_q1_figures.py
 ```
 
@@ -42,7 +46,9 @@ python cee_revision/make_cee_q1_figures.py
 - Repeated grouped validation (100 fits) gave mean selector AUROC 0.720 with SD 0.138, documenting sparse-event instability.
 - Only 89.7 endpoint-correctness disagreements informed each fitted router on average; repeated thresholds ranged from 0.525 to 0.90.
 - Complete-stream equal-cost utility was negative at 0% and 10% controlled-fault prevalence and positive at 40% and 70%; pass penalties shift each value downward.
-- Direct CPU timing uses three warm-ups and seven timed calls for batch sizes 1 and 4,364. Lite-CF requires two endpoint passes. Energy consumption was not measured.
+- Only 5/10 fitted endpoint pairs passed the prospective event-count, discrimination and threshold-stability gate; the other pairs use PDRF under the support-gated policy.
+- At mild scale 1, Lite-CF macro-AUROC was 0.8357, prevention was 96.0%, retention was 5.3% and equal-cost utility was +4.00 decisions per 10,000 observations.
+- Direct CPU timing fixes intra-op threads at one and 12 in separate runs, with three warm-ups and seven timed calls for batch sizes 1 and 4,364. Lite-CF requires two endpoint passes. Energy consumption was not measured.
 
 These results establish risk control under controlled available-group corruption. They do not establish maintenance-confirmed natural sensor failure, population-level failure prevalence or device-independent field recovery.
 
@@ -52,9 +58,11 @@ These results establish risk control under controlled available-group corruption
 - `run_cee_lite_routing_validation.py`: frozen two-pass Lite-CF evaluation.
 - `analyse_cee_q1_scores.py`, `analyse_cee_lite_results.py`: stability, comparator, interval, probability-quality and utility analyses.
 - `analyse_cee_fault_plausibility.py`: standardized- and original-unit intervention audit.
+- `run_cee_strict88_additional_audits.py`: mild-severity and fixed-thread reruns without selector retuning.
+- `analyse_cee_strict88_revision.py`: deployment-support, event-count, fitting-dispersion and severity summaries.
 - `make_cee_q1_figures.py`: Figures 3 and 4 in PDF, SVG, PNG and TIFF formats.
 - `source_data/`: machine-readable frozen inputs and derived outputs.
 - `tables/`: exact LaTeX table bodies.
-- `CEE6_REVISION_AUDIT.md`: reviewer-comment-to-evidence completeness audit.
+- `STRICT88_REVISION_AUDIT.md`: reviewer-comment-to-evidence completeness audit.
 
-The repository is released under the MIT License. The CEE6 release tag is `v1.2.0-cee6`. A software DOI has not been assigned; a DOI must not be inferred from the GitHub URL.
+The repository is released under the MIT License. The Strict-88 release tag is `v1.3.0-strict88`. A software DOI has not been assigned; a DOI must not be inferred from the GitHub URL.

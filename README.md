@@ -4,24 +4,27 @@ Public reproducibility package for **Cross-fitted selective recovery for fault-t
 
 **Repository naming note.** The repository slug retains the earlier `calibrated-fallback` wording so that the public URL remains stable. The final manuscript calls the deployment rule **cross-fitted selective recovery (Safe-CF)**. Its conditional preference score is not claimed to be a generally calibrated reliability or device-health probability.
 
-## CEE-CF10-R2 revision
+## CEE-CF10-R2-LITE Strict-88 revision
 
-- Five-fold sample-group cross-fitting generates out-of-fold selector probabilities before threshold tuning.
-- One PDRF/RO-PDRF-Full checkpoint pair per seed is reused across all deployment, baseline and transfer audits.
+- Five-fold sample-group cross-fitting generates out-of-fold conditional preference scores before threshold tuning.
+- One PDRF/RO-PDRF-Lite checkpoint pair per seed is reused across all Lite-CF deployment audits.
 - Full streams cover no imposed fault and 10%, 40% and 70% fault prevalence with matched group-missingness masks.
-- Leave-one-fault-family-out tests and unseen gain-loss, clipping and dual-group corruptions audit selector transport.
-- Confidence, entropy, leave-one-group-out disagreement, Jensen--Shannon, random and endpoint rules provide simple fallback baselines.
-- A 1,000-replicate crossed-cluster bootstrap resamples fault mechanism, fitted pair and observations while preserving reuse of each fitted pair across mechanisms.
-- Safe-CF prevents 90.3% of negative transfers (95% interval 82.3--95.2%) while retaining 14.4% of recoveries (5.6--26.2%). These intervals are conditional on four controlled mechanisms, 10 fitted pairs and the current observations; they are not fault-population intervals.
+- The two-pass Lite-CF router prevents 94.7% of recovery-induced negative transfers while retaining 9.7% of available corrections on the strict controlled-corruption subset.
+- Mechanism-fixed and batch-fixed intervals quantify fitting variation on the present fixed observations; they are not device- or mechanism-population intervals.
+- A prospective support gate requires event counts in both preference classes, repeated grouped out-of-fold discrimination and threshold stability. Five of 10 fitted endpoint pairs pass; unsupported fits revert to PDRF.
+- The scale-1 audit reuses the scale-3-fitted endpoints, temperatures, coefficients and thresholds without refitting or retuning.
+- Utility is reported across fault prevalence, harm-to-correction ratios and pass penalties; fixed one-thread and 12-thread CPU timings are included, but energy was not measured.
 - Exact scripts, frozen-run metadata, source CSV files, manuscript facts, tables and vector figures are in `cee_revision/`.
 
 Run the formal analysis from the repository root:
 
 ```bash
 python cee_revision/run_cee_selector_validation.py
-python cee_revision/analyse_cee_results.py
-python cee_revision/make_cee_validation_figure.py
-python cee_revision/make_cee_graphical_abstract.py
+python cee_revision/run_cee_lite_routing_validation.py
+python cee_revision/run_cee_strict88_additional_audits.py
+python cee_revision/analyse_cee_lite_results.py
+python cee_revision/analyse_cee_strict88_revision.py
+python cee_revision/make_cee_q1_figures.py
 ```
 
 Set `CEE_FAST=1` for a one-seed smoke test. The formal 10-seed run is identified as `CEE-CF10-R2`.
@@ -138,4 +141,4 @@ The evidence supports a controlled recovery formulation and a bounded, parameter
 
 ## Author and declarations
 
-Riyang Luo is the sole author. Affiliation: School of Mechanical and Power Engineering, Nanjing Tech University, Nanjing, China. Email: lry@njtech.edu.cn. No specific funding was received and no competing interests are declared. The AI disclosure remains omitted until the target journal is selected. A permanent public repository URL and software DOI remain author-controlled publication actions.
+Riyang Luo is the sole author. Affiliation: School of Mechanical and Power Engineering, Nanjing Tech University, Nanjing, China. Email: lry@njtech.edu.cn. No specific funding was received and no competing interests are declared. A permanent software DOI has not been assigned.
