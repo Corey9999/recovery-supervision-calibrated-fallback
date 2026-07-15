@@ -65,7 +65,7 @@ def main():
     ax.axis("off")
 
     ax.text(0.02, 0.93, "Support-gated selective recovery under controlled sensor corruption", fontsize=18, fontweight="bold", color="#15191F", va="top")
-    ax.text(0.02, 0.855, "Endpoints and routing thresholds are fitted before fixed future-batch evaluation", fontsize=10.5, color=GRAY, va="top")
+    ax.text(0.02, 0.855, "Endpoints and routing thresholds were frozen before test; the support gate was proposed afterward and audited retrospectively", fontsize=10.5, color=GRAY, va="top")
 
     box(ax, 0.02, 0.40, 0.145, 0.25, "Controlled fault\nreaches an available\nsensor group", BLUE, LIGHT_BLUE, size=11.5, weight="bold")
     arrow(ax, 0.17, 0.525, 0.215, 0.525)
@@ -75,17 +75,17 @@ def main():
     arrow(ax, 0.165, 0.525, 0.215, 0.645, BLUE)
     arrow(ax, 0.165, 0.525, 0.215, 0.395, ORANGE)
 
-    box(ax, 0.405, 0.39, 0.16, 0.27, "Cross-fitted\nconditional selector\n+ prospective\nsupport gate", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
+    box(ax, 0.405, 0.39, 0.16, 0.27, "Cross-fitted\nconditional selector\n+ post hoc\nsupport-gate audit", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
     arrow(ax, 0.35, 0.645, 0.40, 0.585, BLUE)
     arrow(ax, 0.35, 0.395, 0.40, 0.465, ORANGE)
     arrow(ax, 0.57, 0.525, 0.615, 0.525, TEAL)
 
-    box(ax, 0.62, 0.40, 0.13, 0.25, "Route only when\ncalibration support\npasses", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
+    box(ax, 0.62, 0.40, 0.13, 0.25, "Retrospective audit:\nfallback unless\nsupport passes", TEAL, LIGHT_TEAL, size=11.5, weight="bold")
 
     cards = [
         (0.775, 0.63, "96.2%", "harmful transfers\nprevented", TEAL, LIGHT_TEAL),
         (0.775, 0.40, "6.6%", "available corrections\nretained", ORANGE, LIGHT_ORANGE),
-        (0.890, 0.63, "5/10", "fitted pairs\nsupported", BLUE, LIGHT_BLUE),
+        (0.890, 0.63, "5/10", "fitted pairs\npassed gate", BLUE, LIGHT_BLUE),
         (0.890, 0.40, "2 passes", "supported-pair\nendpoint cost", GRAY, "#F2F3F5"),
     ]
     for x, y, value, label, edge, face in cards:
@@ -94,7 +94,7 @@ def main():
     ax.text(
         0.02,
         0.18,
-        "Calibration-selected all-row / two-stage utility at 1:1: +107.9 / +110.6 per 10,000; at harm ratios 5 and 10, the base endpoint dominates.",
+        "Analytical controls at 2:1: two-stage mean utility +37.8 per 10,000 (95% fitted-pair interval -2.7 to +78.3); not a deployment recommendation.",
         fontsize=9.7,
         color="#353B44",
     )
@@ -109,7 +109,7 @@ def main():
     )
 
     fig.savefig(OUT.with_suffix(".png"), dpi=100, facecolor="white")
-    fig.savefig(OUT.with_suffix(".tiff"), dpi=500, facecolor="white", pil_kwargs={"compression": "tiff_lzw"})
+    fig.savefig(OUT.with_suffix(".tiff"), dpi=600, facecolor="white", pil_kwargs={"compression": "tiff_lzw"})
     fig.savefig(OUT.with_suffix(".pdf"), facecolor="white")
     fig.savefig(OUT.with_suffix(".svg"), facecolor="white")
     plt.close(fig)

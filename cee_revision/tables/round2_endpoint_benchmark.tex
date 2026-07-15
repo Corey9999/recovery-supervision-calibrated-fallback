@@ -1,0 +1,12 @@
+\begin{tabular}{lp{0.25\textwidth}rrc}
+\toprule
+Method & Role in endpoint benchmark & Parameters & Affected AUROC & Router endpoint \\
+\midrule
+PDRF & stable base reference & 19,740 & 0.791 & Base \\
+RO-PDRF-Lite & practical paired-recovery model & 19,740 & 0.802 & Recovery \\
+RO-PDRF-Full & mechanistic recovery audit & 19,740 & 0.804 & No \\
+RO-CAGF & architecture-matched learned baseline & 26,588 & 0.797 & No \\
+RO-AT-GATE & attention-gated learned baseline & 26,809 & 0.784 & No \\
+QMF-PD & published-method adaptation & 17,560 & 0.775 & No \\
+\bottomrule
+\end{tabular}
