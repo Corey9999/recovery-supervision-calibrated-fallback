@@ -227,6 +227,13 @@ def fitted_pair_utility() -> tuple[pd.DataFrame, pd.DataFrame]:
     pair["test_minus_calibration_utility"] = (
         pair.test_utility_per_10000 - pair.calibration_utility_per_10000
     )
+    # The upstream frozen file retains the historical machine key
+    # "Prospective gate Lite-CF".  It is a post hoc, retrospectively audited
+    # policy, so all new round-two outputs use the scientifically accurate
+    # display key below while leaving the frozen input untouched.
+    pair["method"] = pair.method.replace(
+        {"Prospective gate Lite-CF": "Retrospective support gate Lite-CF"}
+    )
     pair.to_csv(DATA / "round2_utility_fitted_pair_metrics.csv", index=False)
 
     summary_rows = []
@@ -263,7 +270,7 @@ def fitted_pair_utility() -> tuple[pd.DataFrame, pd.DataFrame]:
         "All-row multinomial": "All-row",
         "Two-stage": "Two-stage",
         "Frozen Lite-CF (ungated)": "Frozen safety",
-        "Prospective gate Lite-CF": "Support gate",
+        "Retrospective support gate Lite-CF": "Support gate",
         "All-row multinomial (safety)": "All-row safety",
         "Always PDRF": "Always base",
         "Always RO-PDRF-Lite": "Always recovery",
@@ -303,7 +310,7 @@ def fitted_pair_utility() -> tuple[pd.DataFrame, pd.DataFrame]:
         "Always PDRF": 0,
         "Always RO-PDRF-Lite": 1,
         "Frozen Lite-CF (ungated)": 2,
-        "Prospective gate Lite-CF": 3,
+        "Retrospective support gate Lite-CF": 3,
         "All-row multinomial (safety)": 4,
         "Conditional Lite-CF": 5,
         "All-row multinomial": 6,
